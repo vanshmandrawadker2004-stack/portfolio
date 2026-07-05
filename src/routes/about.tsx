@@ -1,14 +1,33 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { PageShell, Reveal, PowerOn, SectionTag, LEDTicker, FloatShapes, SignHover, NeonCTA, Tilt, Counter } from "@/components/site";
+import {
+  PageShell,
+  Reveal,
+  PowerOn,
+  SectionTag,
+  LEDTicker,
+  FloatShapes,
+  SignHover,
+  NeonCTA,
+  Tilt,
+  Counter,
+} from "@/components/site";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — Vansh Mandrawadker" },
-      { name: "description", content: "Product designer from Pune, India. Branding, UI/UX, and industrial design across BORN Group, Avishkaar, and Idiom." },
+      {
+        name: "description",
+        content:
+          "Product designer from Pune, India. Branding, UI/UX, and industrial design across BORN Group, Avishkaar, and Idiom.",
+      },
       { property: "og:title", content: "About — Vansh Mandrawadker" },
-      { property: "og:description", content: "A multi-disciplinary product designer working across brand, product, and industrial design." },
+      {
+        property: "og:description",
+        content:
+          "A multi-disciplinary product designer working across brand, product, and industrial design.",
+      },
       { property: "og:url", content: "/about" },
     ],
     links: [{ rel: "canonical", href: "/about" }],
@@ -16,7 +35,16 @@ export const Route = createFileRoute("/about")({
   component: About,
 });
 
-const skills = ["Figma", "Illustrator", "Photoshop", "Procreate", "Fusion 360", "Keyshot", "Miro", "Notion"];
+const skills = [
+  "Figma",
+  "Illustrator",
+  "Photoshop",
+  "Procreate",
+  "Fusion 360",
+  "Keyshot",
+  "Miro",
+  "Notion",
+];
 
 const experience = [
   { y: "Nov–Dec 2025", c: "Idiom Circular Services Trust", r: "Design Intern" },
@@ -81,9 +109,13 @@ function About() {
                 <div className="flex items-center justify-between pt-4">
                   <div>
                     <div className="serif-display text-xl">Vansh M.</div>
-                    <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">Resident designer — № 01</div>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
+                      Resident designer — № 01
+                    </div>
                   </div>
-                  <span className="flicker-fast font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--neon)]">On duty</span>
+                  <span className="flicker-fast font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--neon)]">
+                    On duty
+                  </span>
                 </div>
               </div>
             </Tilt>
@@ -93,25 +125,42 @@ function About() {
             <div className="neon-border-white flex h-full flex-col justify-between bg-black/60 p-8 md:p-12">
               <div>
                 <p className="serif-display text-2xl leading-snug md:text-4xl">
-                  I'm Vansh — a product designer from Pune, India, and a graduate of Unitedworld Institute of Design.
+                  I'm Vansh — a product designer from Pune, India, and a graduate of Unitedworld
+                  Institute of Design.
                 </p>
                 <p className="mt-6 text-sm leading-relaxed text-[var(--ink-soft)] md:text-base">
-                  I work at the intersection of <span className="text-[var(--neon)]">branding</span>, digital product
-                  design, and industrial design — which means I can take a product from concept to complete identity
-                  to digital experience.
+                  I work at the intersection of <span className="text-[var(--neon)]">branding</span>
+                  , digital product design, and industrial design — which means I can take a product
+                  from concept to complete identity to digital experience.
                 </p>
                 <p className="mt-4 text-sm leading-relaxed text-[var(--ink-soft)] md:text-base">
-                  I've interned at BORN Group, Avishkaar, and Idiom Circular Services Trust, and I run{" "}
-                  <a className="nav-link text-[var(--ink)]" href="https://www.linkedin.com/in/vanshmandrawadker2004/" target="_blank" rel="noreferrer">The Pixel Post</a>,
-                  a weekly design × AI newsletter. When I'm not designing, I'm probably obsessing over typography or
-                  hunting the next AI tool that makes my workflow 3× faster.
+                  I've interned at BORN Group, Avishkaar, and Idiom Circular Services Trust, and I
+                  run{" "}
+                  <a
+                    className="nav-link text-[var(--ink)]"
+                    href="https://www.linkedin.com/in/vanshmandrawadker2004/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    The Pixel Post
+                  </a>
+                  , a weekly design × AI newsletter. When I'm not designing, I'm probably obsessing
+                  over typography or hunting the next AI tool that makes my workflow 3× faster.
                 </p>
               </div>
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link to="/contact" data-cursor="Go" className="bg-[var(--neon)] px-6 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-black transition hover:shadow-[0_0_20px_rgba(255,42,60,0.5)]">
+                <Link
+                  to="/contact"
+                  data-cursor="Go"
+                  className="bg-[var(--neon)] px-6 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-black transition hover:shadow-[0_0_20px_rgba(255,42,60,0.5)]"
+                >
                   Start a project →
                 </Link>
-                <a href="#" data-cursor="CV" className="neon-border-white bg-black px-6 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--ink)] transition hover:border-[var(--neon)] hover:text-[var(--neon)]">
+                <a
+                  href="#"
+                  data-cursor="CV"
+                  className="neon-border-white bg-black px-6 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--ink)] transition hover:border-[var(--neon)] hover:text-[var(--neon)]"
+                >
                   Download CV ↓
                 </a>
               </div>
@@ -129,11 +178,19 @@ function About() {
           ].map(([n, s, l], i) => (
             <PowerOn key={l as string} delay={i * 0.1}>
               <SignHover>
-                <div className={`flex items-center justify-between gap-3 px-5 py-4 ${i % 2 ? "bg-white text-black" : "neon-border bg-black"}`}>
-                  <span className={`serif-display text-3xl md:text-4xl ${i % 2 ? "text-black" : "neon-red"}`}>
+                <div
+                  className={`flex items-center justify-between gap-3 px-5 py-4 ${i % 2 ? "bg-white text-black" : "neon-border bg-black"}`}
+                >
+                  <span
+                    className={`serif-display text-3xl md:text-4xl ${i % 2 ? "text-black" : "neon-red"}`}
+                  >
                     <Counter to={n as number} suffix={s as string} />
                   </span>
-                  <span className={`text-right font-mono text-[9px] uppercase tracking-[0.18em] ${i % 2 ? "text-black/60" : "text-[var(--ink-soft)]"}`}>{l}</span>
+                  <span
+                    className={`text-right font-mono text-[9px] uppercase tracking-[0.18em] ${i % 2 ? "text-black/60" : "text-[var(--ink-soft)]"}`}
+                  >
+                    {l}
+                  </span>
                 </div>
               </SignHover>
             </PowerOn>
@@ -152,8 +209,14 @@ function About() {
             {skills.map((s, i) => (
               <PowerOn key={s} delay={i * 0.07}>
                 <SignHover className={i % 3 === 1 ? "rotate-1" : i % 3 === 2 ? "-rotate-1" : ""}>
-                  <div className={`flex items-center justify-center px-4 py-6 text-center ${i % 3 === 0 ? "neon-border bg-black" : i % 3 === 1 ? "bg-white text-black" : "neon-border-white bg-black"}`}>
-                    <span className={`serif-display text-2xl md:text-3xl ${i % 3 === 0 ? "neon-red" : i % 3 === 1 ? "text-black" : "neon-white"}`}>{s}</span>
+                  <div
+                    className={`flex items-center justify-center px-4 py-6 text-center ${i % 3 === 0 ? "neon-border bg-black" : i % 3 === 1 ? "bg-white text-black" : "neon-border-white bg-black"}`}
+                  >
+                    <span
+                      className={`serif-display text-2xl md:text-3xl ${i % 3 === 0 ? "neon-red" : i % 3 === 1 ? "text-black" : "neon-white"}`}
+                    >
+                      {s}
+                    </span>
                   </div>
                 </SignHover>
               </PowerOn>
@@ -168,17 +231,25 @@ function About() {
           <Reveal>
             <div className="flex items-center justify-between">
               <SectionTag chip="Log" label="03 — Employment records" />
-              <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)] md:inline">Most recent first</span>
+              <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)] md:inline">
+                Most recent first
+              </span>
             </div>
           </Reveal>
           <div className="mt-12 border-t-2 border-[var(--divider)]">
             {experience.map((e, i) => (
               <PowerOn key={e.c} delay={i * 0.07}>
                 <div className="group grid items-baseline gap-2 border-b border-[var(--divider)] py-7 transition-all duration-300 hover:pl-4 md:grid-cols-12 md:gap-4">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)] md:col-span-3">{e.y}</div>
-                  <div className="serif-display text-2xl transition-colors duration-300 group-hover:neon-red md:col-span-6 md:text-4xl">{e.c}</div>
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)] md:col-span-3">
+                    {e.y}
+                  </div>
+                  <div className="serif-display text-2xl transition-colors duration-300 group-hover:neon-red md:col-span-6 md:text-4xl">
+                    {e.c}
+                  </div>
                   <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)] md:col-span-3 md:text-right">
-                    <span className="border border-[var(--divider)] px-2 py-1 transition-colors duration-300 group-hover:border-[var(--neon)] group-hover:text-[var(--neon)]">{e.r}</span>
+                    <span className="border border-[var(--divider)] px-2 py-1 transition-colors duration-300 group-hover:border-[var(--neon)] group-hover:text-[var(--neon)]">
+                      {e.r}
+                    </span>
                   </div>
                 </div>
               </PowerOn>
@@ -194,8 +265,12 @@ function About() {
           <PowerOn>
             <div className="neon-border-white h-full bg-black/60 p-8 md:p-10">
               <SectionTag chip="Edu" label="04 — Education" invert />
-              <div className="serif-display mt-8 text-3xl md:text-4xl">Unitedworld Institute of Design</div>
-              <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">BDes Product Design · Graduated 2026</div>
+              <div className="serif-display mt-8 text-3xl md:text-4xl">
+                Unitedworld Institute of Design
+              </div>
+              <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
+                BDes Product Design · Graduated 2026
+              </div>
             </div>
           </PowerOn>
           <PowerOn delay={0.15}>

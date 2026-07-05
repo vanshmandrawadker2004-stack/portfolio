@@ -8,9 +8,17 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Vansh Mandrawadker — Product Designer" },
-      { name: "description", content: "Freelance Product Designer crafting brands, digital experiences, and design systems that make people stop and look twice." },
+      {
+        name: "description",
+        content:
+          "Freelance Product Designer crafting brands, digital experiences, and design systems that make people stop and look twice.",
+      },
       { property: "og:title", content: "Vansh Mandrawadker — Product Designer" },
-      { property: "og:description", content: "Branding, UI/UX, and Industrial Design — for founders who care about the details." },
+      {
+        property: "og:description",
+        content:
+          "Branding, UI/UX, and Industrial Design — for founders who care about the details.",
+      },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -33,7 +41,9 @@ function SmoothScroll({ children }: { children: ReactNode }) {
 
     const content = contentRef.current;
     if (!content) return;
-    const setH = () => { document.body.style.height = `${content.getBoundingClientRect().height}px`; };
+    const setH = () => {
+      document.body.style.height = `${content.getBoundingClientRect().height}px`;
+    };
     setH();
     const ro = new ResizeObserver(setH);
     ro.observe(content);
@@ -60,7 +70,9 @@ function SmoothScroll({ children }: { children: ReactNode }) {
   }
   return (
     <div className="fixed inset-x-0 top-0">
-      <div ref={contentRef} className="will-change-transform">{children}</div>
+      <div ref={contentRef} className="will-change-transform">
+        {children}
+      </div>
     </div>
   );
 }
@@ -73,15 +85,24 @@ function Atmosphere() {
       <div className="scanlines pointer-events-none fixed inset-0 z-[56] opacity-30" />
       <div
         className="pointer-events-none fixed -left-40 top-[20%] z-[5] h-[480px] w-[480px] rounded-full opacity-[0.1] blur-3xl"
-        style={{ background: "radial-gradient(circle, #ff2a3c, transparent 65%)", animation: "drift-a 16s ease-in-out infinite" }}
+        style={{
+          background: "radial-gradient(circle, #ff2a3c, transparent 65%)",
+          animation: "drift-a 16s ease-in-out infinite",
+        }}
       />
       <div
         className="pointer-events-none fixed -right-48 top-[58%] z-[5] h-[560px] w-[560px] rounded-full opacity-[0.07] blur-3xl"
-        style={{ background: "radial-gradient(circle, #f2efe6, transparent 65%)", animation: "drift-b 21s ease-in-out infinite" }}
+        style={{
+          background: "radial-gradient(circle, #f2efe6, transparent 65%)",
+          animation: "drift-b 21s ease-in-out infinite",
+        }}
       />
       <div
         className="pointer-events-none fixed inset-0 z-[54]"
-        style={{ background: "radial-gradient(ellipse at 50% 120%, rgba(255,42,60,0.1), transparent 55%), radial-gradient(ellipse at center, transparent 62%, rgba(0,0,0,0.45) 100%)" }}
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 120%, rgba(255,42,60,0.1), transparent 55%), radial-gradient(ellipse at center, transparent 62%, rgba(0,0,0,0.45) 100%)",
+        }}
       />
     </>
   );
@@ -101,13 +122,21 @@ function Skyline() {
       {/* far skyline */}
       <div className="absolute inset-x-0 bottom-0 flex h-full items-end justify-center gap-[2px] opacity-40">
         {buildings.map((b, i) => (
-          <div key={`far-${i}`} className="bg-[#101012]" style={{ height: `${b.h * 0.7}%`, width: `${b.w * 0.8}%` }} />
+          <div
+            key={`far-${i}`}
+            className="bg-[#101012]"
+            style={{ height: `${b.h * 0.7}%`, width: `${b.w * 0.8}%` }}
+          />
         ))}
       </div>
       {/* near skyline with lit windows */}
       <div className="absolute inset-x-0 bottom-0 flex h-full items-end justify-between gap-1 opacity-80">
         {buildings.map((b, i) => (
-          <div key={i} className="relative bg-[#0d0d0f]" style={{ height: `${b.h}%`, width: `${b.w}%` }}>
+          <div
+            key={i}
+            className="relative bg-[#0d0d0f]"
+            style={{ height: `${b.h}%`, width: `${b.w}%` }}
+          >
             <div
               className="absolute inset-1 opacity-50"
               style={{
@@ -159,7 +188,13 @@ function CityWindows() {
           animate={{ opacity: [0.03, 0.12, 0.03] }}
           transition={{ duration: w.dur, delay: w.delay, repeat: Infinity }}
           className="absolute"
-          style={{ left: `${w.left}%`, top: `${w.top}%`, width: w.w, height: w.h, background: w.red ? "#ff2a3c" : "#f2efe6" }}
+          style={{
+            left: `${w.left}%`,
+            top: `${w.top}%`,
+            width: w.w,
+            height: w.h,
+            background: w.red ? "#ff2a3c" : "#f2efe6",
+          }}
         />
       ))}
     </div>
@@ -208,7 +243,15 @@ function RetroGrid() {
 }
 
 /* ---------- helpers ---------- */
-function Fade({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
+function Fade({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 26 }}
@@ -222,7 +265,15 @@ function Fade({ children, delay = 0, className = "" }: { children: ReactNode; de
   );
 }
 
-function PowerOn({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
+function PowerOn({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -239,28 +290,62 @@ function PowerOn({ children, delay = 0, className = "" }: { children: ReactNode;
 /* small signs get a hover pop */
 function SignHover({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div whileHover={{ scale: 1.05, rotate: 0 }} transition={{ type: "spring", stiffness: 300, damping: 14 }} className={className}>
+    <motion.div
+      whileHover={{ scale: 1.05, rotate: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 14 }}
+      className={className}
+    >
       {children}
     </motion.div>
   );
 }
 
-function SectionTag({ chip, label, invert = false }: { chip: string; label: string; invert?: boolean }) {
+function SectionTag({
+  chip,
+  label,
+  invert = false,
+}: {
+  chip: string;
+  label: string;
+  invert?: boolean;
+}) {
   return (
     <div className="flex items-center gap-4">
-      <span className={`px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.15em] ${invert ? "bg-white text-black" : "bg-[var(--neon)] text-black"}`}>{chip}</span>
-      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{label}</span>
+      <span
+        className={`px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.15em] ${invert ? "bg-white text-black" : "bg-[var(--neon)] text-black"}`}
+      >
+        {chip}
+      </span>
+      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">
+        {label}
+      </span>
     </div>
   );
 }
 
 /* ---------- LED ticker ---------- */
-function LEDTicker({ text, reverse = false, className = "" }: { text: string; reverse?: boolean; className?: string }) {
+function LEDTicker({
+  text,
+  reverse = false,
+  className = "",
+}: {
+  text: string;
+  reverse?: boolean;
+  className?: string;
+}) {
   return (
-    <div className={`marquee overflow-hidden border-y-2 border-[var(--divider)] bg-black py-2.5 ${className}`}>
-      <div className={reverse ? "marquee-track-reverse" : "marquee-track"} style={{ animationDuration: "26s" }}>
+    <div
+      className={`marquee overflow-hidden border-y-2 border-[var(--divider)] bg-black py-2.5 ${className}`}
+    >
+      <div
+        className={reverse ? "marquee-track-reverse" : "marquee-track"}
+        style={{ animationDuration: "26s" }}
+      >
         {Array.from({ length: 8 }).map((_, i) => (
-          <span key={i} className="neon-red whitespace-nowrap px-4 font-mono text-xs uppercase tracking-[0.35em]">
+          <span
+            key={i}
+            className="neon-red whitespace-nowrap px-4 font-mono text-xs uppercase tracking-[0.35em]"
+          >
             {text}
           </span>
         ))}
@@ -274,8 +359,14 @@ function Loader() {
   const [done, setDone] = useState(false);
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    const t = setTimeout(() => { setDone(true); document.body.style.overflow = ""; }, 1400);
-    return () => { clearTimeout(t); document.body.style.overflow = ""; };
+    const t = setTimeout(() => {
+      setDone(true);
+      document.body.style.overflow = "";
+    }, 1400);
+    return () => {
+      clearTimeout(t);
+      document.body.style.overflow = "";
+    };
   }, []);
   return (
     <AnimatePresence>
@@ -319,7 +410,10 @@ function Hero() {
         <div className="col-span-3 hidden flex-col justify-center gap-7 md:flex">
           <PowerOn delay={0.6}>
             <SignHover>
-              <div className="flex justify-center bg-[var(--neon)] px-3 py-8 font-mono text-lg font-bold uppercase tracking-[0.3em] text-black [writing-mode:vertical-rl]" style={{ boxShadow: "0 0 14px rgba(255,42,60,0.35)" }}>
+              <div
+                className="flex justify-center bg-[var(--neon)] px-3 py-8 font-mono text-lg font-bold uppercase tracking-[0.3em] text-black [writing-mode:vertical-rl]"
+                style={{ boxShadow: "0 0 14px rgba(255,42,60,0.35)" }}
+              >
                 Designer
               </div>
             </SignHover>
@@ -334,7 +428,9 @@ function Hero() {
           <PowerOn delay={1.2}>
             <SignHover className="rotate-1">
               <div className="flicker-fast neon-border bg-black px-3 py-3.5 text-center">
-                <span className="neon-red font-mono text-xs font-bold uppercase tracking-[0.3em]">Open 24/7</span>
+                <span className="neon-red font-mono text-xs font-bold uppercase tracking-[0.3em]">
+                  Open 24/7
+                </span>
               </div>
             </SignHover>
           </PowerOn>
@@ -378,7 +474,11 @@ function Hero() {
           <PowerOn delay={0.7}>
             <SignHover className="rotate-1">
               <div className="neon-border-white bg-black px-4 py-5 text-center">
-                <div className="neon-white serif-display text-2xl leading-snug">Product<br />Designer</div>
+                <div className="neon-white serif-display text-2xl leading-snug">
+                  Product
+                  <br />
+                  Designer
+                </div>
               </div>
             </SignHover>
           </PowerOn>
@@ -399,7 +499,9 @@ function Hero() {
           <PowerOn delay={1.5}>
             <SignHover>
               <div className="flicker neon-border bg-black px-3 py-3.5 text-center">
-                <span className="neon-red font-mono text-xs uppercase tracking-[0.25em]">↓ Work this way</span>
+                <span className="neon-red font-mono text-xs uppercase tracking-[0.25em]">
+                  ↓ Work this way
+                </span>
               </div>
             </SignHover>
           </PowerOn>
@@ -407,10 +509,18 @@ function Hero() {
 
         {/* mobile mini-signs */}
         <div className="col-span-12 mt-4 flex flex-wrap justify-center gap-3 md:hidden">
-          <span className="bg-[var(--neon)] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black">Designer</span>
-          <span className="flicker-fast neon-border bg-black px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em]"><span className="neon-red">Open 24/7</span></span>
-          <span className="bg-white px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black">Est. 2004</span>
-          <span className="bg-[#16161a] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/70">Pune, IN</span>
+          <span className="bg-[var(--neon)] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black">
+            Designer
+          </span>
+          <span className="flicker-fast neon-border bg-black px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em]">
+            <span className="neon-red">Open 24/7</span>
+          </span>
+          <span className="bg-white px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black">
+            Est. 2004
+          </span>
+          <span className="bg-[#16161a] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/70">
+            Pune, IN
+          </span>
         </div>
       </div>
 
@@ -436,14 +546,19 @@ function About() {
             <div className="neon-border-white flex h-full flex-col justify-between bg-black/60 p-8 md:p-12">
               <div>
                 <h2 className="serif-display text-3xl leading-[1.1] md:text-5xl">
-                  A designer who thinks in <span className="neon-red">systems</span> and feels in <span className="neon-red">details.</span>
+                  A designer who thinks in <span className="neon-red">systems</span> and feels in{" "}
+                  <span className="neon-red">details.</span>
                 </h2>
                 <p className="mt-8 max-w-xl text-lg leading-relaxed text-[var(--ink-soft)] md:text-xl">
-                  One designer taking products from idea to identity to interface. Research first — I talk to users
-                  before I open Figma. Working with founders who'd rather have a partner than a vendor.
+                  One designer taking products from idea to identity to interface. Research first —
+                  I talk to users before I open Figma. Working with founders who'd rather have a
+                  partner than a vendor.
                 </p>
               </div>
-              <Link to="/about" className="nav-link mt-8 inline-block self-start font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--neon)]">
+              <Link
+                to="/about"
+                className="nav-link mt-8 inline-block self-start font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--neon)]"
+              >
                 Full story →
               </Link>
             </div>
@@ -474,9 +589,13 @@ function About() {
                 <div className="flex items-center justify-between pt-4">
                   <div>
                     <div className="serif-display text-xl">Vansh M.</div>
-                    <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">Resident designer — № 01</div>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
+                      Resident designer — № 01
+                    </div>
                   </div>
-                  <span className="flicker-fast font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--neon)]">On duty</span>
+                  <span className="flicker-fast font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--neon)]">
+                    On duty
+                  </span>
                 </div>
               </div>
             </Tilt>
@@ -493,11 +612,19 @@ function About() {
           ].map(([n, s, l], i) => (
             <PowerOn key={l as string} delay={i * 0.12}>
               <SignHover>
-                <div className={`flex flex-col gap-1 px-4 py-4 md:flex-row md:items-center md:justify-between md:gap-3 md:px-5 ${i % 2 ? "bg-white text-black" : "neon-border bg-black"}`}>
-                  <span className={`serif-display text-2xl md:text-4xl ${i % 2 ? "text-black" : "neon-red"}`}>
+                <div
+                  className={`flex flex-col gap-1 px-4 py-4 md:flex-row md:items-center md:justify-between md:gap-3 md:px-5 ${i % 2 ? "bg-white text-black" : "neon-border bg-black"}`}
+                >
+                  <span
+                    className={`serif-display text-2xl md:text-4xl ${i % 2 ? "text-black" : "neon-red"}`}
+                  >
                     <Counter to={n as number} suffix={s as string} />
                   </span>
-                  <span className={`font-mono text-[8px] uppercase leading-tight tracking-[0.15em] md:text-right md:text-[9px] md:tracking-[0.18em] ${i % 2 ? "text-black/60" : "text-[var(--ink-soft)]"}`}>{l}</span>
+                  <span
+                    className={`font-mono text-[8px] uppercase leading-tight tracking-[0.15em] md:text-right md:text-[9px] md:tracking-[0.18em] ${i % 2 ? "text-black/60" : "text-[var(--ink-soft)]"}`}
+                  >
+                    {l}
+                  </span>
                 </div>
               </SignHover>
             </PowerOn>
@@ -525,7 +652,9 @@ function Work() {
         <Fade>
           <div className="flex items-center justify-between">
             <SectionTag chip="Work" label="02 — The district" />
-            <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)] md:inline">6 storefronts open tonight</span>
+            <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)] md:inline">
+              6 storefronts open tonight
+            </span>
           </div>
         </Fade>
 
@@ -542,7 +671,9 @@ function Work() {
                     data-cursor="View"
                     className={`group relative flex flex-col gap-0 border-2 border-[var(--divider)] bg-black/70 transition-all duration-500 hover:border-[var(--neon)] hover:shadow-[0_0_22px_rgba(255,42,60,0.25)] md:flex-row ${flip ? "md:flex-row-reverse" : ""}`}
                   >
-                    <div className={`relative w-full overflow-hidden md:w-[46%] ${p.contain ? "bg-black" : ""}`}>
+                    <div
+                      className={`relative w-full overflow-hidden md:w-[46%] ${p.contain ? "bg-black" : ""}`}
+                    >
                       <img
                         src={p.image}
                         alt={p.title}
@@ -556,11 +687,19 @@ function Work() {
 
                     <div className="relative flex flex-1 items-center justify-between gap-6 p-6 md:p-10">
                       <div>
-                        <div className="serif-display text-4xl transition-all duration-300 group-hover:neon-red md:text-6xl">{p.title}</div>
+                        <div className="serif-display text-4xl transition-all duration-300 group-hover:neon-red md:text-6xl">
+                          {p.title}
+                        </div>
                         <div className="mt-4 flex flex-wrap items-center gap-3">
-                          <span className="bg-[var(--neon)] px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-black">{p.category}</span>
-                          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">No. {String(i + 1).padStart(2, "0")}</span>
-                          <span className="flicker-fast font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--neon)] opacity-0 transition group-hover:opacity-100">● View on Behance ↗</span>
+                          <span className="bg-[var(--neon)] px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-black">
+                            {p.category}
+                          </span>
+                          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
+                            No. {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="flicker-fast font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--neon)] opacity-0 transition group-hover:opacity-100">
+                            ● View on Behance ↗
+                          </span>
                         </div>
                       </div>
                       <div className="hidden shrink-0 border border-[var(--divider)] px-2.5 py-4 font-mono text-xs font-bold uppercase tracking-[0.25em] text-white/70 [writing-mode:vertical-rl] transition-colors duration-300 group-hover:border-[var(--neon)] group-hover:text-[var(--neon)] md:block">
@@ -576,7 +715,11 @@ function Work() {
 
         <div className="mt-16 text-center">
           <Magnetic>
-            <Link to="/work" data-cursor="More" className="neon-border inline-block bg-black px-10 py-5 font-mono text-xs font-bold uppercase tracking-[0.3em] text-[var(--neon)] transition hover:bg-[var(--neon)] hover:text-black">
+            <Link
+              to="/work"
+              data-cursor="More"
+              className="neon-border inline-block bg-black px-10 py-5 font-mono text-xs font-bold uppercase tracking-[0.3em] text-[var(--neon)] transition hover:bg-[var(--neon)] hover:text-black"
+            >
               Full archive →
             </Link>
           </Magnetic>
@@ -618,8 +761,16 @@ function Interlude() {
 
 /* ---------- SERVICES — hanging banners that sway ---------- */
 const services = [
-  { t: "Brand Identity", n: "01", items: ["Logos", "Identity systems", "Guidelines", "Naming", "Strategy"] },
-  { t: "UI/UX Design", n: "02", items: ["Web & app", "UX research", "Prototyping", "Design systems"] },
+  {
+    t: "Brand Identity",
+    n: "01",
+    items: ["Logos", "Identity systems", "Guidelines", "Naming", "Strategy"],
+  },
+  {
+    t: "UI/UX Design",
+    n: "02",
+    items: ["Web & app", "UX research", "Prototyping", "Design systems"],
+  },
   { t: "Industrial Design", n: "03", items: ["Concepts", "Fusion 360", "Keyshot", "Mockups"] },
   { t: "Consultation", n: "04", items: ["Audits", "UX reviews", "Direction"] },
 ];
@@ -641,7 +792,11 @@ function Services() {
                 {/* idle sway, like a hanging sign in the wind */}
                 <motion.div
                   animate={{ rotate: isActive ? 0 : [0.7, -0.7, 0.7] }}
-                  transition={isActive ? { duration: 0.3 } : { duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
+                  transition={
+                    isActive
+                      ? { duration: 0.3 }
+                      : { duration: 5 + i, repeat: Infinity, ease: "easeInOut" }
+                  }
                   style={{ transformOrigin: "top center" }}
                 >
                   <button
@@ -651,17 +806,35 @@ function Services() {
                     data-cursor="Open"
                     className={`relative flex h-[360px] w-full flex-col items-center justify-between gap-5 border-2 px-4 py-8 transition-all duration-500 md:h-[470px] ${isActive ? "border-[var(--neon)] bg-[var(--neon)] shadow-[0_0_26px_rgba(255,42,60,0.35)]" : "border-[var(--divider)] bg-black/60 hover:border-white/50"}`}
                   >
-                    <div className={`absolute -top-2 left-1/2 h-2 w-8 -translate-x-1/2 ${isActive ? "bg-black" : "bg-white/25"}`} />
-                    <span className={`serif-display text-2xl md:text-3xl ${isActive ? "text-black" : "text-white/50"}`}>{s.n}</span>
-                    <span className={`serif-display text-xl [writing-mode:vertical-rl] md:text-3xl ${isActive ? "text-black" : "neon-white"}`}>
+                    <div
+                      className={`absolute -top-2 left-1/2 h-2 w-8 -translate-x-1/2 ${isActive ? "bg-black" : "bg-white/25"}`}
+                    />
+                    <span
+                      className={`serif-display text-2xl md:text-3xl ${isActive ? "text-black" : "text-white/50"}`}
+                    >
+                      {s.n}
+                    </span>
+                    <span
+                      className={`serif-display text-xl [writing-mode:vertical-rl] md:text-3xl ${isActive ? "text-black" : "neon-white"}`}
+                    >
                       {s.t}
                     </span>
                     <div className="min-h-[80px]">
                       <AnimatePresence>
                         {isActive && (
-                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col gap-1">
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="flex flex-col gap-1"
+                          >
                             {s.items.map((it) => (
-                              <span key={it} className="font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-black">— {it}</span>
+                              <span
+                                key={it}
+                                className="font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-black"
+                              >
+                                — {it}
+                              </span>
                             ))}
                           </motion.div>
                         )}
@@ -680,10 +853,19 @@ function Services() {
 
 /* ---------- NEWSLETTER + FAQ ---------- */
 const faqs = [
-  { q: "What projects do you take on?", a: "Branding, UI/UX, and industrial design — for startups and founders who want a design partner, not a vendor." },
-  { q: "How do you price?", a: "By scope and deliverables, never hourly. Custom proposal after a quick discovery call." },
+  {
+    q: "What projects do you take on?",
+    a: "Branding, UI/UX, and industrial design — for startups and founders who want a design partner, not a vendor.",
+  },
+  {
+    q: "How do you price?",
+    a: "By scope and deliverables, never hourly. Custom proposal after a quick discovery call.",
+  },
   { q: "Do you work remotely?", a: "Fully — async-friendly across time zones." },
-  { q: "Early-stage budgets?", a: "Selective but flexible. If your project is interesting, let's talk." },
+  {
+    q: "Early-stage budgets?",
+    a: "Selective but flexible. If your project is interesting, let's talk.",
+  },
 ];
 
 function Alley() {
@@ -699,7 +881,9 @@ function Alley() {
           <PowerOn delay={0.15}>
             <SignHover>
               <div className="neon-border mt-8 bg-black p-8 md:p-10">
-                <div className="flicker-slow neon-red serif-display text-4xl md:text-5xl">The Pixel Post</div>
+                <div className="flicker-slow neon-red serif-display text-4xl md:text-5xl">
+                  The Pixel Post
+                </div>
                 <p className="mt-5 text-sm leading-relaxed text-[var(--ink-soft)]">
                   AI × Design, weekly. 1,500+ designers read it on LinkedIn.
                 </p>
@@ -724,13 +908,31 @@ function Alley() {
               const isOpen = open === idx;
               return (
                 <div key={f.q} className="border-b border-[var(--divider)]">
-                  <button onClick={() => setOpen(isOpen ? null : idx)} className="flex w-full items-center justify-between gap-4 py-5 text-left">
-                    <span className={`font-mono text-xs font-bold uppercase tracking-[0.12em] transition ${isOpen ? "neon-red" : "text-[var(--ink)]"}`}>{f.q}</span>
-                    <motion.span animate={{ rotate: isOpen ? 45 : 0 }} className="serif-display shrink-0 text-xl text-[var(--neon)]">+</motion.span>
+                  <button
+                    onClick={() => setOpen(isOpen ? null : idx)}
+                    className="flex w-full items-center justify-between gap-4 py-5 text-left"
+                  >
+                    <span
+                      className={`font-mono text-xs font-bold uppercase tracking-[0.12em] transition ${isOpen ? "neon-red" : "text-[var(--ink)]"}`}
+                    >
+                      {f.q}
+                    </span>
+                    <motion.span
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      className="serif-display shrink-0 text-xl text-[var(--neon)]"
+                    >
+                      +
+                    </motion.span>
                   </button>
                   <AnimatePresence initial={false}>
                     {isOpen && (
-                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.35, ease: EASE }} className="overflow-hidden">
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: EASE }}
+                        className="overflow-hidden"
+                      >
                         <p className="pb-5 text-sm leading-relaxed text-[var(--ink-soft)]">{f.a}</p>
                       </motion.div>
                     )}
@@ -752,10 +954,14 @@ function Contact() {
       <LEDTicker text="Contact ✦ Say hello ✦ vanshm.design@gmail.com ✦ +91 8806786802 ✦" reverse />
       <div className="relative px-5 py-32 text-center md:py-44">
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="serif-display text-[46vw] leading-none text-[var(--neon)]/[0.04]">@</span>
+          <span className="serif-display text-[46vw] leading-none text-[var(--neon)]/[0.04]">
+            @
+          </span>
         </div>
         <Fade>
-          <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-white/40">06 — The part where you email me</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-white/40">
+            06 — The part where you email me
+          </span>
         </Fade>
         <a href="mailto:vanshm.design@gmail.com" data-cursor="Click!" className="group mt-10 block">
           <PowerOn>
@@ -773,9 +979,30 @@ function Contact() {
           </Magnetic>
         </a>
         <div className="mt-12 flex justify-center gap-8">
-          <a className="nav-link font-mono text-[10px] uppercase tracking-[0.2em] text-white/60" href="https://www.linkedin.com/in/vanshmandrawadker2004/" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a className="nav-link font-mono text-[10px] uppercase tracking-[0.2em] text-white/60" href="https://www.behance.net/VanshMandrawadker" target="_blank" rel="noreferrer">Behance</a>
-          <a className="nav-link font-mono text-[10px] uppercase tracking-[0.2em] text-white/60" href="https://marga.co.in" target="_blank" rel="noreferrer">marga.co.in</a>
+          <a
+            className="nav-link font-mono text-[10px] uppercase tracking-[0.2em] text-white/60"
+            href="https://www.linkedin.com/in/vanshmandrawadker2004/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            LinkedIn
+          </a>
+          <a
+            className="nav-link font-mono text-[10px] uppercase tracking-[0.2em] text-white/60"
+            href="https://www.behance.net/VanshMandrawadker"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Behance
+          </a>
+          <a
+            className="nav-link font-mono text-[10px] uppercase tracking-[0.2em] text-white/60"
+            href="https://marga.co.in"
+            target="_blank"
+            rel="noreferrer"
+          >
+            marga.co.in
+          </a>
         </div>
       </div>
       <div className="crosswalk" />
