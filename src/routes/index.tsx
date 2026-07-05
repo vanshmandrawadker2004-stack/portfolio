@@ -493,11 +493,11 @@ function About() {
           ].map(([n, s, l], i) => (
             <PowerOn key={l as string} delay={i * 0.12}>
               <SignHover>
-                <div className={`flex items-center justify-between gap-3 px-5 py-4 ${i % 2 ? "bg-white text-black" : "neon-border bg-black"}`}>
-                  <span className={`serif-display text-3xl md:text-4xl ${i % 2 ? "text-black" : "neon-red"}`}>
+                <div className={`flex flex-col gap-1 px-4 py-4 md:flex-row md:items-center md:justify-between md:gap-3 md:px-5 ${i % 2 ? "bg-white text-black" : "neon-border bg-black"}`}>
+                  <span className={`serif-display text-2xl md:text-4xl ${i % 2 ? "text-black" : "neon-red"}`}>
                     <Counter to={n as number} suffix={s as string} />
                   </span>
-                  <span className={`text-right font-mono text-[9px] uppercase tracking-[0.18em] ${i % 2 ? "text-black/60" : "text-[var(--ink-soft)]"}`}>{l}</span>
+                  <span className={`font-mono text-[8px] uppercase leading-tight tracking-[0.15em] md:text-right md:text-[9px] md:tracking-[0.18em] ${i % 2 ? "text-black/60" : "text-[var(--ink-soft)]"}`}>{l}</span>
                 </div>
               </SignHover>
             </PowerOn>
