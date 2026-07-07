@@ -1,11 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageShell, Reveal, PowerOn, SectionTag, LEDTicker, FloatShapes, SignHover, NeonCTA } from "@/components/site";
+import {
+  PageShell,
+  Reveal,
+  PowerOn,
+  SectionTag,
+  LEDTicker,
+  FloatShapes,
+  SignHover,
+  NeonCTA,
+} from "@/components/site";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
     meta: [
       { title: "Blog — Vansh Mandrawadker" },
-      { name: "description", content: "Notes on design, branding, and using AI to work smarter — from The Pixel Post." },
+      {
+        name: "description",
+        content: "Notes on design, branding, and using AI to work smarter — from The Pixel Post.",
+      },
       { property: "og:title", content: "Blog — Vansh Mandrawadker" },
       { property: "og:description", content: "Writing on design and AI workflows." },
       { property: "og:url", content: "/blog" },
@@ -65,7 +77,8 @@ function Blog() {
           </Reveal>
           <PowerOn delay={0.15}>
             <h1 className="serif-display mt-10 text-[15vw] leading-[0.95] md:text-[9vw]">
-              <span className="neon-white">Field</span> <span className="neon-red flicker-slow">Notes</span>
+              <span className="neon-white">Field</span>{" "}
+              <span className="neon-red flicker-slow">Notes</span>
             </h1>
           </PowerOn>
           <Reveal delay={0.3}>
@@ -92,15 +105,25 @@ function Blog() {
                 >
                   <div>
                     <div className="flex items-center justify-between">
-                      <span className="bg-[var(--neon)] px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-black">{p.c}</span>
-                      <span className="serif-display text-4xl text-white/10">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="bg-[var(--neon)] px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-black">
+                        {p.c}
+                      </span>
+                      <span className="serif-display text-4xl text-white/10">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </div>
-                    <h2 className="serif-display mt-6 text-2xl leading-tight transition-colors duration-300 group-hover:neon-red md:text-3xl">{p.t}</h2>
+                    <h2 className="serif-display mt-6 text-2xl leading-tight transition-colors duration-300 group-hover:neon-red md:text-3xl">
+                      {p.t}
+                    </h2>
                     <p className="mt-4 text-sm leading-relaxed text-[var(--ink-soft)]">{p.x}</p>
                   </div>
                   <div className="mt-8 flex items-center justify-between border-t border-[var(--divider)] pt-4">
-                    <span className="flicker-fast font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--neon)]">● {p.d}</span>
-                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)] transition-colors duration-300 group-hover:text-[var(--neon)]">Read on LinkedIn ↗</span>
+                    <span className="flicker-fast font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--neon)]">
+                      ● {p.d}
+                    </span>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)] transition-colors duration-300 group-hover:text-[var(--neon)]">
+                      Read on LinkedIn ↗
+                    </span>
                   </div>
                 </a>
               </SignHover>
@@ -113,8 +136,12 @@ function Blog() {
           <div className="relative mx-auto mt-16 max-w-[1300px]">
             <div className="neon-border flex flex-col items-start justify-between gap-6 bg-black p-8 md:flex-row md:items-center md:p-10">
               <div>
-                <div className="flicker-slow neon-red serif-display text-3xl md:text-4xl">The Pixel Post</div>
-                <p className="mt-3 text-sm text-[var(--ink-soft)]">The weekly edition — AI × Design, read by 1,500+ designers on LinkedIn.</p>
+                <div className="flicker-slow neon-red serif-display text-3xl md:text-4xl">
+                  The Pixel Post
+                </div>
+                <p className="mt-3 text-sm text-[var(--ink-soft)]">
+                  The weekly edition — AI × Design, read by 1,500+ designers on LinkedIn.
+                </p>
               </div>
               <a
                 href="https://www.linkedin.com/in/vanshmandrawadker2004/"
