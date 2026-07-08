@@ -1,6 +1,7 @@
 # Portfolio Website — Full Handoff Document
 
 ## Project Overview
+
 This is **Vansh Mandrawadker's** personal portfolio website built with **React + Vite + TailwindCSS + Framer Motion + TanStack Router**. It is a freelance portfolio targeting clients who need **branding, UI/UX, and industrial design** work.
 
 **Live dev server:** `npm run dev` → `http://localhost:8080`
@@ -10,6 +11,7 @@ This is **Vansh Mandrawadker's** personal portfolio website built with **React +
 ---
 
 ## Tech Stack
+
 - **React** (with TanStack Router for file-based routing)
 - **Vite** (v8) as bundler
 - **Tailwind CSS v4** (via `@import "tailwindcss"`)
@@ -20,6 +22,7 @@ This is **Vansh Mandrawadker's** personal portfolio website built with **React +
 ---
 
 ## Designer Info
+
 - **Name:** Vansh Mandrawadker
 - **Role:** Product Designer (UI/UX, Industrial Design, Brand Identity)
 - **Email:** vanshm.design@gmail.com
@@ -33,6 +36,7 @@ This is **Vansh Mandrawadker's** personal portfolio website built with **React +
 ---
 
 ## Design Direction
+
 - **Reference site:** https://kanso.framer.media (80% inspiration, not a copy)
 - **Background:** `#FAFAF8` (warm off-white)
 - **Text:** `#0D0D0D` (near-black)
@@ -45,6 +49,7 @@ This is **Vansh Mandrawadker's** personal portfolio website built with **React +
 ---
 
 ## File Structure (important files only)
+
 ```
 src/
   styles.css              ← All CSS variables, fonts, utilities
@@ -68,26 +73,28 @@ public/
 ---
 
 ## Homepage Sections (in order)
-| # | Section | Component | Notes |
-|---|---------|-----------|-------|
-| — | Navbar | in `site.tsx` | Logo left, nav center, "Start a Project" CTA right, live clock |
-| — | Hero | `Hero()` | "Vansh" + "Mandrawadker" in large Helvetica Neue light, tagline right, hero image below |
-| — | Marquee | `Marquee()` | Scrolling tool names strip |
-| 01 | About | `AboutSnippet()` | Headline + bio text left, 4 stat counters right in bordered grid |
-| 02 | Selected Work | `SelectedWork()` | Project cards grid from `projects.ts` |
-| 03 | Why Me | `WhyMe()` | Portrait left + quote, numbered differentiators list right |
-| 04 | Services | `Services()` | Accordion — Brand Identity, UI/UX Design, Industrial Design, Consultation & Audit |
-| 05 | Process | `Process()` | 4-step horizontal: Discover → Define → Design → Deliver |
-| 06 | Newsletter | `Newsletter()` | The Pixel Post CTA card |
-| 07 | FAQ | `FAQ()` | Accordion Q&A |
-| — | CTA Banner | `CTABanner()` | Dark full-width CTA before footer |
-| — | Footer | in `site.tsx` | Nav links, socials, email, newsletter blurb |
+
+| #   | Section       | Component        | Notes                                                                                   |
+| --- | ------------- | ---------------- | --------------------------------------------------------------------------------------- |
+| —   | Navbar        | in `site.tsx`    | Logo left, nav center, "Start a Project" CTA right, live clock                          |
+| —   | Hero          | `Hero()`         | "Vansh" + "Mandrawadker" in large Helvetica Neue light, tagline right, hero image below |
+| —   | Marquee       | `Marquee()`      | Scrolling tool names strip                                                              |
+| 01  | About         | `AboutSnippet()` | Headline + bio text left, 4 stat counters right in bordered grid                        |
+| 02  | Selected Work | `SelectedWork()` | Project cards grid from `projects.ts`                                                   |
+| 03  | Why Me        | `WhyMe()`        | Portrait left + quote, numbered differentiators list right                              |
+| 04  | Services      | `Services()`     | Accordion — Brand Identity, UI/UX Design, Industrial Design, Consultation & Audit       |
+| 05  | Process       | `Process()`      | 4-step horizontal: Discover → Define → Design → Deliver                                 |
+| 06  | Newsletter    | `Newsletter()`   | The Pixel Post CTA card                                                                 |
+| 07  | FAQ           | `FAQ()`          | Accordion Q&A                                                                           |
+| —   | CTA Banner    | `CTABanner()`    | Dark full-width CTA before footer                                                       |
+| —   | Footer        | in `site.tsx`    | Nav links, socials, email, newsletter blurb                                             |
 
 **Note:** Testimonials section was REMOVED (fake quotes). Section numbers updated accordingly (FAQ is now 07, not 08).
 
 ---
 
 ## Stats (About section counters)
+
 ```
 4+    Internships completed
 10+   Projects delivered
@@ -98,6 +105,7 @@ public/
 ---
 
 ## Projects Data (`src/lib/projects.ts`)
+
 ```ts
 { slug: "marga",              title: "marga",               year: "2025", category: "Web / Brand",       image: "/marga 2.png",         href: "https://marga.co.in",                                      span: "full", contain: true }
 { slug: "portfolio",          title: "Portfolio",            year: "2025", category: "UI/UX",             image: "[behance CDN url]",     href: "https://www.behance.net/gallery/224137575/Portfolio",       span: "half" }
@@ -109,22 +117,25 @@ public/
 { slug: "acoform",            title: "ACOFORM",              year: "2024", category: "Brand Identity",    image: "[unsplash]",            href: "#",                                                         span: "half" }
 { slug: "presto",             title: "Presto",               year: "2024", category: "Industrial Design", image: "[unsplash]",            href: "#",                                                         span: "full" }
 ```
+
 **Note:** `contain: true` on marga means it uses `object-contain` with black background instead of `object-cover`, so the screenshot isn't stretched.
 
 ---
 
 ## Images
-| File | Used for |
-|------|----------|
-| `/public/IMG_1820 2.JPG` | Hero section (desk with sketchbook, laptop, LG monitor) |
+
+| File                          | Used for                                                           |
+| ----------------------------- | ------------------------------------------------------------------ |
+| `/public/IMG_1820 2.JPG`      | Hero section (desk with sketchbook, laptop, LG monitor)            |
 | `/public/photo of myself.jpg` | Portrait in "Why Me" section (Vansh standing near large sculpture) |
-| `/public/marga 2.png` | Marga project card (dark themed screenshot of marga.co.in) |
+| `/public/marga 2.png`         | Marga project card (dark themed screenshot of marga.co.in)         |
 
 **Still using Unsplash placeholders for:** Weave, ACOFORM, Presto projects — replace with real project images.
 
 ---
 
 ## Changes Made So Far
+
 1. ✅ Removed `®` symbol from "Mandrawadker" in hero
 2. ✅ Fixed hero text overflow — reduced font size so name doesn't bleed into right column
 3. ✅ Changed font from Playfair Display → Space Grotesk → Cormorant Garamond → **Helvetica Neue** (final)
@@ -143,6 +154,7 @@ public/
 ---
 
 ## Still To Do / Known Issues
+
 - [ ] Weave, ACOFORM, Presto project images are still Unsplash placeholders — need real images
 - [ ] marga image quality is lower than ideal (screenshot limitation) — consider replacing with a better image
 - [ ] Hero image could be better composed — currently the desk photo
@@ -154,6 +166,7 @@ public/
 ---
 
 ## How to Run
+
 ```bash
 cd "portfolio website"
 npm run dev
@@ -161,6 +174,7 @@ npm run dev
 ```
 
 ## How to Push Changes to GitHub
+
 ```bash
 cd "portfolio website"
 git add .
