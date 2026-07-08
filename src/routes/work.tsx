@@ -1,15 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { PageShell, Reveal, PowerOn, SectionTag, LEDTicker, FloatShapes, NeonCTA, Tilt } from "@/components/site";
+import {
+  PageShell,
+  Reveal,
+  PowerOn,
+  SectionTag,
+  LEDTicker,
+  FloatShapes,
+  NeonCTA,
+  Tilt,
+} from "@/components/site";
 import { projects } from "@/lib/projects";
 
 export const Route = createFileRoute("/work")({
   head: () => ({
     meta: [
       { title: "Work — Vansh Mandrawadker" },
-      { name: "description", content: "Selected freelance work in branding, UI/UX, and industrial design." },
+      {
+        name: "description",
+        content: "Selected freelance work in branding, UI/UX, and industrial design.",
+      },
       { property: "og:title", content: "Work — Vansh Mandrawadker" },
-      { property: "og:description", content: "Brand identity, product, and industrial design projects." },
+      {
+        property: "og:description",
+        content: "Brand identity, product, and industrial design projects.",
+      },
       { property: "og:url", content: "/work" },
     ],
     links: [{ rel: "canonical", href: "/work" }],
@@ -23,8 +38,9 @@ function Work() {
   const [f, setF] = useState<(typeof filters)[number]>("All");
   const list = useMemo(() => {
     if (f === "All") return projects;
-    if (f === "UI/UX") return projects.filter(p => p.category === "UI/UX" || p.category === "Web / Brand");
-    return projects.filter(p => p.category === f);
+    if (f === "UI/UX")
+      return projects.filter((p) => p.category === "UI/UX" || p.category === "Web / Brand");
+    return projects.filter((p) => p.category === f);
   }, [f]);
 
   return (
@@ -38,7 +54,8 @@ function Work() {
           </Reveal>
           <PowerOn delay={0.15}>
             <h1 className="serif-display mt-10 text-[15vw] leading-[0.95] md:text-[9vw]">
-              <span className="neon-white">The</span> <span className="neon-red flicker-slow">District</span>
+              <span className="neon-white">The</span>{" "}
+              <span className="neon-red flicker-slow">District</span>
             </h1>
           </PowerOn>
           <Reveal delay={0.3}>
@@ -100,13 +117,21 @@ function Work() {
                     </div>
                     <div className="flex items-center justify-between gap-4 p-5 md:p-6">
                       <div>
-                        <div className="serif-display text-3xl transition-all duration-300 group-hover:neon-red md:text-4xl">{p.title}</div>
+                        <div className="serif-display text-3xl transition-all duration-300 group-hover:neon-red md:text-4xl">
+                          {p.title}
+                        </div>
                         <div className="mt-2 flex flex-wrap items-center gap-3">
-                          <span className="bg-[var(--neon)] px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-black">{p.category}</span>
-                          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{p.year}</span>
+                          <span className="bg-[var(--neon)] px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-black">
+                            {p.category}
+                          </span>
+                          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
+                            {p.year}
+                          </span>
                         </div>
                       </div>
-                      <span className="flicker-fast font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--neon)] opacity-0 transition group-hover:opacity-100">● View ↗</span>
+                      <span className="flicker-fast font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--neon)] opacity-0 transition group-hover:opacity-100">
+                        ● View ↗
+                      </span>
                     </div>
                   </a>
                 </Tilt>
