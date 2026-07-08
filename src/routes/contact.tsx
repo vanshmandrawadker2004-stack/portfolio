@@ -6,7 +6,10 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Vansh Mandrawadker" },
-      { name: "description", content: "Start a freelance project — branding, UI/UX, or industrial design." },
+      {
+        name: "description",
+        content: "Start a freelance project — branding, UI/UX, or industrial design.",
+      },
       { property: "og:title", content: "Contact — Vansh Mandrawadker" },
       { property: "og:description", content: "Get in touch about a freelance design project." },
       { property: "og:url", content: "/contact" },
@@ -18,19 +21,26 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sent, setSent] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", type: "Brand Identity", budget: "Let's discuss", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    type: "Brand Identity",
+    budget: "Let's discuss",
+    message: "",
+  });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const subject = encodeURIComponent(`New project enquiry — ${form.name}`);
     const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\nProject type: ${form.type}\nBudget: ${form.budget}\n\n${form.message}`
+      `Name: ${form.name}\nEmail: ${form.email}\nProject type: ${form.type}\nBudget: ${form.budget}\n\n${form.message}`,
     );
     window.location.href = `mailto:vanshm.design@gmail.com?subject=${subject}&body=${body}`;
     setSent(true);
   };
 
-  const field = "w-full border-b-2 border-[var(--divider)] bg-transparent py-3 text-base text-[var(--ink)] outline-none transition focus:border-[var(--neon)] placeholder:text-[var(--ink-soft)]";
+  const field =
+    "w-full border-b-2 border-[var(--divider)] bg-transparent py-3 text-base text-[var(--ink)] outline-none transition focus:border-[var(--neon)] placeholder:text-[var(--ink-soft)]";
   const label = "font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--ink-soft)]";
 
   return (
@@ -44,7 +54,8 @@ function Contact() {
           </Reveal>
           <PowerOn delay={0.15}>
             <h1 className="serif-display mt-10 text-[16vw] leading-[0.95] md:text-[10vw]">
-              <span className="neon-red flicker-slow">Let's</span> <span className="neon-white">Talk</span>
+              <span className="neon-red flicker-slow">Let's</span>{" "}
+              <span className="neon-white">Talk</span>
             </h1>
           </PowerOn>
           <Reveal delay={0.3}>
@@ -63,37 +74,81 @@ function Contact() {
           <PowerOn className="md:col-span-7">
             <div className="neon-border-white bg-black/60 p-8 md:p-12">
               <div className="mb-8 flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">Enquiry form — v2.6</span>
-                <span className="flicker-fast font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--neon)]">● Rec</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">
+                  Enquiry form — v2.6
+                </span>
+                <span className="flicker-fast font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--neon)]">
+                  ● Rec
+                </span>
               </div>
               <form onSubmit={submit} className="space-y-8">
                 <div className="grid gap-8 md:grid-cols-2">
                   <label className="block">
                     <span className={label}>Name</span>
-                    <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={field} placeholder="Your full name" />
+                    <input
+                      required
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      className={field}
+                      placeholder="Your full name"
+                    />
                   </label>
                   <label className="block">
                     <span className={label}>Email</span>
-                    <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={field} placeholder="you@email.com" />
+                    <input
+                      required
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className={field}
+                      placeholder="you@email.com"
+                    />
                   </label>
                 </div>
                 <div className="grid gap-8 md:grid-cols-2">
                   <label className="block">
                     <span className={label}>Project type</span>
-                    <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className={field + " bg-black"}>
-                      {["Brand Identity", "UI/UX Design", "Industrial Design", "Consultation", "Other"].map(o => <option key={o}>{o}</option>)}
+                    <select
+                      value={form.type}
+                      onChange={(e) => setForm({ ...form, type: e.target.value })}
+                      className={field + " bg-black"}
+                    >
+                      {[
+                        "Brand Identity",
+                        "UI/UX Design",
+                        "Industrial Design",
+                        "Consultation",
+                        "Other",
+                      ].map((o) => (
+                        <option key={o}>{o}</option>
+                      ))}
                     </select>
                   </label>
                   <label className="block">
                     <span className={label}>Budget</span>
-                    <select value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} className={field + " bg-black"}>
-                      {["Under ₹10K", "₹10K–₹30K", "₹30K–₹60K", "₹60K+", "Let's discuss"].map(o => <option key={o}>{o}</option>)}
+                    <select
+                      value={form.budget}
+                      onChange={(e) => setForm({ ...form, budget: e.target.value })}
+                      className={field + " bg-black"}
+                    >
+                      {["Under ₹10K", "₹10K–₹30K", "₹30K–₹60K", "₹60K+", "Let's discuss"].map(
+                        (o) => (
+                          <option key={o}>{o}</option>
+                        ),
+                      )}
                     </select>
                   </label>
                 </div>
                 <label className="block">
                   <span className={label}>Tell me about the project</span>
-                  <textarea required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className={field + " resize-none"} placeholder="Goals, timeline, anything I should know…" />
+                  <textarea
+                    required
+                    rows={5}
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    className={field + " resize-none"}
+                    placeholder="Goals, timeline, anything I should know…"
+                  />
                 </label>
                 <button
                   type="submit"
@@ -102,7 +157,12 @@ function Contact() {
                 >
                   Send transmission →
                 </button>
-                {sent && <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">Opening your mail client… if nothing happens, write to vanshm.design@gmail.com directly.</p>}
+                {sent && (
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
+                    Opening your mail client… if nothing happens, write to vanshm.design@gmail.com
+                    directly.
+                  </p>
+                )}
               </form>
             </div>
           </PowerOn>
@@ -111,17 +171,33 @@ function Contact() {
           <div className="flex flex-col gap-5 md:col-span-5">
             <PowerOn delay={0.1}>
               <div className="neon-border flex items-center justify-between bg-black px-6 py-5">
-                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--ink)]">Status</span>
-                <span className="flicker-fast neon-red font-mono text-[10px] font-bold uppercase tracking-[0.2em]">● Open for projects</span>
+                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--ink)]">
+                  Status
+                </span>
+                <span className="flicker-fast neon-red font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
+                  ● Open for projects
+                </span>
               </div>
             </PowerOn>
             {[
               { l: "Email", v: "vanshm.design@gmail.com", h: "mailto:vanshm.design@gmail.com" },
               { l: "Phone", v: "+91 8806786802", h: "tel:+918806786802" },
-              { l: "LinkedIn", v: "vanshmandrawadker2004", h: "https://www.linkedin.com/in/vanshmandrawadker2004/" },
-              { l: "Behance", v: "VanshMandrawadker", h: "https://www.behance.net/VanshMandrawadker" },
+              {
+                l: "LinkedIn",
+                v: "vanshmandrawadker2004",
+                h: "https://www.linkedin.com/in/vanshmandrawadker2004/",
+              },
+              {
+                l: "Behance",
+                v: "VanshMandrawadker",
+                h: "https://www.behance.net/VanshMandrawadker",
+              },
               { l: "Live project", v: "marga.co.in", h: "https://marga.co.in" },
-              { l: "Newsletter", v: "The Pixel Post", h: "https://www.linkedin.com/in/vanshmandrawadker2004/" },
+              {
+                l: "Newsletter",
+                v: "The Pixel Post",
+                h: "https://www.linkedin.com/in/vanshmandrawadker2004/",
+              },
             ].map((i, idx) => (
               <PowerOn key={i.l} delay={0.15 + idx * 0.06}>
                 <a
@@ -131,8 +207,12 @@ function Contact() {
                   data-cursor="Go"
                   className="group flex items-center justify-between border-2 border-[var(--divider)] bg-black/60 px-6 py-4 transition-all duration-300 hover:border-[var(--neon)] hover:pl-8"
                 >
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{i.l}</span>
-                  <span className="serif-display text-lg transition-colors duration-300 group-hover:neon-red md:text-xl">{i.v}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
+                    {i.l}
+                  </span>
+                  <span className="serif-display text-lg transition-colors duration-300 group-hover:neon-red md:text-xl">
+                    {i.v}
+                  </span>
                 </a>
               </PowerOn>
             ))}

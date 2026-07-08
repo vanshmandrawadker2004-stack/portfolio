@@ -91,7 +91,11 @@
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     font-family: var(--font-serif);
     letter-spacing: 0.005em;
     text-transform: uppercase;
@@ -238,7 +242,9 @@
   /* Image treatment: grayscale until hover */
   .img-reveal img {
     filter: grayscale(100%) contrast(1.05);
-    transition: filter 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    transition:
+      filter 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .img-reveal:hover img {
     filter: grayscale(0%) contrast(1);
@@ -246,7 +252,9 @@
   }
 
   .neon-glow {
-    text-shadow: 0 0 10px rgba(255, 42, 60, 0.3), 0 0 30px rgba(255, 42, 60, 0.12);
+    text-shadow:
+      0 0 10px rgba(255, 42, 60, 0.3),
+      0 0 30px rgba(255, 42, 60, 0.12);
   }
 
   /* ---- Tokyo signage system (soft glow, readable) ---- */
@@ -286,42 +294,82 @@
   }
   .crosswalk {
     height: 16px;
-    background-image: repeating-linear-gradient(90deg, #f2efe6 0px, #f2efe6 42px, transparent 42px, transparent 84px);
+    background-image: repeating-linear-gradient(
+      90deg,
+      #f2efe6 0px,
+      #f2efe6 42px,
+      transparent 42px,
+      transparent 84px
+    );
     opacity: 0.85;
   }
   .scanlines {
-    background-image: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.32) 0px, rgba(0, 0, 0, 0.32) 1px, transparent 1px, transparent 3px);
+    background-image: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.32) 0px,
+      rgba(0, 0, 0, 0.32) 1px,
+      transparent 1px,
+      transparent 3px
+    );
   }
   .rain {
-    background-image: repeating-linear-gradient(112deg, transparent 0px, transparent 9px, rgba(242, 239, 230, 0.045) 9px, rgba(242, 239, 230, 0.045) 10px);
+    background-image: repeating-linear-gradient(
+      112deg,
+      transparent 0px,
+      transparent 9px,
+      rgba(242, 239, 230, 0.045) 9px,
+      rgba(242, 239, 230, 0.045) 10px
+    );
     background-size: 200% 200%;
     animation: rainfall 0.7s linear infinite;
   }
 }
 
 @keyframes rainfall {
-  from { background-position: 0 0; }
-  to { background-position: -60px 120px; }
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -60px 120px;
+  }
 }
 
 @keyframes grid-scroll {
-  from { background-position-y: 0px; }
-  to { background-position-y: 56px; }
+  from {
+    background-position-y: 0px;
+  }
+  to {
+    background-position-y: 56px;
+  }
 }
 
 @keyframes drift-a {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(60px, -50px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(60px, -50px);
+  }
 }
 
 @keyframes drift-b {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-70px, 40px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-70px, 40px);
+  }
 }
 
 @keyframes spin-very-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ---- RED MODE (the DO NOT PRESS button) ---- */
@@ -342,27 +390,63 @@ body.red-mode ::selection {
 }
 
 @keyframes shake {
-  10%, 90% { transform: translate3d(-2px, 0, 0); }
-  20%, 80% { transform: translate3d(4px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-  40%, 60% { transform: translate3d(6px, 0, 0); }
+  10%,
+  90% {
+    transform: translate3d(-2px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(4px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-6px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(6px, 0, 0);
+  }
 }
 
 @keyframes streaks {
-  from { background-position-y: 0; }
-  to { background-position-y: -900px; }
+  from {
+    background-position-y: 0;
+  }
+  to {
+    background-position-y: -900px;
+  }
 }
 
 @keyframes flicker {
-  0%, 100% { opacity: 1; }
-  41% { opacity: 1; }
-  42% { opacity: 0.55; }
-  43% { opacity: 1; }
-  45% { opacity: 0.25; }
-  46% { opacity: 1; }
-  73% { opacity: 1; }
-  74% { opacity: 0.5; }
-  75% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  41% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.55;
+  }
+  43% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.25;
+  }
+  46% {
+    opacity: 1;
+  }
+  73% {
+    opacity: 1;
+  }
+  74% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 1;
+  }
 }
 
 @layer components {
@@ -387,16 +471,28 @@ body.red-mode ::selection {
 }
 
 @keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes marquee-reverse {
-  from { transform: translateX(-50%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
