@@ -38,23 +38,23 @@ function SectionTagline({ attributes, headline, body, meta }: {
   attributes: string[]; headline: string; body: string; meta?: string;
 }) {
   return (
-    <div className="grid gap-10 py-8 md:grid-cols-[1fr_2fr] md:gap-20 md:py-14">
+    <div className="grid gap-12 py-14 md:grid-cols-[1fr_2fr] md:gap-24 md:py-20">
       {/* left — stacked attributes */}
       <div className="flex flex-col gap-1 pt-1">
-        <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--neon)]">Vitalink</div>
+        <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Vitalink</div>
         {attributes.map(a => (
-          <span key={a} className="serif-display text-2xl leading-tight text-[var(--ink-soft)] md:text-3xl">{a}</span>
+          <span key={a} className="serif-display text-2xl leading-snug text-[var(--ink-soft)] md:text-3xl">{a}</span>
         ))}
         {meta && (
-          <div className="mt-6 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]/50">
+          <div className="mt-8 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">
             Services / {meta}
           </div>
         )}
       </div>
       {/* right — headline + body */}
       <div>
-        <p className="serif-display text-2xl leading-tight text-[var(--foreground)] md:text-4xl">{headline}</p>
-        <p className="mt-6 text-sm leading-[1.9] text-[var(--ink-soft)] md:text-base">{body}</p>
+        <p className="serif-display text-3xl leading-tight text-[var(--foreground)] md:text-5xl">{headline}</p>
+        <p className="mt-8 text-sm leading-[1.9] text-[var(--ink-soft)] md:text-base">{body}</p>
       </div>
     </div>
   );
@@ -73,24 +73,29 @@ function SectionText({ heading, body }: { heading?: string; body: string }) {
 
 function SectionPalette({ colors }: { colors: { name: string; hex: string; role: string }[] }) {
   return (
-    <div className="py-6">
+    <div className="py-10">
       {/* full-bleed color strips */}
-      <div className="flex h-28 overflow-hidden md:h-40">
-        {colors.map((c, i) => (
+      <div className="flex h-48 overflow-hidden md:h-64">
+        {colors.map(c => (
           <div
             key={c.hex}
-            className="flex-1 transition-all duration-500 hover:flex-[2]"
+            className="group relative flex-1 cursor-default transition-all duration-500 hover:flex-[2]"
             style={{ background: c.hex }}
-          />
+          >
+            {/* hex on hover */}
+            <span className="absolute bottom-4 left-0 right-0 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-white/0 transition-all duration-300 group-hover:text-white/80">
+              {c.hex}
+            </span>
+          </div>
         ))}
       </div>
       {/* labels below */}
-      <div className="mt-0 grid border-t border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${colors.length}, 1fr)` }}>
+      <div className="grid border-t border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${colors.length}, 1fr)` }}>
         {colors.map(c => (
-          <div key={c.hex} className="border-r border-[var(--divider)] px-3 py-3 last:border-r-0">
-            <div className="font-mono text-[10px] font-medium text-[var(--foreground)]">{c.name}</div>
-            <div className="font-mono text-[9px] text-[var(--ink-soft)]">{c.hex}</div>
-            <div className="mt-1 font-mono text-[9px] leading-tight text-[var(--ink-soft)]/60">{c.role.split("—")[0]}</div>
+          <div key={c.hex} className="border-r border-[var(--divider)] px-4 py-5 last:border-r-0">
+            <div className="font-mono text-[11px] font-medium text-[var(--foreground)]">{c.name}</div>
+            <div className="mt-1 font-mono text-[10px] text-[var(--ink-soft)]">{c.hex}</div>
+            <div className="mt-1.5 font-mono text-[10px] leading-snug text-[var(--ink-soft)]">{c.role.split("—")[0].trim()}</div>
           </div>
         ))}
       </div>
@@ -100,37 +105,50 @@ function SectionPalette({ colors }: { colors: { name: string; hex: string; role:
 
 function SectionTypography({ name, weights, description }: { name: string; weights: string[]; description: string }) {
   return (
-    <div className="py-6">
-      <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
-        {/* large specimen */}
-        <div>
-          <div
-            style={{ fontFamily: name }}
-            className="border-b border-[var(--divider)] pb-4 text-[5rem] font-light leading-none tracking-tight text-[var(--foreground)] md:text-[9rem]"
-          >
-            Aa
-          </div>
-          <div style={{ fontFamily: name }} className="mt-4 text-xs text-[var(--ink-soft)]/60 md:text-sm">
-            A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br />
-            a b c d e f g h i j k l m n o p q r s t u v w x y z<br />
-            0 1 2 3 4 5 6 7 8 9
-          </div>
-        </div>
-        {/* meta right */}
-        <div className="flex flex-col gap-6 pt-2">
+    <div className="py-10">
+      {/* dot-grid background panel */}
+      <div
+        className="relative overflow-hidden p-8 md:p-14"
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+          border: "1px solid var(--divider)",
+        }}
+      >
+        <div className="grid gap-10 md:grid-cols-[2fr_1fr]">
+          {/* large specimen */}
           <div>
-            <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--neon)]">Typeface</div>
-            <div className="text-2xl font-light text-[var(--foreground)]" style={{ fontFamily: name }}>{name}</div>
-          </div>
-          <div>
-            <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--ink-soft)]/50">Weights used</div>
-            <div className="flex flex-col gap-1.5">
-              {weights.map(w => (
-                <div key={w} className="font-mono text-[10px] text-[var(--ink-soft)]">{w}</div>
-              ))}
+            <div
+              style={{ fontFamily: name }}
+              className="text-[6rem] font-light leading-none tracking-tight text-[var(--foreground)] md:text-[11rem]"
+            >
+              Aa
+            </div>
+            <div
+              style={{ fontFamily: name }}
+              className="mt-5 border-t border-[var(--divider)] pt-5 text-sm leading-relaxed text-[var(--ink-soft)]"
+            >
+              A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br />
+              a b c d e f g h i j k l m n o p q r s t u v w x y z<br />
+              0 1 2 3 4 5 6 7 8 9
             </div>
           </div>
-          <p className="text-xs leading-relaxed text-[var(--ink-soft)]/70">{description}</p>
+          {/* meta right */}
+          <div className="flex flex-col gap-8 border-l border-[var(--divider)] pl-8 md:pl-12">
+            <div>
+              <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Typeface</div>
+              <div className="mt-1 text-3xl font-light text-[var(--foreground)]" style={{ fontFamily: name }}>{name}</div>
+            </div>
+            <div>
+              <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--ink-soft)]">Weights</div>
+              <div className="flex flex-col gap-2">
+                {weights.map(w => (
+                  <div key={w} className="font-mono text-[11px] text-[var(--foreground)]">{w}</div>
+                ))}
+              </div>
+            </div>
+            <p className="text-xs leading-relaxed text-[var(--ink-soft)]">{description}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -138,33 +156,43 @@ function SectionTypography({ name, weights, description }: { name: string; weigh
 }
 
 function SectionPersonas({ persona }: { persona: { name: string; role: string; painPoints: string[]; goals: string[] } }) {
+  const initials = persona.name.split(" ").map(n => n[0]).join("");
   return (
-    <div className="py-6">
-      {/* name header — editorial, no box */}
-      <div className="mb-8 border-b border-[var(--divider)] pb-6">
-        <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--neon)]">User Persona</div>
-        <div className="mt-2 serif-display text-4xl text-[var(--foreground)] md:text-6xl">{persona.name}</div>
-        <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{persona.role}</div>
+    <div className="py-10">
+      {/* header with large faded initials in bg */}
+      <div className="relative mb-10 overflow-hidden border-b border-[var(--divider)] pb-8">
+        {/* decorative large initials */}
+        <div
+          className="pointer-events-none absolute -right-4 -top-6 select-none font-[Anton,sans-serif] text-[12rem] leading-none text-white/[0.03] md:text-[18rem]"
+          aria-hidden
+        >
+          {initials}
+        </div>
+        <div className="relative">
+          <div className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">User Persona</div>
+          <div className="mt-3 serif-display text-5xl text-[var(--foreground)] md:text-7xl">{persona.name}</div>
+          <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{persona.role}</div>
+        </div>
       </div>
-      {/* two columns — no border box */}
-      <div className="grid gap-10 md:grid-cols-2 md:gap-16">
+      {/* two columns */}
+      <div className="grid gap-12 md:grid-cols-2 md:gap-20">
         <div>
-          <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--ink-soft)]/50">Pain Points</div>
-          <ul className="flex flex-col gap-4">
+          <div className="mb-5 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--ink-soft)]">Pain Points</div>
+          <ul className="flex flex-col gap-5">
             {persona.painPoints.map((p, i) => (
               <li key={i} className="flex gap-4 text-sm leading-relaxed text-[var(--foreground)]">
-                <span className="mt-[6px] h-1 w-4 flex-shrink-0 bg-red-500/60" />
+                <span className="mt-[7px] h-[2px] w-5 flex-shrink-0 bg-red-500/80" />
                 {p}
               </li>
             ))}
           </ul>
         </div>
         <div>
-          <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--ink-soft)]/50">Goals</div>
-          <ul className="flex flex-col gap-4">
+          <div className="mb-5 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--ink-soft)]">Goals</div>
+          <ul className="flex flex-col gap-5">
             {persona.goals.map((g, i) => (
               <li key={i} className="flex gap-4 text-sm leading-relaxed text-[var(--foreground)]">
-                <span className="mt-[6px] h-1 w-4 flex-shrink-0 bg-[var(--neon)]" />
+                <span className="mt-[7px] h-[2px] w-5 flex-shrink-0 bg-[var(--neon)]" />
                 {g}
               </li>
             ))}
@@ -251,7 +279,7 @@ function SectionConceptMark({ heading, body }: { heading: string; body: string }
 
 function SectionImage({ src, caption }: { src: string; caption?: string }) {
   return (
-    <div className="py-3">
+    <div className="py-6">
       <div className="group overflow-hidden">
         <img
           src={src}
@@ -261,9 +289,9 @@ function SectionImage({ src, caption }: { src: string; caption?: string }) {
         />
       </div>
       {caption && (
-        <div className="mt-3 flex items-center gap-2">
-          <span className="h-px w-4 bg-[var(--neon)]" />
-          <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{caption}</span>
+        <div className="mt-4 flex items-center gap-3">
+          <span className="h-[2px] w-5 bg-[var(--neon)]" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{caption}</span>
         </div>
       )}
     </div>
@@ -272,8 +300,8 @@ function SectionImage({ src, caption }: { src: string; caption?: string }) {
 
 function SectionScreens({ images }: { images: { src: string; caption: string }[] }) {
   return (
-    <div className="py-3">
-      <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
+    <div className="py-6">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         {images.map((img, i) => (
           <div key={i} className="group flex flex-col">
             <div className="overflow-hidden">
@@ -284,9 +312,9 @@ function SectionScreens({ images }: { images: { src: string; caption: string }[]
                 loading="lazy"
               />
             </div>
-            <div className="mt-2 flex items-center gap-2">
-              <span className="h-px w-3 bg-[var(--divider)]" />
-              <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{img.caption}</span>
+            <div className="mt-3 flex items-center gap-3">
+              <span className="h-[2px] w-4 bg-[var(--divider)]" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{img.caption}</span>
             </div>
           </div>
         ))}
