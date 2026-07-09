@@ -574,18 +574,20 @@ function SectionEvidenceCards({ intro, cards }: { intro: string; cards: { headli
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col gap-3 border border-[var(--divider)] bg-[#0e0e10] p-5"
+            transition={{ duration: 0.5, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col border border-[var(--divider)] bg-[#111113]"
           >
-            <div
-              className="text-sm font-semibold leading-snug text-[var(--foreground)]"
-              style={{ fontFamily: "var(--font-sans)" }}
-            >
-              {c.headline}
-            </div>
-            <p className="flex-1 text-[11px] leading-relaxed text-[var(--ink-soft)]">{c.body}</p>
-            <div className="mt-auto border-t border-[var(--divider)] pt-3 font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
-              {c.date}
+            {/* image placeholder strip */}
+            <div className="h-2 w-full" style={{ background: `hsl(${(i * 47) % 360}, 35%, 28%)` }} />
+            <div className="flex flex-1 flex-col gap-3 p-5">
+              {/* blue hyperlink-style headline */}
+              <div className="text-sm font-semibold leading-snug" style={{ color: "#4a9eff" }}>
+                {c.headline}
+              </div>
+              <p className="flex-1 text-[11px] leading-relaxed text-[var(--ink-soft)]">{c.body}</p>
+              <div className="mt-auto pt-3 font-mono text-[9px] italic text-[var(--ink-soft)]">
+                Last Updated: {c.date}
+              </div>
             </div>
           </motion.div>
         ))}
@@ -598,27 +600,62 @@ function SectionComparison({ leftName, rightName, rows }: {
   leftName: string; rightName: string;
   rows: { label: string; left: string; right: string }[];
 }) {
+  // Build simple SVG station sketches for each side
+  const KalupurSketch = () => (
+    <svg viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full opacity-60">
+      {/* simple station elevation */}
+      <rect x="10" y="60" width="260" height="50" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+      <rect x="90" y="30" width="100" height="32" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+      <rect x="120" y="10" width="40" height="22" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+      {/* windows */}
+      {[30,60,90,150,180,210,240].map(x => <rect key={x} x={x} y="72" width="14" height="18" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />)}
+      {/* crane */}
+      <line x1="240" y1="60" x2="240" y2="20" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" />
+      <line x1="220" y1="22" x2="260" y2="22" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" />
+      <line x1="248" y1="22" x2="248" y2="40" stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="2 2" />
+    </svg>
+  );
+  const CsmtSketch = () => (
+    <svg viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full opacity-60">
+      {/* Gothic building silhouette */}
+      <rect x="20" y="50" width="240" height="60" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+      {/* central dome */}
+      <path d="M 110 50 Q 140 10 170 50" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
+      {/* spires */}
+      <path d="M 70 50 L 70 25 L 80 50" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+      <path d="M 190 50 L 190 25 L 200 50" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+      <path d="M 138 10 L 142 0 L 146 10" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+      {/* arched windows */}
+      {[40,85,165,210].map(x => (
+        <g key={x}>
+          <rect x={x} y="70" width="22" height="28" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+          <path d={`M ${x} 70 Q ${x+11} 62 ${x+22} 70`} fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+        </g>
+      ))}
+    </svg>
+  );
+
   return (
     <div className="py-10">
-      <div className="grid grid-cols-[1fr_1fr] gap-px border border-[var(--divider)]">
-        {/* header row */}
-        <div className="border-b border-r border-[var(--divider)] bg-[#1565C0]/20 px-5 py-4">
-          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#2196F3]">Selected</div>
-          <div className="mt-1 font-semibold text-[var(--foreground)]">{leftName}</div>
+      {/* station illustrations */}
+      <div className="grid grid-cols-2 gap-4 mb-0">
+        <div className="relative border-2 border-[#1565C0] bg-[#0d1525] p-4 pb-2">
+          <KalupurSketch />
+          <div className="mt-2 font-semibold text-[var(--foreground)]">{leftName}</div>
         </div>
-        <div className="border-b border-[var(--divider)] bg-white/[0.03] px-5 py-4">
-          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">Benchmark</div>
-          <div className="mt-1 font-semibold text-[var(--foreground)]">{rightName}</div>
+        <div className="border border-[var(--divider)] bg-[#111113] p-4 pb-2">
+          <CsmtSketch />
+          <div className="mt-2 font-semibold text-[var(--foreground)]">{rightName}</div>
         </div>
-        {/* data rows */}
+      </div>
+      {/* comparison rows */}
+      <div className="grid grid-cols-2">
         {rows.map((r, i) => (
           <>
-            <div key={`l${i}`} className="border-b border-r border-[var(--divider)] px-5 py-5 last:border-b-0">
-              <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--neon)]">{r.label}</div>
+            <div key={`l${i}`} className="border-b border-l border-[var(--divider)] px-5 py-4">
               <div className="text-sm leading-relaxed text-[var(--ink-soft)]">{r.left}</div>
             </div>
-            <div key={`r${i}`} className="border-b border-[var(--divider)] bg-white/[0.02] px-5 py-5 last:border-b-0">
-              <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{r.label}</div>
+            <div key={`r${i}`} className="border-b border-l border-r border-[var(--divider)] bg-white/[0.015] px-5 py-4">
               <div className="text-sm leading-relaxed text-[var(--foreground)]">{r.right}</div>
             </div>
           </>
@@ -632,39 +669,62 @@ function SectionPlacesVisited({ description, places }: { description: string; pl
   return (
     <div className="py-10">
       <p className="mb-8 max-w-2xl text-sm leading-[1.9] text-[var(--ink-soft)]">{description}</p>
-      {/* SVG map — simplified Ahmedabad city grid */}
-      <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: "#111113" }}>
-        <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" className="w-full">
-          {/* city grid lines — horizontal */}
-          {Array.from({ length: 18 }, (_, i) => (
-            <line key={`h${i}`} x1="0" y1={22 * i} x2="900" y2={22 * i} stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+      <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: "#1a1a1c" }}>
+        <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" className="w-full">
+          <defs>
+            <filter id="mapgrain">
+              <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch" result="noise"/>
+              <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+              <feBlend in="SourceGraphic" in2="gray" mode="overlay" result="blended"/>
+              <feComposite in="blended" in2="SourceGraphic" operator="in"/>
+            </filter>
+          </defs>
+          {/* grainy background */}
+          <rect width="900" height="360" fill="#1a1a1c" filter="url(#mapgrain)" opacity="0.3" />
+          {/* road network — Ahmedabad style */}
+          {/* major east-west roads */}
+          {[60,120,180,240,290,340,390].map(y => (
+            <line key={`ew${y}`} x1="0" y1={y} x2="900" y2={y} stroke="rgba(255,255,255,0.07)" strokeWidth={y === 180 ? 3 : 1.5} />
           ))}
-          {/* city grid lines — vertical */}
-          {Array.from({ length: 36 }, (_, i) => (
-            <line key={`v${i}`} x1={25 * i} y1="0" x2={25 * i} y2="380" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+          {/* major north-south roads */}
+          {[100,200,300,360,450,540,640,750,850].map(x => (
+            <line key={`ns${x}`} x1={x} y1="0" x2={x} y2="360" stroke="rgba(255,255,255,0.07)" strokeWidth={x === 450 ? 3 : 1.5} />
           ))}
-          {/* river — Sabarmati */}
-          <path d="M 300 0 C 310 80 290 160 305 240 C 315 300 300 380 310 380" stroke="rgba(255,255,255,0.12)" strokeWidth="18" fill="none" strokeLinecap="round" />
-          <path d="M 300 0 C 310 80 290 160 305 240 C 315 300 300 380 310 380" stroke="rgba(255,255,255,0.06)" strokeWidth="10" fill="none" strokeLinecap="round" />
-          {/* main roads */}
-          <line x1="0" y1="190" x2="900" y2="190" stroke="rgba(255,255,255,0.09)" strokeWidth="3" />
-          <line x1="450" y1="0" x2="450" y2="380" stroke="rgba(255,255,255,0.07)" strokeWidth="2" />
-          <line x1="0" y1="95" x2="900" y2="95" stroke="rgba(255,255,255,0.05)" strokeWidth="1.5" />
-          <line x1="0" y1="285" x2="900" y2="285" stroke="rgba(255,255,255,0.05)" strokeWidth="1.5" />
+          {/* city blocks */}
+          {[0,1,2,3,4,5,6].flatMap(row => [0,1,2,3,4,5,6,7,8].map(col => (
+            <rect key={`b${row}-${col}`}
+              x={col * 100 + 2} y={row * 52 + 2}
+              width={96} height={48}
+              fill="rgba(255,255,255,0.015)" stroke="none"
+            />
+          )))}
+          {/* Sabarmati river */}
+          <path d="M 330 0 C 340 60 320 120 335 180 C 345 230 325 290 340 360"
+            stroke="rgba(100,140,200,0.35)" strokeWidth="22" fill="none" strokeLinecap="round" />
+          <path d="M 330 0 C 340 60 320 120 335 180 C 345 230 325 290 340 360"
+            stroke="rgba(100,140,200,0.15)" strokeWidth="12" fill="none" strokeLinecap="round" />
+          {/* railway line */}
+          <path d="M 0 135 L 900 135" stroke="rgba(200,80,80,0.4)" strokeWidth="3" strokeDasharray="12 5" />
+          <path d="M 580 0 L 580 360" stroke="rgba(200,80,80,0.25)" strokeWidth="2" strokeDasharray="8 4" />
           {/* station pins */}
           {places.map((p, i) => {
             const cx = (p.x / 100) * 900;
-            const cy = (p.y / 100) * 380;
+            const cy = (p.y / 100) * 360;
+            const labelW = p.name.length * 7 + 20;
+            const above = cy > 200;
             return (
               <g key={i}>
-                {/* drop shadow */}
-                <circle cx={cx} cy={cy + 2} r={12} fill="rgba(0,0,0,0.4)" />
-                {/* pin body */}
-                <circle cx={cx} cy={cy} r={12} fill="#C62828" />
-                <circle cx={cx} cy={cy} r={5} fill="white" />
-                {/* label pill */}
-                <rect x={cx + 16} y={cy - 12} width={Math.max(160, p.name.length * 6.8)} height={24} rx="3" fill="#1a1a1c" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-                <text x={cx + 24} y={cy + 4} fill="#f2efe6" fontSize="9" fontFamily="monospace" letterSpacing="1">{p.name}</text>
+                {/* pin shadow */}
+                <circle cx={cx} cy={cy + 3} r={14} fill="rgba(0,0,0,0.5)" />
+                {/* pin */}
+                <circle cx={cx} cy={cy} r={14} fill="#C62828" />
+                <path d={`M ${cx} ${cy + 14} L ${cx - 7} ${cy + 26} L ${cx + 7} ${cy + 26} Z`} fill="#C62828" />
+                <circle cx={cx} cy={cy} r={6} fill="white" />
+                {/* callout box */}
+                <rect x={cx + 18} y={above ? cy - 20 : cy - 12} width={labelW} height={24} rx="4"
+                  fill="#0d0d0f" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                <text x={cx + 27} y={above ? cy - 3 : cy + 5}
+                  fill="#f2efe6" fontSize="9.5" fontFamily="monospace" letterSpacing="0.5">{p.name}</text>
               </g>
             );
           })}
@@ -676,26 +736,47 @@ function SectionPlacesVisited({ description, places }: { description: string; pl
 
 function SectionDemographicBars({ groups }: { groups: { title: string; bars: { label: string; value: number; max: number }[] }[] }) {
   return (
-    <div className="flex flex-col gap-12 py-10">
+    <div className="flex flex-col gap-14 py-10">
       {groups.map((g, gi) => (
         <div key={gi}>
-          <div className="mb-6 font-semibold text-[var(--foreground)]" style={{ fontFamily: "var(--font-sans)" }}>{g.title}</div>
-          <div className="flex flex-col gap-4">
+          {/* section title — matches original bold heading style */}
+          <div className="mb-6 text-lg font-semibold text-[var(--foreground)]" style={{ fontFamily: "var(--font-sans)" }}>
+            {g.title}
+          </div>
+          <div className="flex flex-col gap-5">
             {g.bars.map((b, i) => (
-              <div key={i} className="grid items-center gap-4" style={{ gridTemplateColumns: "180px 1fr 32px" }}>
-                <div className="text-sm text-[var(--foreground)]">{b.label}</div>
-                <div className="relative h-6 overflow-hidden bg-[#1a1a1c]">
+              <motion.div
+                key={i}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="grid items-center gap-0"
+                style={{ gridTemplateColumns: "160px auto 28px 1fr" }}
+              >
+                {/* label */}
+                <span className="text-sm text-[var(--foreground)] pr-1">{b.label}</span>
+                {/* dotted leader */}
+                <span
+                  className="font-mono text-[11px] tracking-widest text-[var(--ink-soft)] overflow-hidden whitespace-nowrap"
+                  style={{ maxWidth: 220, minWidth: 60 }}
+                >
+                  {"·".repeat(60)}
+                </span>
+                {/* value */}
+                <span className="text-right text-sm font-medium text-[var(--foreground)] pr-4">{b.value}</span>
+                {/* bar */}
+                <div className="relative h-6">
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: `${(b.value / b.max) * 100}%` }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1.0, delay: i * 0.1 + gi * 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 1.0, delay: i * 0.12 + gi * 0.3, ease: [0.22, 1, 0.36, 1] }}
                     className="absolute inset-y-0 left-0"
-                    style={{ background: i === 0 ? "#212121" : "rgba(255,255,255,0.18)" }}
+                    style={{ background: i === 0 ? "#1a1a1c" : "rgba(255,255,255,0.14)" }}
                   />
                 </div>
-                <div className="text-right font-mono text-[11px] text-[var(--ink-soft)]">{b.value}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -705,73 +786,81 @@ function SectionDemographicBars({ groups }: { groups: { title: string; bars: { l
 }
 
 function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string[]; bottomLabels: string[]; peakX: number; peakLabel: string }[] }) {
-  // Build a smooth SVG area for each chart. Curve shape: one clear peak based on peakX position.
-  const buildPath = (peakX: number, w: number, h: number) => {
-    // Generate a series of y-values across 20 points, shaped as a smooth hump
-    const pts = Array.from({ length: 20 }, (_, i) => {
-      const t = i / 19;
-      const dist = Math.abs(t - peakX);
-      // Gaussian-like shape for peak
-      const y = 1 - Math.exp(-dist * dist / (2 * 0.06));
-      return { x: t * w, y: y * h * 0.82 + h * 0.05 };
-    });
-    // Add a secondary smaller hump to make it more interesting
-    const pts2 = pts.map(p => {
-      const t = p.x / w;
-      const secondHump = Math.exp(-Math.pow(t - (peakX + 0.45), 2) / (2 * 0.04)) * h * 0.3;
-      return { ...p, y: p.y - secondHump };
-    });
-    const d = pts2.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(" ");
-    return `${d} L ${w} ${h} L 0 ${h} Z`;
+  // Pre-defined curve shapes matching the actual research data
+  const buildPath = (peakX: number, W: number, H: number, chartIdx: number) => {
+    let yVals: number[];
+    if (chartIdx === 0) {
+      // Time of day: morning PEAK, afternoon trough, evening moderate
+      yVals = [0.08,0.10,0.14,0.20,0.35,0.60,0.82,0.88,0.85,0.80,0.72,0.65,0.60,0.58,0.55,0.52,0.48,0.44,0.42,0.40];
+    } else {
+      // Monthly: moderate Jan-Mar, low May-Sep, massive Oct peak, moderate Nov-Dec
+      yVals = [0.45,0.40,0.42,0.55,0.70,0.82,0.85,0.83,0.80,0.08,0.50,0.65,0.70,0.72,0.75,0.75,0.74,0.72,0.70,0.68];
+    }
+    const pts = yVals.map((y, i) => ({ x: (i / (yVals.length - 1)) * W, y: y * H * 0.88 + 4 }));
+    const d = pts.map((p, i) => {
+      if (i === 0) return `M ${p.x} ${p.y}`;
+      const prev = pts[i - 1];
+      const cpx1 = prev.x + (p.x - prev.x) * 0.45;
+      const cpx2 = p.x - (p.x - prev.x) * 0.45;
+      return `C ${cpx1} ${prev.y} ${cpx2} ${p.y} ${p.x} ${p.y}`;
+    }).join(" ");
+    return `${d} L ${W} ${H} L 0 ${H} Z`;
   };
 
   return (
     <div className="flex flex-col gap-10 py-10">
       {charts.map((c, ci) => {
         const W = 900; const H = 200;
-        const peakSvgX = c.peakX * W;
+        const n = c.xLabels.length;
+        const sectionW = W / n;
         return (
           <div key={ci}>
-            <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{c.title}</div>
-            <div className="relative border border-[var(--divider)]" style={{ background: "#0e0e10" }}>
-              {/* x-axis dividers */}
-              <div className="absolute inset-x-0 top-0 flex h-full">
-                {c.xLabels.map((_, i) => i > 0 && (
-                  <div key={i} className="h-full border-l border-[var(--divider)]" style={{ width: `${100 / c.xLabels.length}%`, marginLeft: i === 1 ? `${100 / c.xLabels.length}%` : 0 }} />
+            <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: "#0d0d0f" }}>
+              {/* grainy overlay */}
+              <div className="grain pointer-events-none absolute inset-0 opacity-30 z-10" />
+              {/* vertical section dividers + x-labels at top */}
+              <div className="absolute inset-0 flex z-20 pointer-events-none">
+                {c.xLabels.map((l, i) => (
+                  <div key={i} className="flex-1 flex flex-col" style={{ borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+                    <div className="pt-3 pb-1 text-center font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{l}</div>
+                  </div>
                 ))}
               </div>
-              <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none">
+              {/* SVG area chart */}
+              <svg viewBox={`0 0 ${W} ${H}`} className="w-full relative z-0" preserveAspectRatio="none" style={{ display: "block" }}>
                 <defs>
-                  <linearGradient id={`ag${ci}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#3a3a3a" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#1a1a1a" stopOpacity="0.3" />
+                  <linearGradient id={`g${ci}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#404040" stopOpacity="1" />
+                    <stop offset="70%" stopColor="#252525" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#101010" stopOpacity="0.4" />
                   </linearGradient>
+                  <filter id={`gn${ci}`}>
+                    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch" result="noise"/>
+                    <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+                    <feBlend in="SourceGraphic" in2="gray" mode="multiply" result="b"/>
+                    <feComposite in="b" in2="SourceGraphic" operator="in"/>
+                  </filter>
                 </defs>
-                <path d={buildPath(c.peakX, W, H)} fill={`url(#ag${ci})`} />
+                <g filter={`url(#gn${ci})`}>
+                  <path d={buildPath(c.peakX, W, H, ci)} fill={`url(#g${ci})`} />
+                </g>
               </svg>
-              {/* peak label */}
+              {/* peak badge */}
               <div
-                className="absolute top-3 flex -translate-x-1/2 flex-col items-center"
-                style={{ left: `${c.peakX * 100}%` }}
+                className="absolute z-30 flex -translate-x-1/2 flex-col items-center"
+                style={{ left: `${c.peakX * 100}%`, top: ci === 0 ? "14%" : "4%" }}
               >
-                <div className="rounded-sm bg-[#1a1a1c] px-2 py-1 font-mono text-[11px] font-semibold text-[var(--foreground)] shadow ring-1 ring-[var(--divider)]">
+                <div className="rounded bg-[#1c1c1e] px-2.5 py-1 font-mono text-[11px] font-bold text-[var(--foreground)] shadow-lg ring-1 ring-white/20">
                   {c.peakLabel}
                 </div>
-                <div className="mt-0.5 h-2 w-px bg-white/30" />
-                <div className="h-1.5 w-1.5 rounded-full bg-white/60 ring-2 ring-[var(--background)]" />
-              </div>
-              {/* x-axis labels */}
-              <div className="flex border-t border-[var(--divider)] px-1">
-                {c.xLabels.map((l, i) => (
-                  <div key={i} className="flex-1 py-2 text-center font-mono text-[8px] uppercase tracking-[0.15em] text-[var(--ink-soft)]">{l}</div>
-                ))}
+                <div className="h-2 w-px bg-white/25 mt-0.5" />
+                <div className="h-2 w-2 rounded-full bg-white/70 ring-2 ring-[var(--background)]" />
               </div>
             </div>
-            {/* bottom labels */}
-            <div className="mt-2 grid text-center" style={{ gridTemplateColumns: `repeat(${c.bottomLabels.length}, 1fr)` }}>
-              {c.bottomLabels.map((l, i) => (
-                <div key={i} className="font-mono text-[9px] uppercase tracking-[0.15em] text-[var(--ink-soft)]">{l}</div>
-              ))}
+            {/* bottom section labels */}
+            <div className="mt-2 grid font-mono text-[10px] uppercase tracking-[0.15em] text-center text-[var(--ink-soft)]"
+              style={{ gridTemplateColumns: `repeat(${c.bottomLabels.length}, 1fr)` }}>
+              {c.bottomLabels.map((l, i) => <div key={i}>{l}</div>)}
             </div>
           </div>
         );
@@ -780,46 +869,164 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
   );
 }
 
+function SectionChokePoints({ intro }: { intro: string }) {
+  return (
+    <div className="py-10">
+      <p className="mb-8 max-w-2xl text-sm leading-[1.9] text-[var(--ink-soft)]">{intro}</p>
+      <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: "#111113" }}>
+        <div className="grain pointer-events-none absolute inset-0 opacity-20 z-10" />
+        <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" className="w-full relative z-0">
+          <defs>
+            <filter id="chgrain">
+              <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" result="noise"/>
+              <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+              <feBlend in="SourceGraphic" in2="gray" mode="multiply" result="b"/>
+              <feComposite in="b" in2="SourceGraphic" operator="in"/>
+            </filter>
+            <linearGradient id="pillargr" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4a4a4e" />
+              <stop offset="100%" stopColor="#2a2a2e" />
+            </linearGradient>
+            <linearGradient id="bridgegr" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#c62828" />
+              <stop offset="50%" stopColor="#e53935" />
+              <stop offset="100%" stopColor="#c62828" />
+            </linearGradient>
+          </defs>
+
+          {/* --- PLATFORM PILLARS (varying heights, representing station columns) --- */}
+          {[
+            { x: 60,  w: 55, h: 180, top: 90 },
+            { x: 140, w: 50, h: 220, top: 50 },
+            { x: 220, w: 55, h: 195, top: 75 },
+            { x: 300, w: 50, h: 240, top: 30 },
+            { x: 380, w: 55, h: 205, top: 65 },
+            { x: 460, w: 50, h: 215, top: 55 },
+            { x: 545, w: 55, h: 180, top: 90 },
+            { x: 625, w: 50, h: 235, top: 35 },
+            { x: 705, w: 55, h: 200, top: 70 },
+            { x: 785, w: 50, h: 185, top: 85 },
+          ].map((p, i) => (
+            <g key={i} filter="url(#chgrain)">
+              <rect x={p.x} y={p.top} width={p.w} height={p.h} fill="url(#pillargr)" rx="2" />
+              {/* window pattern on pillar */}
+              {Array.from({ length: Math.floor(p.h / 28) }, (_, r) => (
+                <rect key={r} x={p.x + 8} y={p.top + 10 + r * 28} width={p.w - 16} height={14}
+                  fill="rgba(255,255,255,0.04)" />
+              ))}
+            </g>
+          ))}
+
+          {/* --- RED BRIDGE / WALKWAY crossing horizontally --- */}
+          <g filter="url(#chgrain)">
+            <rect x="40" y="155" width="820" height="36" fill="url(#bridgegr)" rx="2" />
+            {/* bridge railings */}
+            <line x1="40" y1="158" x2="860" y2="158" stroke="rgba(255,255,255,0.15)" strokeWidth="2" />
+            <line x1="40" y1="188" x2="860" y2="188" stroke="rgba(0,0,0,0.3)" strokeWidth="2" />
+            {/* bridge cross-supports */}
+            {[0,1,2,3,4,5,6,7].map(i => (
+              <line key={i} x1={80 + i * 100} y1="155" x2={80 + i * 100} y2="191"
+                stroke="rgba(255,100,100,0.4)" strokeWidth="2" />
+            ))}
+          </g>
+
+          {/* --- STAIR indicators (red rectangles at pillar-bridge intersections) --- */}
+          {[140, 300, 460, 625, 785].map((x, i) => (
+            <g key={i}>
+              <rect x={x + 2} y="155" width={46} height={36} fill="rgba(198,40,40,0.8)" />
+              {/* stair lines */}
+              {[0,1,2,3,4,5].map(s => (
+                <line key={s} x1={x + 2} y1={155 + s * 6} x2={x + 48} y2={155 + s * 6}
+                  stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+              ))}
+            </g>
+          ))}
+
+          {/* --- ANNOTATION LINES & LABELS --- */}
+          {/* Stairs label */}
+          <line x1="300" y1="148" x2="320" y2="118" stroke="rgba(255,255,255,0.35)" strokeWidth="1" strokeDasharray="3 3" />
+          <circle cx="300" cy="148" r="3" fill="white" opacity="0.7" />
+          <rect x="325" y="106" width="58" height="20" rx="2" fill="#1a1a1c" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+          <text x="333" y="120" fill="#f2efe6" fontSize="10" fontFamily="sans-serif">Stairs</text>
+
+          {/* Bridge label */}
+          <line x1="240" y1="173" x2="190" y2="220" stroke="rgba(255,255,255,0.35)" strokeWidth="1" strokeDasharray="3 3" />
+          <circle cx="240" cy="173" r="3" fill="white" opacity="0.7" />
+          <rect x="140" y="222" width="62" height="20" rx="2" fill="#1a1a1c" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+          <text x="148" y="236" fill="#f2efe6" fontSize="10" fontFamily="sans-serif">Bridge</text>
+
+          {/* Station Entrance label */}
+          <line x1="80" y1="270" x2="110" y2="295" stroke="rgba(255,255,255,0.35)" strokeWidth="1" strokeDasharray="3 3" />
+          <circle cx="80" cy="270" r="3" fill="white" opacity="0.7" />
+          <rect x="112" y="286" width="128" height="20" rx="2" fill="#1a1a1c" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+          <text x="120" y="300" fill="#f2efe6" fontSize="10" fontFamily="sans-serif">Station Entrance</text>
+
+          {/* ground / base */}
+          <rect x="40" y="270" width="820" height="8" fill="rgba(255,255,255,0.06)" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 function SectionJourneyMapFull({ phases }: { phases: { num: string; name: string; tasks: string[]; emotionY: number; opportunities: string[] }[] }) {
-  const W = 1000; const H = 120;
-  // Build smooth SVG emotion curve through phase points
+  const W = 1000; const H = 110;
   const pts = phases.map((p, i) => ({
     x: (i / (phases.length - 1)) * W,
-    y: p.emotionY * H,
+    y: p.emotionY * H * 0.9 + 5,
   }));
-  // Catmull-Rom to bezier
-  const path = pts.map((p, i) => {
+  const curvePath = pts.map((p, i) => {
     if (i === 0) return `M ${p.x} ${p.y}`;
     const prev = pts[i - 1];
-    const cpx1 = prev.x + (p.x - prev.x) * 0.4;
-    const cpy1 = prev.y;
-    const cpx2 = p.x - (p.x - prev.x) * 0.4;
-    const cpy2 = p.y;
-    return `C ${cpx1} ${cpy1} ${cpx2} ${cpy2} ${p.x} ${p.y}`;
+    const cx1 = prev.x + (p.x - prev.x) * 0.45;
+    const cx2 = p.x - (p.x - prev.x) * 0.45;
+    return `C ${cx1} ${prev.y} ${cx2} ${p.y} ${p.x} ${p.y}`;
   }).join(" ");
 
   return (
-    <div className="py-10">
-      <div className="overflow-x-auto">
-        <div className="min-w-[700px]">
+    <div className="py-10 overflow-x-auto">
+      <div className="min-w-[720px]" style={{ display: "grid", gridTemplateColumns: "56px 1fr" }}>
+
+        {/* LEFT SIDEBAR — row labels */}
+        <div className="flex flex-col border border-r-0 border-[var(--divider)] bg-[#0e0e10]">
+          {/* spacer for header row */}
+          <div className="border-b border-[var(--divider)]" style={{ height: 84 }} />
+          {/* Task list label */}
+          <div className="flex flex-1 items-center justify-center border-b border-[var(--divider)]" style={{ minHeight: 100 }}>
+            <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--ink-soft)]"
+              style={{ writingMode: "vertical-lr", transform: "rotate(180deg)" }}>Task list</span>
+          </div>
+          {/* Emotion label */}
+          <div className="flex items-center justify-center border-b border-[var(--divider)]" style={{ height: 90 }}>
+            <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--ink-soft)]"
+              style={{ writingMode: "vertical-lr", transform: "rotate(180deg)" }}>Emotion</span>
+          </div>
+          {/* Opportunities label */}
+          <div className="flex flex-1 items-center justify-center border-b border-[var(--divider)]" style={{ minHeight: 120 }}>
+            <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--neon)]"
+              style={{ writingMode: "vertical-lr", transform: "rotate(180deg)" }}>Opportunities</span>
+          </div>
+        </div>
+
+        {/* MAIN TABLE */}
+        <div>
           {/* phase headers */}
           <div className="grid border border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${phases.length}, 1fr)` }}>
             {phases.map((ph, i) => (
-              <div key={i} className="border-r border-[var(--divider)] bg-[#111113] p-4 last:border-r-0">
-                <div className="serif-display text-3xl text-[var(--ink-soft)] md:text-5xl">{ph.num}</div>
-                <div className="mt-1 text-sm font-semibold text-[var(--foreground)]" style={{ fontFamily: "var(--font-sans)" }}>{ph.name}</div>
+              <div key={i} className="border-r border-[var(--divider)] bg-[#0d0d0f] p-4 last:border-r-0">
+                <div className="serif-display text-4xl leading-none text-[var(--ink-soft)] md:text-5xl">{ph.num}</div>
+                <div className="mt-2 font-semibold text-sm text-[var(--foreground)]" style={{ fontFamily: "var(--font-sans)" }}>{ph.name}</div>
               </div>
             ))}
           </div>
-          {/* tasks row */}
+          {/* tasks */}
           <div className="grid border-x border-b border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${phases.length}, 1fr)` }}>
             {phases.map((ph, i) => (
               <div key={i} className="border-r border-[var(--divider)] p-4 last:border-r-0">
-                <div className="mb-2 font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Tasks</div>
-                <ul className="flex flex-col gap-1.5">
+                <ul className="flex flex-col gap-2">
                   {ph.tasks.map((t, j) => (
-                    <li key={j} className="flex items-start gap-1.5 text-[11px] leading-snug text-[var(--foreground)]">
-                      <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-[var(--ink-soft)]" />
+                    <li key={j} className="flex items-start gap-2 text-[11px] leading-snug text-[var(--foreground)]">
+                      <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[var(--ink-soft)]" />
                       {t}
                     </li>
                   ))}
@@ -828,43 +1035,43 @@ function SectionJourneyMapFull({ phases }: { phases: { num: string; name: string
             ))}
           </div>
           {/* emotion curve */}
-          <div className="border-x border-b border-[var(--divider)] bg-[#0e0e10] px-4 py-2">
-            <div className="mb-1 font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Emotion</div>
-            <svg viewBox={`0 0 ${W} ${H + 20}`} className="w-full" style={{ height: 80 }}>
+          <div className="border-x border-b border-[var(--divider)] bg-[#0d0d0f]">
+            <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: 90, display: "block" }}>
               <defs>
-                <linearGradient id="emgrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="rgba(255,42,60,0.25)" />
-                  <stop offset="100%" stopColor="rgba(255,42,60,0)" />
+                <linearGradient id="emg" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="rgba(80,80,80,0.6)" />
+                  <stop offset="100%" stopColor="rgba(20,20,20,0)" />
                 </linearGradient>
+                <filter id="emgrain">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" result="n"/>
+                  <feColorMatrix type="saturate" values="0" in="n" result="g"/>
+                  <feBlend in="SourceGraphic" in2="g" mode="multiply" result="b"/>
+                  <feComposite in="b" in2="SourceGraphic" operator="in"/>
+                </filter>
               </defs>
-              {/* filled area under curve */}
-              <path
-                d={`${path} L ${W} ${H + 10} L 0 ${H + 10} Z`}
-                fill="url(#emgrad)"
-              />
-              <path d={path} fill="none" stroke="#ff2a3c" strokeWidth="2.5" strokeLinecap="round" />
-              {/* dots at each phase point */}
+              <g filter="url(#emgrain)">
+                <path d={`${curvePath} L ${W} ${H} L 0 ${H} Z`} fill="url(#emg)" />
+              </g>
+              <path d={curvePath} fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" />
               {pts.map((p, i) => (
                 <g key={i}>
-                  <circle cx={p.x} cy={p.y} r={5} fill="#ff2a3c" />
-                  <circle cx={p.x} cy={p.y} r={3} fill="var(--background)" />
-                  {/* emoji label */}
-                  <text x={p.x} y={p.y - 10} textAnchor="middle" fontSize="14">
-                    {phases[i].emotionY > 0.65 ? "😣" : phases[i].emotionY > 0.4 ? "😕" : "😌"}
+                  <circle cx={p.x} cy={p.y} r={5} fill="rgba(255,255,255,0.7)" />
+                  <circle cx={p.x} cy={p.y} r={2.5} fill="#0d0d0f" />
+                  <text x={p.x} y={p.y - 12} textAnchor="middle" fontSize="13" fontFamily="Apple Color Emoji,sans-serif">
+                    {phases[i].emotionY > 0.65 ? "😣" : phases[i].emotionY > 0.4 ? "😕" : "🙂"}
                   </text>
                 </g>
               ))}
             </svg>
           </div>
-          {/* opportunities row */}
+          {/* opportunities */}
           <div className="grid border-x border-b border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${phases.length}, 1fr)` }}>
             {phases.map((ph, i) => (
               <div key={i} className="border-r border-[var(--divider)] p-4 last:border-r-0">
-                <div className="mb-2 font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--neon)]">Opportunities</div>
-                <ul className="flex flex-col gap-1.5">
+                <ul className="flex flex-col gap-2">
                   {ph.opportunities.map((o, j) => (
-                    <li key={j} className="flex items-start gap-1.5 text-[11px] leading-snug text-[var(--ink-soft)]">
-                      <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-[var(--neon)]" />
+                    <li key={j} className="flex items-start gap-2 text-[11px] leading-snug text-[var(--ink-soft)]">
+                      <span className="mt-[5px] h-[5px] w-[5px] shrink-0 rounded-full bg-[var(--neon)]" />
                       {o}
                     </li>
                   ))}
@@ -882,42 +1089,117 @@ function SectionPlatformColorcode({ description, platforms }: { description: str
   return (
     <div className="py-10">
       <p className="mb-8 max-w-2xl text-sm leading-[1.9] text-[var(--ink-soft)]">{description}</p>
-      {/* Station layout — entrance at bottom, platforms stacked up */}
       <div className="border border-[var(--divider)] bg-[#0e0e10] p-6">
-        <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Station Platform Layout</div>
-        <div className="flex flex-col gap-1">
-          {[...platforms].reverse().map((p, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center gap-3"
-            >
-              <div className="w-6 shrink-0 text-right font-mono text-[10px] text-[var(--ink-soft)]">{p.num}</div>
-              <div
-                className="h-8 flex-1 transition-all duration-300 hover:brightness-110"
-                style={{ background: p.color }}
-              />
-            </motion.div>
-          ))}
-        </div>
-        {/* entrance indicator */}
-        <div className="mt-3 flex items-center justify-center gap-2 border-t border-[var(--divider)] pt-3">
-          <div className="h-px w-12 bg-[var(--ink-soft)]" />
-          <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">You Are Here · Entrance</span>
-          <div className="h-px w-12 bg-[var(--ink-soft)]" />
+        <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">16.1  Platform Color Code</div>
+        {/* top-down station view: platforms as horizontal colored strips */}
+        <div className="relative mx-auto max-w-lg">
+          <div className="flex flex-col gap-[3px]">
+            {[...platforms].reverse().map((p, i) => (
+              <motion.div
+                key={i}
+                initial={{ scaleX: 0, opacity: 0 }}
+                whileInView={{ scaleX: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                className="flex items-center"
+                style={{ originX: "left" }}
+              >
+                <div className="w-8 shrink-0 text-right font-mono text-[9px] text-[var(--ink-soft)] pr-2">{platforms[platforms.length - 1 - i].num}</div>
+                <div className="flex-1 h-7" style={{ background: p.color }} />
+              </motion.div>
+            ))}
+          </div>
+          {/* entrance */}
+          <div className="mt-3 flex flex-col items-center gap-1">
+            <div className="h-5 w-px bg-[var(--divider)]" />
+            <div className="flex items-center gap-2 rounded bg-[#1a1a1c] px-3 py-1 ring-1 ring-[var(--divider)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--neon)]" />
+              <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--foreground)]">You Are Here</span>
+            </div>
+            <div className="font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--ink-soft)] mt-1">ENTRANCE</div>
+          </div>
         </div>
       </div>
-      {/* platform legend */}
-      <div className="mt-3 grid grid-cols-4 gap-1 md:grid-cols-6">
-        {platforms.map((p, i) => (
-          <div key={i} className="flex items-center gap-2 p-2">
-            <div className="h-4 w-4 shrink-0 rounded-sm" style={{ background: p.color }} />
-            <span className="font-mono text-[9px] text-[var(--ink-soft)]">Pltfm {p.num}</span>
+    </div>
+  );
+}
+
+function SectionTicketRedesign() {
+  const fields = [
+    { label: "Train No.", value: "12952 RAJDHANI EXP" },
+    { label: "From", value: "NDLS (New Delhi)" },
+    { label: "To", value: "MMCT (Mumbai Central)" },
+    { label: "Date", value: "15-Oct-2024" },
+    { label: "Coach", value: "B1 · Berth 32 (Side Upper)" },
+    { label: "Platform", value: "Platform 3" },
+  ];
+  return (
+    <div className="py-10">
+      <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">16.2  Digital Ticket Redesign</div>
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* BEFORE */}
+        <div>
+          <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">16.2.1  Before — Current Reservation Slip</div>
+          <div className="border border-[var(--divider)] bg-[#f5f0e8] p-4 font-mono">
+            {/* simulate chaotic current Indian Railways ticket */}
+            <div className="mb-2 border-b border-gray-400 pb-2 text-[9px] font-bold text-gray-800 uppercase tracking-wider text-center">
+              Indian Railways — Reservation Cum Journey Ticket
+            </div>
+            <div className="grid grid-cols-3 gap-1 text-[7px] text-gray-700">
+              {["TRAIN NO / NAME","DATE OF JOURNEY","QUOTA","CLASS","BOOKING DATE","CHART PREPARED","PNR NUMBER","TRANSACTION ID","ADULT","CHILD","FARE","TAT NO","FROM","TO","BOARDING","RESERVATION UPTO","DEP TIME","ARR TIME","COACH NO","BERTH NO","BERTH TYPE","PASSENGER NAME","AGE","GENDER","CONCESSION","STATUS","FOOD","CONTACT","REMARKS","DISTANCE"].map((f, i) => (
+                <div key={i} className="border border-gray-300 px-1 py-0.5 leading-tight">
+                  <div className="text-[6px] text-gray-500 uppercase">{f}</div>
+                  <div className="text-[7px] font-bold text-gray-800">{"— — —"}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-2 border-t border-gray-400 pt-1 text-[6px] text-gray-500 leading-tight">
+              *THIS IS NOT A VALID TICKET WITHOUT CONDUCTOR'S SIGNATURE. PASSENGERS ARE ADVISED TO CARRY VALID PHOTO ID. T&C APPLY. VALID ONLY IF SIGNED BY AUTHORISED RAILWAY OFFICIAL.
+            </div>
           </div>
-        ))}
+        </div>
+        {/* AFTER */}
+        <div>
+          <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--neon)]">16.2.2  After — Redesigned Reservation Slip</div>
+          <div className="border border-[var(--divider)] bg-[#111113] overflow-hidden">
+            {/* Platform colour band at top */}
+            <div className="flex items-center gap-3 bg-[#3F51B5] px-5 py-3">
+              <div className="text-white">
+                <div className="font-mono text-[8px] uppercase tracking-[0.25em] opacity-70">Platform</div>
+                <div className="text-3xl font-bold leading-none">3</div>
+              </div>
+              <div className="h-10 w-px bg-white/20" />
+              <div className="text-white">
+                <div className="font-mono text-[8px] uppercase tracking-[0.2em] opacity-70">Rajdhani Express</div>
+                <div className="text-sm font-semibold">12952 · B1 · 32</div>
+              </div>
+              <div className="ml-auto font-mono text-[8px] text-white/60 text-right">15 Oct 2024<br/>DEP 16:55</div>
+            </div>
+            {/* Clean field grid */}
+            <div className="grid grid-cols-2 gap-px bg-[var(--divider)] border-t border-[var(--divider)]">
+              {fields.map((f, i) => (
+                <div key={i} className="bg-[#111113] px-4 py-3">
+                  <div className="font-mono text-[8px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{f.label}</div>
+                  <div className="mt-0.5 text-sm font-medium text-[var(--foreground)]">{f.value}</div>
+                </div>
+              ))}
+            </div>
+            {/* Bottom PNR bar */}
+            <div className="flex items-center justify-between border-t border-[var(--divider)] bg-[#0d0d0f] px-4 py-2">
+              <div>
+                <div className="font-mono text-[8px] text-[var(--ink-soft)]">PNR</div>
+                <div className="font-mono text-sm font-bold text-[var(--foreground)]">4124 5678 90</div>
+              </div>
+              {/* barcode placeholder */}
+              <svg width="80" height="32" viewBox="0 0 80 32">
+                {Array.from({ length: 24 }, (_, i) => (
+                  <rect key={i} x={i * 3.2 + (i % 3 === 0 ? 1 : 0)} y="0" width={i % 4 === 0 ? 2 : 1} height="32"
+                    fill="rgba(255,255,255,0.7)" />
+                ))}
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -1220,6 +1502,8 @@ function renderSection(section: ProjectSection, i: number) {
       {section.type === "area-chart" && <SectionAreaChart charts={section.charts} />}
       {section.type === "journey-map-full" && <SectionJourneyMapFull phases={section.phases} />}
       {section.type === "platform-colorcode" && <SectionPlatformColorcode description={section.description} platforms={section.platforms} />}
+      {section.type === "choke-diagram" && <SectionChokePoints intro={section.intro} />}
+      {section.type === "ticket-redesign" && <SectionTicketRedesign />}
     </motion.div>
   );
 }

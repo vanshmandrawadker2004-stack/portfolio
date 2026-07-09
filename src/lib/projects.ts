@@ -21,7 +21,9 @@ export type ProjectSection =
   | { type: "area-chart"; charts: { title: string; bottomLabels: string[]; xLabels: string[]; peakX: number; peakLabel: string; valleyX?: number }[] }
   | { type: "journey-map-full"; phases: { num: string; name: string; tasks: string[]; emotionY: number; opportunities: string[] }[] }
   | { type: "platform-colorcode"; description: string; platforms: { num: number; color: string }[] }
-  | { type: "places-visited"; description: string; places: { name: string; x: number; y: number }[] };
+  | { type: "places-visited"; description: string; places: { name: string; x: number; y: number }[] }
+  | { type: "choke-diagram"; intro: string }
+  | { type: "ticket-redesign" };
 
 export type Project = {
   slug: string;
@@ -434,7 +436,7 @@ export const projects: Project[] = [
       { type: "label", text: "Contextual Inquiry" },
       {
         type: "text",
-        heading: "Research Method",
+        heading: "7. Contextual Inquiry",
         body: "Contextual Inquiry observes passengers navigating stations in real-time to understand actual wayfinding challenges. By studying how people interpret signage and move through spaces, we uncover genuine problems that surveys alone would miss — revealing true pain points and design opportunities.",
       },
       {
@@ -483,6 +485,11 @@ export const projects: Project[] = [
             peakLabel: "2,00,000",
           },
         ],
+      },
+      { type: "label", text: "Choke Points" },
+      {
+        type: "choke-diagram",
+        intro: "Main choke points causing congestion at railway stations include train entrances, ramps, lifts, escalators, stairs, ticket booking halls, and station entry/exit points. These critical junctions experience maximum crowding and navigation confusion, especially during peak hours when inadequate wayfinding compounds the chaos.",
       },
       { type: "label", text: "User Research" },
       {
@@ -579,6 +586,7 @@ export const projects: Project[] = [
           { num: 12, color: "#F44336" },
         ],
       },
+      { type: "ticket-redesign" },
       {
         type: "typography",
         name: "Noto Sans",
