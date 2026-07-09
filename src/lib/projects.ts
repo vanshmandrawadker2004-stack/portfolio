@@ -249,7 +249,7 @@ export const projects: Project[] = [
     category: "Brand Identity",
     href: "/project/thrive",
     externalHref: "https://www.behance.net/gallery/222992479/Thrive",
-    image: "/projects/thrive/logo-sign.png",
+    image: "/projects/thrive/mockup-sign.png",
     span: "half",
     description: "Brand identity for a growth-focused startup — rooted in sustainability, innovation, and a forward-thinking design language.",
     sections: [
@@ -287,12 +287,19 @@ export const projects: Project[] = [
       {
         type: "image",
         src: "/projects/thrive/mockup-sign.png",
-        caption: "Outdoor signage — brand presence at scale",
+        caption: "Outdoor signage — brand at scale",
       },
       {
         type: "screens",
         images: [
-          { src: "/projects/thrive/mockup-tote.png", caption: "Tote bag — everyday brand touchpoint" },
+          { src: "/projects/thrive/mockup-citylight.png", caption: "Citylight poster — street presence" },
+          { src: "/projects/thrive/mockup-billboard.png", caption: "Billboard — brand in the wild" },
+        ],
+      },
+      {
+        type: "screens",
+        images: [
+          { src: "/projects/thrive/mockup-tote.png", caption: "Tote bag — everyday touchpoint" },
           { src: "/projects/thrive/mockup-app.png", caption: "App icon — digital presence" },
         ],
       },
