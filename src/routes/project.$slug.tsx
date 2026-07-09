@@ -561,6 +561,262 @@ function SectionScreens({ images }: { images: { src: string; caption: string }[]
   );
 }
 
+/* ─────────────────────── Custom infographic renderers ─────────────────────── */
+
+function SectionStatGrid({ stats }: { stats: { value: string; label: string; sub?: string }[] }) {
+  return (
+    <div className="py-10">
+      <div className={`grid gap-px border border-[var(--divider)] ${stats.length === 4 ? "grid-cols-2 md:grid-cols-4" : "grid-cols-2"}`}>
+        {stats.map((s, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col gap-2 border-r border-[var(--divider)] bg-[var(--background)] px-6 py-10 last:border-r-0"
+          >
+            <div
+              className="serif-display leading-none text-[var(--foreground)]"
+              style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
+            >
+              {s.value}
+            </div>
+            <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{s.label}</div>
+            {s.sub && <div className="font-mono text-[10px] text-[var(--ink-soft)]">{s.sub}</div>}
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SectionBarChart({ title, bars, caption }: { title: string; bars: { label: string; value: number; color?: string }[]; caption?: string }) {
+  const max = Math.max(...bars.map(b => b.value));
+  return (
+    <div className="py-10">
+      <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">{title}</div>
+      <div className="flex flex-col gap-4">
+        {bars.map((b, i) => (
+          <div key={i} className="flex items-center gap-4">
+            <div className="w-44 shrink-0 text-right font-mono text-[10px] uppercase tracking-[0.15em] text-[var(--ink-soft)]">
+              {b.label}
+            </div>
+            <div className="flex flex-1 items-center gap-3">
+              <div className="relative h-8 flex-1 overflow-hidden bg-white/[0.04]">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${(b.value / max) * 100}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.1, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-y-0 left-0"
+                  style={{ background: b.color ?? "var(--neon)" }}
+                />
+              </div>
+              <span className="w-10 shrink-0 font-mono text-[11px] font-medium text-[var(--foreground)]">
+                {b.value}%
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      {caption && (
+        <div className="mt-6 flex items-center gap-3">
+          <span className="h-[2px] w-5 bg-[var(--neon)]" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{caption}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SectionRouteLine({ title, stations, color }: { title: string; stations: { name: string; major?: boolean; interchange?: boolean }[]; color: string }) {
+  return (
+    <div className="py-10">
+      <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">{title}</div>
+      <div className="relative overflow-x-auto pb-8">
+        <div className="flex min-w-max items-start gap-0">
+          {stations.map((s, i) => (
+            <div key={i} className="flex flex-col items-center">
+              {/* connector line segment */}
+              <div className="flex items-center">
+                {i > 0 && (
+                  <div className="h-[3px] w-12 md:w-16" style={{ background: color }} />
+                )}
+                {/* station dot */}
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                  className="relative"
+                >
+                  <div
+                    className="rounded-full border-2 border-[var(--background)]"
+                    style={{
+                      background: s.major ? color : "var(--ink-soft)",
+                      width: s.major ? 16 : s.interchange ? 14 : 10,
+                      height: s.major ? 16 : s.interchange ? 14 : 10,
+                      boxShadow: s.major ? `0 0 12px ${color}80` : "none",
+                    }}
+                  />
+                  {s.interchange && (
+                    <div
+                      className="absolute inset-[3px] rounded-full"
+                      style={{ background: "var(--background)" }}
+                    />
+                  )}
+                </motion.div>
+                {i < stations.length - 1 && (
+                  <div className="h-[3px] w-12 md:w-16" style={{ background: color }} />
+                )}
+              </div>
+              {/* station name */}
+              <div
+                className="mt-3 max-w-[68px] text-center font-mono text-[8px] uppercase leading-tight tracking-[0.15em]"
+                style={{ color: s.major ? "var(--foreground)" : "var(--ink-soft)" }}
+              >
+                {s.name}
+              </div>
+              {s.interchange && (
+                <div className="mt-1 font-mono text-[7px] uppercase tracking-[0.1em] text-[var(--neon)]">⇄</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="mt-2 flex items-center gap-6 border-t border-[var(--divider)] pt-4">
+        <div className="flex items-center gap-2">
+          <div className="h-4 w-4 rounded-full" style={{ background: color }} />
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">Major Station</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-3 w-3 rounded-full ring-2 ring-[var(--ink-soft)]" style={{ background: "var(--background)" }} />
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">Interchange</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-[10px] w-[10px] rounded-full bg-[var(--ink-soft)]" />
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">Regular Stop</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SectionInfoHierarchy({ title, levels }: { title: string; levels: { name: string; examples: string[]; color: string }[] }) {
+  return (
+    <div className="py-10">
+      <div className="mb-8 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">{title}</div>
+      <div className="flex flex-col gap-px">
+        {levels.map((level, i) => {
+          const widthPct = 100 - i * (100 / (levels.length + 1));
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-stretch gap-4"
+            >
+              {/* pyramid bar */}
+              <div className="relative flex h-14 items-center justify-between px-5" style={{ width: `${widthPct}%`, background: level.color }}>
+                <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-white">
+                  L{i + 1} — {level.name}
+                </span>
+                <span className="text-right font-mono text-[9px] uppercase tracking-[0.15em] text-white/70">
+                  {level.examples[0]}
+                </span>
+              </div>
+              {/* examples */}
+              <div className="flex flex-1 items-center gap-2 overflow-hidden">
+                {level.examples.slice(1).map((ex, j) => (
+                  <span key={j} className="border border-[var(--divider)] px-2 py-1 font-mono text-[9px] uppercase tracking-[0.15em] text-[var(--ink-soft)]">
+                    {ex}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SectionSignSystem({ signs }: { signs: { type: string; color: string; textColor: string; label: string; sub: string }[] }) {
+  return (
+    <div className="py-10">
+      <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Sign System</div>
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+        {signs.map((s, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, scale: 0.96 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            className="relative overflow-hidden"
+            style={{ background: s.color }}
+          >
+            {/* sign stripe */}
+            <div className="absolute left-0 top-0 h-full w-1 bg-white/20" />
+            <div className="flex flex-col gap-1 p-5 pl-7">
+              <div className="font-mono text-[9px] uppercase tracking-[0.3em]" style={{ color: s.textColor + "aa" }}>
+                {s.type}
+              </div>
+              <div className="serif-display text-xl leading-tight md:text-2xl" style={{ color: s.textColor }}>
+                {s.label}
+              </div>
+              <div className="mt-1 font-mono text-[9px] uppercase tracking-[0.15em]" style={{ color: s.textColor + "99" }}>
+                {s.sub}
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SectionUserJourney({ title, steps }: { title: string; steps: { phase: string; action: string; pain?: string }[] }) {
+  return (
+    <div className="py-10">
+      <div className="mb-8 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">{title}</div>
+      <div className="relative">
+        {/* connecting line */}
+        <div className="absolute left-4 top-4 bottom-4 w-px bg-[var(--divider)]" />
+        <div className="flex flex-col gap-6 pl-12">
+          {steps.map((step, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
+            >
+              {/* dot */}
+              <div
+                className="absolute -left-[2.1rem] top-1 h-3 w-3 rounded-full border-2"
+                style={{ background: step.pain ? "var(--neon)" : "var(--ink-soft)", borderColor: "var(--background)" }}
+              />
+              <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--neon)]">{step.phase}</div>
+              <div className="text-sm text-[var(--foreground)]">{step.action}</div>
+              {step.pain && (
+                <div className="mt-2 flex items-start gap-2 text-[11px] text-[var(--ink-soft)]">
+                  <span className="mt-[3px] h-[2px] w-3 shrink-0 bg-red-500/70" />
+                  {step.pain}
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function renderSection(section: ProjectSection, i: number) {
   return (
     <motion.div
@@ -589,6 +845,12 @@ function renderSection(section: ProjectSection, i: number) {
       {section.type === "screens" && <SectionScreens images={section.images} />}
       {section.type === "concept-mark" && <SectionConceptMark heading={section.heading} body={section.body} variant={section.variant} />}
       {section.type === "logo-colors" && <SectionLogoColors />}
+      {section.type === "stat-grid" && <SectionStatGrid stats={section.stats} />}
+      {section.type === "bar-chart" && <SectionBarChart title={section.title} bars={section.bars} caption={section.caption} />}
+      {section.type === "route-line" && <SectionRouteLine title={section.title} stations={section.stations} color={section.color} />}
+      {section.type === "info-hierarchy" && <SectionInfoHierarchy title={section.title} levels={section.levels} />}
+      {section.type === "sign-system" && <SectionSignSystem signs={section.signs} />}
+      {section.type === "user-journey" && <SectionUserJourney title={section.title} steps={section.steps} />}
     </motion.div>
   );
 }

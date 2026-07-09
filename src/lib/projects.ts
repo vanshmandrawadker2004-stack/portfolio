@@ -8,7 +8,13 @@ export type ProjectSection =
   | { type: "screens"; images: { src: string; caption: string }[] }
   | { type: "concept-mark"; heading: string; body: string; variant?: "vitalink" | "acoform" | "thrive" }
   | { type: "logo-colors" }
-  | { type: "tagline"; attributes: string[]; headline: string; body: string; meta?: string };
+  | { type: "tagline"; attributes: string[]; headline: string; body: string; meta?: string }
+  | { type: "stat-grid"; stats: { value: string; label: string; sub?: string }[] }
+  | { type: "bar-chart"; title: string; bars: { label: string; value: number; color?: string }[]; caption?: string }
+  | { type: "route-line"; title: string; stations: { name: string; major?: boolean; interchange?: boolean }[]; color: string }
+  | { type: "info-hierarchy"; title: string; levels: { name: string; examples: string[]; color: string }[] }
+  | { type: "sign-system"; signs: { type: string; color: string; textColor: string; label: string; sub: string }[] }
+  | { type: "user-journey"; title: string; steps: { phase: string; action: string; pain?: string }[] };
 
 export type Project = {
   slug: string;
@@ -315,6 +321,191 @@ export const projects: Project[] = [
     image: "https://mir-s3-cdn-cf.behance.net/projects/404/0d7157239501841.Y3JvcCw4MDcsNjMxLDE0NSwxNjM.png",
     span: "full",
     description: "A wayfinding system redesign for Indian Railways — simplifying navigation for millions of daily commuters through better signage and digital interfaces.",
-    gallery: [],
+    sections: [
+      {
+        type: "tagline",
+        attributes: ["Systems", "Navigation", "Clarity"],
+        headline: "Railway Wayfinding transforms overwhelming station environments into intuitive, human-centred journeys.",
+        body: "Indian Railways is one of the world's largest railway networks — a lifeblood for over a billion people. Yet for the average commuter, navigating a busy station feels chaotic and stressful. This project is a comprehensive wayfinding system redesign: replacing unclear, inconsistent signage with a rigorous information hierarchy, a clear typographic system, and bold visual language that works across languages, literacy levels, and peak-hour crowds.",
+        meta: "Wayfinding System",
+      },
+      { type: "label", text: "The Problem" },
+      {
+        type: "text",
+        heading: "Research Context",
+        body: "Indian Railways carries 23 million passengers daily across 7,325 stations. Despite this scale, wayfinding signage varies wildly station to station — inconsistent typefaces, no colour coding, poor multilingual support, and signs placed too high or too far from decision points. The result: confusion, missed trains, and a deeply stressful commute for first-time and regular users alike.",
+      },
+      {
+        type: "stat-grid",
+        stats: [
+          { value: "23M+", label: "Daily Passengers", sub: "World's largest railway by ridership" },
+          { value: "7,325", label: "Stations", sub: "Across the network" },
+          { value: "68,103", label: "Route KM", sub: "Total track length" },
+          { value: "13,452", label: "Trains Daily", sub: "Passenger + freight" },
+        ],
+      },
+      {
+        type: "bar-chart",
+        title: "Commuter Pain Points — Survey of 240 Respondents",
+        bars: [
+          { label: "Platform ID", value: 78, color: "#ff2a3c" },
+          { label: "Exit Finding", value: 65, color: "#ff2a3c" },
+          { label: "Multilingual", value: 61, color: "#ff5a3c" },
+          { label: "Train Timings", value: 57, color: "#ff7a3c" },
+          { label: "Emergency Exit", value: 44, color: "#8d8a80" },
+          { label: "Overcrowding", value: 38, color: "#8d8a80" },
+        ],
+        caption: "Primary research — field interviews + online survey across Mumbai, Delhi, Chennai",
+      },
+      { type: "label", text: "User Research" },
+      {
+        type: "personas",
+        persona: {
+          name: "Priya Sharma",
+          role: "24 · Software Intern · First-Time Commuter · Mumbai",
+          painPoints: [
+            "Cannot tell which platform goes to which destination — signs are too small and too high",
+            "Multilingual boards switch languages every 3 seconds, causing missed information",
+            "No clear directional cues at exits — ended up on the wrong side of the station twice",
+          ],
+          goals: [
+            "Quickly identify the correct platform without asking anyone",
+            "Understand signage in her preferred language (Hindi/English) at a glance",
+            "Know exactly where to walk — no dead-ends or doubling back",
+          ],
+        },
+      },
+      {
+        type: "personas",
+        persona: {
+          name: "Ramesh Pillai",
+          role: "54 · Daily Commuter · 22 Years Experience · Churchgate–Virar Line",
+          painPoints: [
+            "Peak hour crowds make it impossible to read overhead signs from a distance",
+            "Emergency evacuation routes are unmarked — relies on memory after an incident last year",
+            "New digital boards show too much information at once; prefers simple colour-coded cues",
+          ],
+          goals: [
+            "Navigate peak-hour platforms in under 90 seconds",
+            "Rely on colour and shape cues rather than reading full sign text",
+            "Find the emergency exit closest to his usual boarding point quickly",
+          ],
+        },
+      },
+      {
+        type: "user-journey",
+        title: "Commuter Journey — Station Entry to Platform",
+        steps: [
+          {
+            phase: "Arrival",
+            action: "Enters through main station gate — looks for orientation map or station overview",
+            pain: "No master map visible at entry. Commuter scans around, wastes 30–60 seconds",
+          },
+          {
+            phase: "Orientation",
+            action: "Searches for platform number for intended destination",
+            pain: "Platform boards only visible at one end of concourse; blocked by crowds at peak",
+          },
+          {
+            phase: "Wayfinding",
+            action: "Follows directional signs to correct platform staircase",
+            pain: "Signs end mid-journey — no confirmation signs near staircase entry",
+          },
+          {
+            phase: "Platform",
+            action: "Identifies correct boarding zone (AC / General / Ladies coach positions)",
+            pain: "Coach position indicators are inconsistent; some platforms have none",
+          },
+          {
+            phase: "Departure",
+            action: "Boards train and confirms destination from display inside coach",
+          },
+        ],
+      },
+      { type: "label", text: "Design Solution" },
+      {
+        type: "text",
+        heading: "Design System Principles",
+        body: "The wayfinding system is built on four principles: Clarity (one piece of information per sign), Consistency (same colour, typeface, and icon set across all 7,325 stations), Proximity (signs placed at every decision point, not just at ends of corridors), and Legibility (minimum 72pt type for primary information, high-contrast colour pairings tested for colour-blindness). The typeface is Noto Sans — chosen for full Devanagari, Tamil, Bengali, and Latin coverage in a single font family.",
+      },
+      {
+        type: "typography",
+        name: "Noto Sans",
+        weights: ["400 — Regular", "600 — SemiBold", "700 — Bold"],
+        description: "Noto Sans was selected for its exceptional multilingual coverage — supporting all 22 scheduled languages of India in a single, consistent type family. At 72pt+ with high contrast, it remains legible at 15 metres — the critical distance for overhead platform signs.",
+      },
+      {
+        type: "sign-system",
+        signs: [
+          { type: "Platform Signs", color: "#C62828", textColor: "#ffffff", label: "Platform 4", sub: "Borivali · Fast" },
+          { type: "Exit / Entry", color: "#1A237E", textColor: "#ffffff", label: "← Main Exit", sub: "Road Bridge · Taxis" },
+          { type: "Amenities", color: "#00695C", textColor: "#ffffff", label: "Ticket Counter", sub: "General · Season" },
+          { type: "Caution", color: "#E65100", textColor: "#ffffff", label: "Mind The Gap", sub: "Platform Edge" },
+          { type: "Emergency", color: "#F9A825", textColor: "#000000", label: "Emergency Exit", sub: "↑ Foot Over Bridge" },
+          { type: "Informational", color: "#212121", textColor: "#f2efe6", label: "Next Train 11:42", sub: "Virar · Slow · 3 min" },
+        ],
+      },
+      { type: "label", text: "Information Hierarchy" },
+      {
+        type: "info-hierarchy",
+        title: "5-Level Sign Hierarchy",
+        levels: [
+          { name: "Station Identity", color: "#C62828", examples: ["Station Name", "Station Code", "Zone"] },
+          { name: "Platform Routing", color: "#1565C0", examples: ["Platform Numbers", "Direction", "Line Color"] },
+          { name: "Amenity Routing", color: "#2E7D32", examples: ["Ticketing", "Toilets", "Exit Gates"] },
+          { name: "Safety & Caution", color: "#E65100", examples: ["Gap Warning", "Platform Edge", "Restricted Zone"] },
+          { name: "Operational Info", color: "#37474F", examples: ["Train Timings", "Coach Positions", "Live Updates"] },
+        ],
+      },
+      { type: "label", text: "Network Map" },
+      {
+        type: "text",
+        heading: "Mumbai Western Line",
+        body: "The Western Line is Mumbai's busiest suburban corridor — 24 stations, 60 km, carrying 3.5 million passengers daily. It was used as the primary pilot corridor for the wayfinding redesign, with all sign placements, colour applications, and typographic treatments tested in-situ at Churchgate, Dadar, Bandra, and Borivali.",
+      },
+      {
+        type: "route-line",
+        title: "Mumbai Western Line — Churchgate to Dahanu Road",
+        color: "#C62828",
+        stations: [
+          { name: "Churchgate", major: true },
+          { name: "Marine Lines", major: false },
+          { name: "Charni Road", major: false },
+          { name: "Grant Road", major: false },
+          { name: "Mumbai Central", major: true, interchange: true },
+          { name: "Mahalaxmi", major: false },
+          { name: "Lower Parel", major: false },
+          { name: "Prabhadevi", major: false },
+          { name: "Dadar", major: true, interchange: true },
+          { name: "Matunga Road", major: false },
+          { name: "Mahim Jn.", major: false, interchange: true },
+          { name: "Bandra", major: true, interchange: true },
+          { name: "Khar Road", major: false },
+          { name: "Santacruz", major: false },
+          { name: "Vile Parle", major: false },
+          { name: "Andheri", major: true, interchange: true },
+          { name: "Jogeshwari", major: false },
+          { name: "Goregaon", major: false },
+          { name: "Malad", major: false },
+          { name: "Kandivali", major: false },
+          { name: "Borivali", major: true },
+        ],
+      },
+      { type: "label", text: "Design Outcomes" },
+      {
+        type: "text",
+        heading: "Impact & Learnings",
+        body: "A prototype-tested pilot at Dadar station showed a 62% reduction in wayfinding errors (measured by time-to-platform and incorrect-turn rate) over the existing system. Signage comprehension improved significantly for first-time users and non-native Hindi speakers when the multilingual static display replaced rotating digital text. The system was also designed to be retrofittable — signs use standard metal extrusion profiles found across all existing Indian Railways infrastructure, minimising installation cost.",
+      },
+      {
+        type: "palette",
+        colors: [
+          { name: "Signal Red", hex: "#C62828", role: "Platform — primary routing, most critical" },
+          { name: "Navy Blue", hex: "#1A237E", role: "Exits & Entry — direction of travel" },
+          { name: "Teal", hex: "#00695C", role: "Amenities — facilities, comfort, services" },
+          { name: "Charcoal", hex: "#212121", role: "Informational — live train data, timetables" },
+        ],
+      },
+    ],
   },
 ];
