@@ -150,6 +150,48 @@ function SectionPersonas({ persona }: { persona: { name: string; role: string; p
   );
 }
 
+function SectionConceptMark({ heading, body }: { heading: string; body: string }) {
+  return (
+    <div className="py-8 md:py-12">
+      <div className="grid gap-12 md:grid-cols-2 md:gap-16">
+        {/* text left */}
+        <div>
+          <h2 className="mb-5 text-xl font-semibold text-[var(--foreground)]">{heading}</h2>
+          <p className="text-base leading-[1.85] text-[var(--ink-soft)]">{body}</p>
+        </div>
+        {/* marks right */}
+        <div className="flex items-center justify-around gap-8 border border-[var(--divider)] px-8 py-10">
+          {/* LV lettermark */}
+          <div className="flex flex-col items-center gap-4">
+            <div className="font-[Anton,sans-serif] text-6xl font-normal leading-none tracking-wide text-[var(--foreground)] md:text-7xl">
+              LV
+            </div>
+            <div className="h-px w-full bg-[var(--foreground)]" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Naming</span>
+          </div>
+          {/* ECG pulse */}
+          <div className="flex flex-col items-center gap-4">
+            <svg
+              viewBox="0 0 140 60"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-32 md:w-40"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="0,30 35,30 48,18 58,52 68,8 78,30 140,30" />
+            </svg>
+            <div className="h-px w-full bg-[var(--foreground)]" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Health</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SectionImage({ src, caption }: { src: string; caption?: string }) {
   return (
     <div className="py-4">
@@ -200,6 +242,7 @@ function renderSection(section: ProjectSection, i: number) {
       {section.type === "personas" && <SectionPersonas persona={section.persona} />}
       {section.type === "image" && <SectionImage src={section.src} caption={section.caption} />}
       {section.type === "screens" && <SectionScreens images={section.images} />}
+      {section.type === "concept-mark" && <SectionConceptMark heading={section.heading} body={section.body} />}
     </motion.div>
   );
 }

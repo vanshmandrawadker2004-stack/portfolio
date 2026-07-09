@@ -5,7 +5,8 @@ export type ProjectSection =
   | { type: "typography"; name: string; weights: string[]; description: string }
   | { type: "personas"; persona: { name: string; role: string; painPoints: string[]; goals: string[] } }
   | { type: "image"; src: string; caption?: string }
-  | { type: "screens"; images: { src: string; caption: string }[] };
+  | { type: "screens"; images: { src: string; caption: string }[] }
+  | { type: "concept-mark"; heading: string; body: string };
 
 export type Project = {
   slug: string;
@@ -108,14 +109,9 @@ export const projects: Project[] = [
         text: "Brand Identity",
       },
       {
-        type: "text",
-        heading: "Concept",
+        type: "concept-mark",
+        heading: "Concept:",
         body: "The Vitalink logo mark is a distinctive fusion of a medical pulse and the initials 'V' and 'L'. The stylized symbol cleverly integrates the steady rhythm of a heartbeat — representing health and connectivity — with the brand's initials, creating a mark that is instantly recognizable and meaningful. This minimalist approach embodies Vitalink's core values of reliability, empowerment, and care, while visually communicating trust and seamless connection at the heart of patient-doctor interaction. Rendered in a simple, professional style, the logo balances modernity with warmth, establishing a clear and approachable brand identity.",
-      },
-      {
-        type: "image",
-        src: "https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/8d840f237702741.6905f135cecd5.png",
-        caption: "Logo mark exploration — LV pulse concept",
       },
       {
         type: "label",
