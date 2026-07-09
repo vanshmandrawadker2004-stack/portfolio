@@ -6,7 +6,7 @@ export type ProjectSection =
   | { type: "personas"; persona: { name: string; role: string; painPoints: string[]; goals: string[] } }
   | { type: "image"; src: string; caption?: string }
   | { type: "screens"; images: { src: string; caption: string }[] }
-  | { type: "concept-mark"; heading: string; body: string; variant?: "vitalink" | "acoform" }
+  | { type: "concept-mark"; heading: string; body: string; variant?: "vitalink" | "acoform" | "thrive" }
   | { type: "logo-colors" }
   | { type: "tagline"; attributes: string[]; headline: string; body: string; meta?: string };
 
@@ -249,10 +249,55 @@ export const projects: Project[] = [
     category: "Brand Identity",
     href: "/project/thrive",
     externalHref: "https://www.behance.net/gallery/222992479/Thrive",
-    image: "https://mir-s3-cdn-cf.behance.net/projects/404/2402d7222992479.Y3JvcCwxMzU5LDEwNjMsMzIyLDA.jpg",
+    image: "/projects/thrive/logo-sign.png",
     span: "half",
-    description: "Brand identity for a wellness startup — rooted in clarity, growth, and a human-first design language.",
-    gallery: [],
+    description: "Brand identity for a growth-focused startup — rooted in sustainability, innovation, and a forward-thinking design language.",
+    sections: [
+      {
+        type: "tagline",
+        attributes: ["Growth", "Innovation", "Impact"],
+        headline: "Thrive delivers smart solutions for sustainable growth. Powered by innovation, built for impact.",
+        body: "Thrive is a forward-thinking brand built around the belief that sustainable growth and bold innovation go hand in hand. Designed to inspire confidence and clarity, the identity reflects a company that moves with purpose — empowering people, businesses, and communities to reach their full potential. Every element of the brand communicates momentum, resilience, and a commitment to making meaningful impact.",
+        meta: "Logo & Brand Identity",
+      },
+      { type: "label", text: "Brand Identity" },
+      {
+        type: "concept-mark",
+        heading: "Concept:",
+        body: "The Thrive logo mark is a dynamic fusion of the letter T and a sprouting leaf, representing the brand's dual commitment to structured growth and natural sustainability. The bold geometric T provides a foundation of strength and reliability, while the leaf element introduces organic vitality and forward momentum. Together, they create a mark that is instantly recognizable — communicating that Thrive is where ambition meets purpose.",
+        variant: "thrive",
+      },
+      {
+        type: "screens",
+        images: [
+          { src: "/projects/thrive/logo-light.png", caption: "Logo mark — light" },
+          { src: "/projects/thrive/logo-dark.png", caption: "Logo mark — dark" },
+        ],
+      },
+      { type: "label", text: "Design System" },
+      {
+        type: "palette",
+        colors: [
+          { name: "Forest Green", hex: "#5BA830", role: "Primary — growth, vitality" },
+          { name: "Earthy Teal", hex: "#3A7A28", role: "Secondary — depth, balance" },
+          { name: "Carbon", hex: "#1E1E1E", role: "Text — strength, grounding" },
+          { name: "Warm Sand", hex: "#F0EBE0", role: "Background — calm, clarity" },
+        ],
+      },
+      { type: "label", text: "Brand Applications" },
+      {
+        type: "image",
+        src: "/projects/thrive/mockup-sign.png",
+        caption: "Outdoor signage — brand presence at scale",
+      },
+      {
+        type: "screens",
+        images: [
+          { src: "/projects/thrive/mockup-tote.png", caption: "Tote bag — everyday brand touchpoint" },
+          { src: "/projects/thrive/mockup-app.png", caption: "App icon — digital presence" },
+        ],
+      },
+    ],
   },
   {
     slug: "railway-way-finding",

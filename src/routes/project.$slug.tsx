@@ -393,10 +393,11 @@ function SectionLogoColors() {
   );
 }
 
-function SectionConceptMark({ heading, body, variant = "vitalink" }: { heading: string; body: string; variant?: "vitalink" | "acoform" }) {
+function SectionConceptMark({ heading, body, variant = "vitalink" }: { heading: string; body: string; variant?: "vitalink" | "acoform" | "thrive" }) {
   const isAcoform = variant === "acoform";
-  const accentColor = isAcoform ? "rgba(239,153,33,0.08)" : "rgba(108,99,255,0.06)";
-  const accentBorder = isAcoform ? "rgba(239,153,33,0.25)" : "rgba(108,99,255,0.2)";
+  const isThrive = variant === "thrive";
+  const accentColor = isAcoform ? "rgba(239,153,33,0.08)" : isThrive ? "rgba(91,168,48,0.07)" : "rgba(108,99,255,0.06)";
+  const accentBorder = isAcoform ? "rgba(239,153,33,0.25)" : isThrive ? "rgba(91,168,48,0.25)" : "rgba(108,99,255,0.2)";
 
   return (
     <div className="py-10 md:py-14">
@@ -411,7 +412,42 @@ function SectionConceptMark({ heading, body, variant = "vitalink" }: { heading: 
           className="flex items-center justify-around gap-8 px-8 py-12"
           style={{ background: accentColor, borderLeft: `1px solid ${accentBorder}` }}
         >
-          {isAcoform ? (
+          {isThrive ? (
+            <>
+              {/* T lettermark */}
+              <div className="flex flex-col items-center gap-5">
+                <div className="font-[Anton,sans-serif] text-7xl font-normal leading-none tracking-wide text-[var(--foreground)] md:text-8xl">
+                  T
+                </div>
+                <div className="h-px w-full bg-[var(--divider)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Naming</span>
+              </div>
+              {/* Leaf / growth mark */}
+              <div className="flex flex-col items-center gap-5">
+                <svg
+                  viewBox="0 0 100 100"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-20 md:w-28"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ color: "#5BA830" }}
+                >
+                  {/* leaf shape */}
+                  <path d="M50 90 C50 90 10 70 10 35 C10 15 30 8 50 8 C70 8 90 15 90 35 C90 70 50 90 50 90Z" />
+                  {/* centre vein */}
+                  <line x1="50" y1="90" x2="50" y2="20" />
+                  {/* side veins */}
+                  <line x1="50" y1="55" x2="28" y2="38" />
+                  <line x1="50" y1="55" x2="72" y2="38" />
+                </svg>
+                <div className="h-px w-full bg-[var(--divider)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Sustainable</span>
+              </div>
+            </>
+          ) : isAcoform ? (
             <>
               {/* Af lettermark */}
               <div className="flex flex-col items-center gap-5">
