@@ -396,8 +396,8 @@ function SectionLogoColors() {
 function SectionConceptMark({ heading, body, variant = "vitalink" }: { heading: string; body: string; variant?: "vitalink" | "acoform" | "thrive" }) {
   const isAcoform = variant === "acoform";
   const isThrive = variant === "thrive";
-  const accentColor = isAcoform ? "rgba(239,153,33,0.08)" : isThrive ? "rgba(91,168,48,0.07)" : "rgba(108,99,255,0.06)";
-  const accentBorder = isAcoform ? "rgba(239,153,33,0.25)" : isThrive ? "rgba(91,168,48,0.25)" : "rgba(108,99,255,0.2)";
+  const accentColor = isAcoform ? "rgba(239,153,33,0.08)" : isThrive ? "rgba(167,201,85,0.08)" : "rgba(108,99,255,0.06)";
+  const accentBorder = isAcoform ? "rgba(239,153,33,0.25)" : isThrive ? "rgba(167,201,85,0.25)" : "rgba(108,99,255,0.2)";
 
   return (
     <div className="py-10 md:py-14">
@@ -433,7 +433,7 @@ function SectionConceptMark({ heading, body, variant = "vitalink" }: { heading: 
                   strokeWidth="4.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  style={{ color: "#5BA830" }}
+                  style={{ color: "#A7C955" }}
                 >
                   {/* leaf shape */}
                   <path d="M50 90 C50 90 10 70 10 35 C10 15 30 8 50 8 C70 8 90 15 90 35 C90 70 50 90 50 90Z" />

@@ -278,10 +278,9 @@ export const projects: Project[] = [
       {
         type: "palette",
         colors: [
-          { name: "Forest Green", hex: "#5BA830", role: "Primary — growth, vitality" },
-          { name: "Earthy Teal", hex: "#3A7A28", role: "Secondary — depth, balance" },
-          { name: "Carbon", hex: "#1E1E1E", role: "Text — strength, grounding" },
-          { name: "Warm Sand", hex: "#F0EBE0", role: "Background — calm, clarity" },
+          { name: "Thrive Lime", hex: "#A7C955", role: "Primary — growth, vitality" },
+          { name: "Leafy Jade", hex: "#317E3D", role: "Secondary — depth, balance" },
+          { name: "Urban Charcoal", hex: "#212121", role: "Text — strength, grounding" },
         ],
       },
       { type: "label", text: "Brand Applications" },
