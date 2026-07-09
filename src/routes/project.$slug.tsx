@@ -150,6 +150,36 @@ function SectionPersonas({ persona }: { persona: { name: string; role: string; p
   );
 }
 
+function SectionLogoColors() {
+  const PulseMark = ({ color }: { color: string }) => (
+    <svg
+      viewBox="0 0 140 100"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-20 md:w-28"
+      fill="none"
+      stroke={color}
+      strokeWidth="7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="10,50 42,50 55,30 68,72 80,14 93,50 130,50" />
+    </svg>
+  );
+
+  return (
+    <div className="py-4">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex aspect-video items-center justify-center" style={{ background: "#6B6F7E" }}>
+          <PulseMark color="#ffffff" />
+        </div>
+        <div className="flex aspect-video items-center justify-center" style={{ background: "#6C63FF" }}>
+          <PulseMark color="#ffffff" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SectionConceptMark({ heading, body }: { heading: string; body: string }) {
   return (
     <div className="py-8 md:py-12">
@@ -243,6 +273,7 @@ function renderSection(section: ProjectSection, i: number) {
       {section.type === "image" && <SectionImage src={section.src} caption={section.caption} />}
       {section.type === "screens" && <SectionScreens images={section.images} />}
       {section.type === "concept-mark" && <SectionConceptMark heading={section.heading} body={section.body} />}
+      {section.type === "logo-colors" && <SectionLogoColors />}
     </motion.div>
   );
 }

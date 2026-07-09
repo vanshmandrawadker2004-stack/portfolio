@@ -6,7 +6,8 @@ export type ProjectSection =
   | { type: "personas"; persona: { name: string; role: string; painPoints: string[]; goals: string[] } }
   | { type: "image"; src: string; caption?: string }
   | { type: "screens"; images: { src: string; caption: string }[] }
-  | { type: "concept-mark"; heading: string; body: string };
+  | { type: "concept-mark"; heading: string; body: string }
+  | { type: "logo-colors" };
 
 export type Project = {
   slug: string;
@@ -114,6 +115,13 @@ export const projects: Project[] = [
         body: "The Vitalink logo mark is a distinctive fusion of a medical pulse and the initials 'V' and 'L'. The stylized symbol cleverly integrates the steady rhythm of a heartbeat — representing health and connectivity — with the brand's initials, creating a mark that is instantly recognizable and meaningful. This minimalist approach embodies Vitalink's core values of reliability, empowerment, and care, while visually communicating trust and seamless connection at the heart of patient-doctor interaction. Rendered in a simple, professional style, the logo balances modernity with warmth, establishing a clear and approachable brand identity.",
       },
       {
+        type: "screens",
+        images: [
+          { src: "/projects/vitalink/logo-gray.png", caption: "Logo mark — neutral" },
+          { src: "/projects/vitalink/logo-purple.png", caption: "Logo mark — brand" },
+        ],
+      },
+      {
         type: "label",
         text: "Design System",
       },
@@ -161,6 +169,26 @@ export const projects: Project[] = [
         type: "text",
         heading: "Screens",
         body: "The product flows through four core interactions: discovery (search and filter by specialty and location), browse (a doctor listing with key trust signals surfaced at a glance), profile (deep-dive on a specific doctor with credentials, reviews, and next available slots), and booking (a streamlined 3-step appointment confirmation). Every screen was built to reduce cognitive load — fewer decisions per screen, clearer hierarchy, and instant feedback on actions.",
+      },
+      {
+        type: "image",
+        src: "/projects/vitalink/screen-hero.png",
+        caption: "Landing — Find Your Trusted Doctor with Vitalink",
+      },
+      {
+        type: "image",
+        src: "/projects/vitalink/screen-listing.png",
+        caption: "Doctor search & listing with filters and map",
+      },
+      {
+        type: "image",
+        src: "/projects/vitalink/screen-profile.png",
+        caption: "Dr. Rohini Kulkarni — profile, patient stories & scheduling",
+      },
+      {
+        type: "image",
+        src: "/projects/vitalink/screen-booking.png",
+        caption: "Appointment checkout — in clinic, 22nd June 15:30",
       },
     ],
   },
