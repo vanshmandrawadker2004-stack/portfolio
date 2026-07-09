@@ -6,7 +6,7 @@ export type ProjectSection =
   | { type: "personas"; persona: { name: string; role: string; painPoints: string[]; goals: string[] } }
   | { type: "image"; src: string; caption?: string }
   | { type: "screens"; images: { src: string; caption: string }[] }
-  | { type: "concept-mark"; heading: string; body: string }
+  | { type: "concept-mark"; heading: string; body: string; variant?: "vitalink" | "acoform" }
   | { type: "logo-colors" }
   | { type: "tagline"; attributes: string[]; headline: string; body: string; meta?: string };
 
@@ -184,6 +184,61 @@ export const projects: Project[] = [
         type: "image",
         src: "/projects/vitalink/screen-booking.png",
         caption: "Appointment checkout — in clinic, 22nd June 15:30",
+      },
+    ],
+  },
+  {
+    slug: "acoform",
+    title: "Acoform",
+    year: "2025",
+    category: "Brand Identity",
+    href: "/project/acoform",
+    image: "/projects/acoform/logo-amber.png",
+    span: "half",
+    description: "Brand identity for a next-generation aluminum formwork company — built on strength, structure, and precision engineering.",
+    sections: [
+      {
+        type: "tagline",
+        attributes: ["Engineering", "Construction", "Excellence"],
+        headline: "Acoform delivers next-generation formwork for modern infrastructure. Built for efficiency, designed for the future.",
+        body: "Acoform is a forward-thinking brand committed to revolutionizing the construction industry through precision, efficiency, and sustainable formwork solutions. With a focus on innovation and structural integrity, they enable builders and developers to create faster, safer, and more reliable infrastructure. Their cutting-edge aluminum formwork systems empower the construction ecosystem to break traditional limits, build smarter, and shape the skylines of tomorrow.",
+        meta: "Logo & Brochure",
+      },
+      { type: "label", text: "Brand Identity" },
+      {
+        type: "concept-mark",
+        heading: "Concept:",
+        body: "The Acoform logo mark is a thoughtful fusion of the letters A and F, representing the brand name itself. The angular, structured design echoes the shape of aluminum formwork panels, subtly referencing the product's modularity and precision. By blending typography with architectural geometry, the mark captures the essence of Acoform — a company built on strength, structure, and smart construction solutions.",
+        variant: "acoform",
+      },
+      {
+        type: "screens",
+        images: [
+          { src: "/projects/acoform/logo-amber.png", caption: "Logo mark — Amber Blaze" },
+          { src: "/projects/acoform/logo-mark.png", caption: "Logo mark — Steel" },
+        ],
+      },
+      { type: "label", text: "Design System" },
+      {
+        type: "palette",
+        colors: [
+          { name: "Urban Grey", hex: "#898989", role: "Structure — concrete, strength" },
+          { name: "Amber Blaze", hex: "#EF9921", role: "Primary — energy, action" },
+          { name: "Frost Veil", hex: "#FCFCFC", role: "Background — clarity, space" },
+        ],
+      },
+      { type: "label", text: "Brand Applications" },
+      {
+        type: "image",
+        src: "/projects/acoform/mockup-helmet.png",
+        caption: "Hard hat — branded PPE on site",
+      },
+      {
+        type: "screens",
+        images: [
+          { src: "/projects/acoform/mockup-card.png", caption: "Business card — minimal, black" },
+          { src: "/projects/acoform/mockup-billboard.png", caption: "Fence billboard — site presence" },
+        ],
       },
     ],
   },

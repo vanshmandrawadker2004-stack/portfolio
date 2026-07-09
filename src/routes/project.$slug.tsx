@@ -393,7 +393,11 @@ function SectionLogoColors() {
   );
 }
 
-function SectionConceptMark({ heading, body }: { heading: string; body: string }) {
+function SectionConceptMark({ heading, body, variant = "vitalink" }: { heading: string; body: string; variant?: "vitalink" | "acoform" }) {
+  const isAcoform = variant === "acoform";
+  const accentColor = isAcoform ? "rgba(239,153,33,0.08)" : "rgba(108,99,255,0.06)";
+  const accentBorder = isAcoform ? "rgba(239,153,33,0.25)" : "rgba(108,99,255,0.2)";
+
   return (
     <div className="py-10 md:py-14">
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
@@ -402,36 +406,73 @@ function SectionConceptMark({ heading, body }: { heading: string; body: string }
           <h2 className="mb-5 serif-display text-3xl text-[var(--foreground)] md:text-4xl">{heading}</h2>
           <p className="text-sm leading-[1.9] text-[var(--ink-soft)]">{body}</p>
         </div>
-        {/* marks right — brand-tinted bg */}
+        {/* marks right */}
         <div
           className="flex items-center justify-around gap-8 px-8 py-12"
-          style={{ background: "rgba(108,99,255,0.06)", borderLeft: "1px solid rgba(108,99,255,0.2)" }}
+          style={{ background: accentColor, borderLeft: `1px solid ${accentBorder}` }}
         >
-          {/* LV lettermark */}
-          <div className="flex flex-col items-center gap-5">
-            <div className="font-[Anton,sans-serif] text-7xl font-normal leading-none tracking-wide text-[var(--foreground)] md:text-8xl">
-              LV
-            </div>
-            <div className="h-px w-full bg-[var(--divider)]" />
-            <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Naming</span>
-          </div>
-          {/* ECG pulse */}
-          <div className="flex flex-col items-center gap-5">
-            <svg
-              viewBox="0 0 140 60"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-32 text-[var(--foreground)] md:w-40"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="0,30 35,30 48,18 58,52 68,8 78,30 140,30" />
-            </svg>
-            <div className="h-px w-full bg-[var(--divider)]" />
-            <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Health</span>
-          </div>
+          {isAcoform ? (
+            <>
+              {/* Af lettermark */}
+              <div className="flex flex-col items-center gap-5">
+                <div className="font-[Anton,sans-serif] text-7xl font-normal leading-none tracking-wide text-[var(--foreground)] md:text-8xl">
+                  Af
+                </div>
+                <div className="h-px w-full bg-[var(--divider)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Naming</span>
+              </div>
+              {/* Formwork grid */}
+              <div className="flex flex-col items-center gap-5">
+                <svg
+                  viewBox="0 0 120 100"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-28 text-[var(--foreground)] md:w-36"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="square"
+                >
+                  {/* 3×2 modular panel grid */}
+                  <rect x="6" y="6" width="32" height="40" />
+                  <rect x="44" y="6" width="32" height="40" />
+                  <rect x="82" y="6" width="32" height="40" />
+                  <rect x="6" y="54" width="32" height="40" />
+                  <rect x="44" y="54" width="32" height="40" />
+                  <rect x="82" y="54" width="32" height="40" />
+                </svg>
+                <div className="h-px w-full bg-[var(--divider)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Construction</span>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* LV lettermark */}
+              <div className="flex flex-col items-center gap-5">
+                <div className="font-[Anton,sans-serif] text-7xl font-normal leading-none tracking-wide text-[var(--foreground)] md:text-8xl">
+                  LV
+                </div>
+                <div className="h-px w-full bg-[var(--divider)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Naming</span>
+              </div>
+              {/* ECG pulse */}
+              <div className="flex flex-col items-center gap-5">
+                <svg
+                  viewBox="0 0 140 60"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-32 text-[var(--foreground)] md:w-40"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="0,30 35,30 48,18 58,52 68,8 78,30 140,30" />
+                </svg>
+                <div className="h-px w-full bg-[var(--divider)]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Health</span>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -510,7 +551,7 @@ function renderSection(section: ProjectSection, i: number) {
       {section.type === "personas" && <SectionPersonas persona={section.persona} />}
       {section.type === "image" && <SectionImage src={section.src} caption={section.caption} />}
       {section.type === "screens" && <SectionScreens images={section.images} />}
-      {section.type === "concept-mark" && <SectionConceptMark heading={section.heading} body={section.body} />}
+      {section.type === "concept-mark" && <SectionConceptMark heading={section.heading} body={section.body} variant={section.variant} />}
       {section.type === "logo-colors" && <SectionLogoColors />}
     </motion.div>
   );
