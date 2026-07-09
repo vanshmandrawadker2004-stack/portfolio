@@ -7,7 +7,8 @@ export type ProjectSection =
   | { type: "image"; src: string; caption?: string }
   | { type: "screens"; images: { src: string; caption: string }[] }
   | { type: "concept-mark"; heading: string; body: string }
-  | { type: "logo-colors" };
+  | { type: "logo-colors" }
+  | { type: "tagline"; attributes: string[]; headline: string; body: string; meta?: string };
 
 export type Project = {
   slug: string;
@@ -93,17 +94,11 @@ export const projects: Project[] = [
     description: "A health-tech product connecting patients and caregivers through a seamless digital interface.",
     sections: [
       {
-        type: "text",
-        heading: "Vitalink: Accessible · Reliable · Empowering",
-        body: "Vitalink connects patients and doctors with ease. Driven by reliability, built to empower.",
-      },
-      {
-        type: "text",
+        type: "tagline",
+        attributes: ["Accessible", "Reliable", "Empowering"],
+        headline: "Vitalink connects patients and doctors with ease. Driven by reliability, built to empower.",
         body: "Vitalink is a forward-thinking platform dedicated to revolutionizing healthcare connections through intuitive, accessible technology. Committed to reliability, empowerment, and care, Vitalink helps patients and doctors connect quickly and confidently. By prioritizing seamless experiences and a culture of trust, Vitalink enables better health journeys, smarter collaboration, and a healthier tomorrow.",
-      },
-      {
-        type: "label",
-        text: "Services: Logo & Website",
+        meta: "Logo & Website",
       },
       {
         type: "label",

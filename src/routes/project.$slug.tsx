@@ -26,10 +26,36 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 function SectionLabel({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-4 py-8 md:py-12">
+    <div className="flex items-center gap-3 py-12 md:py-16">
+      <span className="text-[var(--neon)]">◆</span>
+      <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--ink-soft)]">{text}</span>
       <div className="h-px flex-1 bg-[var(--divider)]" />
-      <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">{text}</span>
-      <div className="h-px flex-1 bg-[var(--divider)]" />
+    </div>
+  );
+}
+
+function SectionTagline({ attributes, headline, body, meta }: {
+  attributes: string[]; headline: string; body: string; meta?: string;
+}) {
+  return (
+    <div className="grid gap-10 py-8 md:grid-cols-[1fr_2fr] md:gap-20 md:py-14">
+      {/* left — stacked attributes */}
+      <div className="flex flex-col gap-1 pt-1">
+        <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--neon)]">Vitalink</div>
+        {attributes.map(a => (
+          <span key={a} className="serif-display text-2xl leading-tight text-[var(--ink-soft)] md:text-3xl">{a}</span>
+        ))}
+        {meta && (
+          <div className="mt-6 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]/50">
+            Services / {meta}
+          </div>
+        )}
+      </div>
+      {/* right — headline + body */}
+      <div>
+        <p className="serif-display text-2xl leading-tight text-[var(--foreground)] md:text-4xl">{headline}</p>
+        <p className="mt-6 text-sm leading-[1.9] text-[var(--ink-soft)] md:text-base">{body}</p>
+      </div>
     </div>
   );
 }
@@ -47,19 +73,24 @@ function SectionText({ heading, body }: { heading?: string; body: string }) {
 
 function SectionPalette({ colors }: { colors: { name: string; hex: string; role: string }[] }) {
   return (
-    <div className="py-4">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+    <div className="py-6">
+      {/* full-bleed color strips */}
+      <div className="flex h-28 overflow-hidden md:h-40">
+        {colors.map((c, i) => (
+          <div
+            key={c.hex}
+            className="flex-1 transition-all duration-500 hover:flex-[2]"
+            style={{ background: c.hex }}
+          />
+        ))}
+      </div>
+      {/* labels below */}
+      <div className="mt-0 grid border-t border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${colors.length}, 1fr)` }}>
         {colors.map(c => (
-          <div key={c.hex} className="group flex flex-col gap-3">
-            <div
-              className="h-24 w-full border border-white/5 md:h-32"
-              style={{ background: c.hex }}
-            />
-            <div>
-              <div className="font-mono text-xs font-medium text-[var(--foreground)]">{c.name}</div>
-              <div className="font-mono text-[10px] text-[var(--ink-soft)]">{c.hex}</div>
-              <div className="mt-1 font-mono text-[10px] text-[var(--ink-soft)] opacity-70">{c.role}</div>
-            </div>
+          <div key={c.hex} className="border-r border-[var(--divider)] px-3 py-3 last:border-r-0">
+            <div className="font-mono text-[10px] font-medium text-[var(--foreground)]">{c.name}</div>
+            <div className="font-mono text-[9px] text-[var(--ink-soft)]">{c.hex}</div>
+            <div className="mt-1 font-mono text-[9px] leading-tight text-[var(--ink-soft)]/60">{c.role.split("—")[0]}</div>
           </div>
         ))}
       </div>
@@ -69,37 +100,37 @@ function SectionPalette({ colors }: { colors: { name: string; hex: string; role:
 
 function SectionTypography({ name, weights, description }: { name: string; weights: string[]; description: string }) {
   return (
-    <div className="py-4">
-      <div className="border border-[var(--divider)] p-6 md:p-10">
-        {/* specimen */}
-        <div className="mb-6 border-b border-[var(--divider)] pb-6">
-          <div style={{ fontFamily: name }} className="text-5xl font-light leading-none text-[var(--foreground)] md:text-7xl">
+    <div className="py-6">
+      <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
+        {/* large specimen */}
+        <div>
+          <div
+            style={{ fontFamily: name }}
+            className="border-b border-[var(--divider)] pb-4 text-[5rem] font-light leading-none tracking-tight text-[var(--foreground)] md:text-[9rem]"
+          >
             Aa
           </div>
-          <div style={{ fontFamily: name }} className="mt-2 text-base text-[var(--ink-soft)]">
-            ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />
-            abcdefghijklmnopqrstuvwxyz<br />
-            0123456789
+          <div style={{ fontFamily: name }} className="mt-4 text-xs text-[var(--ink-soft)]/60 md:text-sm">
+            A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br />
+            a b c d e f g h i j k l m n o p q r s t u v w x y z<br />
+            0 1 2 3 4 5 6 7 8 9
           </div>
         </div>
-        {/* meta */}
-        <div className="flex flex-col gap-4 md:flex-row md:gap-12">
+        {/* meta right */}
+        <div className="flex flex-col gap-6 pt-2">
           <div>
-            <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Typeface</div>
-            <div className="text-xl font-semibold" style={{ fontFamily: name }}>{name}</div>
+            <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--neon)]">Typeface</div>
+            <div className="text-2xl font-light text-[var(--foreground)]" style={{ fontFamily: name }}>{name}</div>
           </div>
           <div>
-            <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Weights</div>
-            <div className="flex flex-col gap-1">
+            <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--ink-soft)]/50">Weights used</div>
+            <div className="flex flex-col gap-1.5">
               {weights.map(w => (
-                <div key={w} className="font-mono text-xs text-[var(--foreground)]">{w}</div>
+                <div key={w} className="font-mono text-[10px] text-[var(--ink-soft)]">{w}</div>
               ))}
             </div>
           </div>
-          <div className="flex-1">
-            <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Rationale</div>
-            <p className="text-sm leading-relaxed text-[var(--ink-soft)]">{description}</p>
-          </div>
+          <p className="text-xs leading-relaxed text-[var(--ink-soft)]/70">{description}</p>
         </div>
       </div>
     </div>
@@ -108,42 +139,36 @@ function SectionTypography({ name, weights, description }: { name: string; weigh
 
 function SectionPersonas({ persona }: { persona: { name: string; role: string; painPoints: string[]; goals: string[] } }) {
   return (
-    <div className="py-4">
-      <div className="border border-[var(--divider)]">
-        {/* persona header */}
-        <div className="flex items-center gap-5 border-b border-[var(--divider)] p-6">
-          <div className="flex h-12 w-12 items-center justify-center border border-[var(--neon)] font-mono text-sm font-bold text-[var(--neon)]">
-            {persona.name.split(" ").map(n => n[0]).join("")}
-          </div>
-          <div>
-            <div className="font-semibold text-[var(--foreground)]">{persona.name}</div>
-            <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{persona.role}</div>
-          </div>
+    <div className="py-6">
+      {/* name header — editorial, no box */}
+      <div className="mb-8 border-b border-[var(--divider)] pb-6">
+        <div className="font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--neon)]">User Persona</div>
+        <div className="mt-2 serif-display text-4xl text-[var(--foreground)] md:text-6xl">{persona.name}</div>
+        <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{persona.role}</div>
+      </div>
+      {/* two columns — no border box */}
+      <div className="grid gap-10 md:grid-cols-2 md:gap-16">
+        <div>
+          <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--ink-soft)]/50">Pain Points</div>
+          <ul className="flex flex-col gap-4">
+            {persona.painPoints.map((p, i) => (
+              <li key={i} className="flex gap-4 text-sm leading-relaxed text-[var(--foreground)]">
+                <span className="mt-[6px] h-1 w-4 flex-shrink-0 bg-red-500/60" />
+                {p}
+              </li>
+            ))}
+          </ul>
         </div>
-        {/* two columns */}
-        <div className="grid md:grid-cols-2">
-          <div className="border-b border-[var(--divider)] p-6 md:border-b-0 md:border-r">
-            <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Pain Points</div>
-            <ul className="flex flex-col gap-3">
-              {persona.painPoints.map((p, i) => (
-                <li key={i} className="flex gap-3 text-sm leading-relaxed text-[var(--foreground)]">
-                  <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-red-500/70" />
-                  {p}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="p-6">
-            <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Goals</div>
-            <ul className="flex flex-col gap-3">
-              {persona.goals.map((g, i) => (
-                <li key={i} className="flex gap-3 text-sm leading-relaxed text-[var(--foreground)]">
-                  <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--neon)]" />
-                  {g}
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div>
+          <div className="mb-4 font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--ink-soft)]/50">Goals</div>
+          <ul className="flex flex-col gap-4">
+            {persona.goals.map((g, i) => (
+              <li key={i} className="flex gap-4 text-sm leading-relaxed text-[var(--foreground)]">
+                <span className="mt-[6px] h-1 w-4 flex-shrink-0 bg-[var(--neon)]" />
+                {g}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
@@ -165,10 +190,9 @@ function SectionLogoColors() {
       <polyline points="10,50 42,50 55,30 68,72 80,14 93,50 130,50" />
     </svg>
   );
-
   return (
     <div className="py-4">
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-1">
         <div className="flex aspect-video items-center justify-center" style={{ background: "#6B6F7E" }}>
           <PulseMark color="#ffffff" />
         </div>
@@ -182,39 +206,42 @@ function SectionLogoColors() {
 
 function SectionConceptMark({ heading, body }: { heading: string; body: string }) {
   return (
-    <div className="py-8 md:py-12">
+    <div className="py-10 md:py-14">
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         {/* text left */}
         <div>
-          <h2 className="mb-5 text-xl font-semibold text-[var(--foreground)]">{heading}</h2>
-          <p className="text-base leading-[1.85] text-[var(--ink-soft)]">{body}</p>
+          <h2 className="mb-5 serif-display text-3xl text-[var(--foreground)] md:text-4xl">{heading}</h2>
+          <p className="text-sm leading-[1.9] text-[var(--ink-soft)]">{body}</p>
         </div>
-        {/* marks right */}
-        <div className="flex items-center justify-around gap-8 border border-[var(--divider)] px-8 py-10">
+        {/* marks right — brand-tinted bg */}
+        <div
+          className="flex items-center justify-around gap-8 px-8 py-12"
+          style={{ background: "rgba(108,99,255,0.06)", borderLeft: "1px solid rgba(108,99,255,0.2)" }}
+        >
           {/* LV lettermark */}
-          <div className="flex flex-col items-center gap-4">
-            <div className="font-[Anton,sans-serif] text-6xl font-normal leading-none tracking-wide text-[var(--foreground)] md:text-7xl">
+          <div className="flex flex-col items-center gap-5">
+            <div className="font-[Anton,sans-serif] text-7xl font-normal leading-none tracking-wide text-[var(--foreground)] md:text-8xl">
               LV
             </div>
-            <div className="h-px w-full bg-[var(--foreground)]" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Naming</span>
+            <div className="h-px w-full bg-[var(--divider)]" />
+            <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Naming</span>
           </div>
           {/* ECG pulse */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-5">
             <svg
               viewBox="0 0 140 60"
               xmlns="http://www.w3.org/2000/svg"
-              className="w-32 md:w-40"
+              className="w-32 text-[var(--foreground)] md:w-40"
               fill="none"
               stroke="currentColor"
-              strokeWidth="4"
+              strokeWidth="5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
               <polyline points="0,30 35,30 48,18 58,52 68,8 78,30 140,30" />
             </svg>
-            <div className="h-px w-full bg-[var(--foreground)]" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Health</span>
+            <div className="h-px w-full bg-[var(--divider)]" />
+            <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)]">Health</span>
           </div>
         </div>
       </div>
@@ -224,13 +251,19 @@ function SectionConceptMark({ heading, body }: { heading: string; body: string }
 
 function SectionImage({ src, caption }: { src: string; caption?: string }) {
   return (
-    <div className="py-4">
-      <div className="overflow-hidden border border-[var(--divider)]">
-        <img src={src} alt={caption ?? ""} className="w-full object-cover" loading="lazy" />
+    <div className="py-3">
+      <div className="group overflow-hidden">
+        <img
+          src={src}
+          alt={caption ?? ""}
+          className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.01]"
+          loading="lazy"
+        />
       </div>
       {caption && (
-        <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">
-          {caption}
+        <div className="mt-3 flex items-center gap-2">
+          <span className="h-px w-4 bg-[var(--neon)]" />
+          <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{caption}</span>
         </div>
       )}
     </div>
@@ -239,14 +272,22 @@ function SectionImage({ src, caption }: { src: string; caption?: string }) {
 
 function SectionScreens({ images }: { images: { src: string; caption: string }[] }) {
   return (
-    <div className="py-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div className="py-3">
+      <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
         {images.map((img, i) => (
-          <div key={i} className="flex flex-col gap-2">
-            <div className="overflow-hidden border border-[var(--divider)]">
-              <img src={img.src} alt={img.caption} className="w-full object-cover" loading="lazy" />
+          <div key={i} className="group flex flex-col">
+            <div className="overflow-hidden">
+              <img
+                src={img.src}
+                alt={img.caption}
+                className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                loading="lazy"
+              />
             </div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{img.caption}</div>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="h-px w-3 bg-[var(--divider)]" />
+              <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{img.caption}</span>
+            </div>
           </div>
         ))}
       </div>
@@ -258,12 +299,20 @@ function renderSection(section: ProjectSection, i: number) {
   return (
     <motion.div
       key={i}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, delay: 0.05, ease: EASE }}
+      transition={{ duration: 0.8, ease: EASE }}
     >
       {section.type === "label" && <SectionLabel text={section.text} />}
+      {section.type === "tagline" && (
+        <SectionTagline
+          attributes={section.attributes}
+          headline={section.headline}
+          body={section.body}
+          meta={section.meta}
+        />
+      )}
       {section.type === "text" && <SectionText heading={section.heading} body={section.body} />}
       {section.type === "palette" && <SectionPalette colors={section.colors} />}
       {section.type === "typography" && (
