@@ -92,8 +92,16 @@ export const projects: Project[] = [
     sections: [
       {
         type: "text",
-        heading: "Overview",
-        body: "Vitalink is a healthcare platform redesign focused on removing friction between patients and doctors. The brief was simple: make finding and booking a trusted doctor feel as easy as ordering food. We explored how clarity, accessible design language, and thoughtful information hierarchy can transform a stressful experience into a confident one.",
+        heading: "Vitalink: Accessible · Reliable · Empowering",
+        body: "Vitalink connects patients and doctors with ease. Driven by reliability, built to empower.",
+      },
+      {
+        type: "text",
+        body: "Vitalink is a forward-thinking platform dedicated to revolutionizing healthcare connections through intuitive, accessible technology. Committed to reliability, empowerment, and care, Vitalink helps patients and doctors connect quickly and confidently. By prioritizing seamless experiences and a culture of trust, Vitalink enables better health journeys, smarter collaboration, and a healthier tomorrow.",
+      },
+      {
+        type: "label",
+        text: "Services: Logo & Website",
       },
       {
         type: "label",
@@ -101,8 +109,8 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "The Mark",
-        body: "The LV logomark fuses a pulse waveform with the letterform itself — a direct metaphor for life, technology, and connection. Paired with the wordmark and two supporting descriptors (Wellbeing · Health), the system is built to feel both clinical and approachable. The pulse detail adds humanity to what could otherwise be a cold, institutional logo.",
+        heading: "Concept",
+        body: "The Vitalink logo mark is a distinctive fusion of a medical pulse and the initials 'V' and 'L'. The stylized symbol cleverly integrates the steady rhythm of a heartbeat — representing health and connectivity — with the brand's initials, creating a mark that is instantly recognizable and meaningful. This minimalist approach embodies Vitalink's core values of reliability, empowerment, and care, while visually communicating trust and seamless connection at the heart of patient-doctor interaction. Rendered in a simple, professional style, the logo balances modernity with warmth, establishing a clear and approachable brand identity.",
       },
       {
         type: "image",

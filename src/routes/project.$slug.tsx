@@ -36,7 +36,7 @@ function SectionLabel({ text }: { text: string }) {
 
 function SectionText({ heading, body }: { heading?: string; body: string }) {
   return (
-    <div className="mx-auto max-w-2xl py-4">
+    <div className="max-w-3xl py-4">
       {heading && (
         <h2 className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</h2>
       )}
@@ -157,7 +157,7 @@ function SectionImage({ src, caption }: { src: string; caption?: string }) {
         <img src={src} alt={caption ?? ""} className="w-full object-cover" loading="lazy" />
       </div>
       {caption && (
-        <div className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">
+        <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">
           {caption}
         </div>
       )}
