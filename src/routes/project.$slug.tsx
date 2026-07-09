@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { projects, type Project, type ProjectSection } from "@/lib/projects";
 
 export const Route = createFileRoute("/project/$slug")({
@@ -21,6 +22,115 @@ export const Route = createFileRoute("/project/$slug")({
 });
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+/* ─────────────────────── Home-page atmosphere ─────────────────────── */
+
+function SmoothScroll({ children }: { children: ReactNode }) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    const noReduce = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!fine || !noReduce) return;
+    setEnabled(true);
+
+    const content = contentRef.current;
+    if (!content) return;
+    const setH = () => { document.body.style.height = `${content.getBoundingClientRect().height}px`; };
+    setH();
+    const ro = new ResizeObserver(setH);
+    ro.observe(content);
+
+    let current = window.scrollY;
+    let raf = 0;
+    const loop = () => {
+      const target = window.scrollY;
+      current += (target - current) * 0.075;
+      if (Math.abs(target - current) < 0.1) current = target;
+      content.style.transform = `translate3d(0, ${-current}px, 0)`;
+      raf = requestAnimationFrame(loop);
+    };
+    loop();
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      document.body.style.height = "";
+    };
+  }, []);
+
+  if (!enabled) return <div ref={contentRef}>{children}</div>;
+  return (
+    <div className="fixed inset-x-0 top-0">
+      <div ref={contentRef} className="will-change-transform">{children}</div>
+    </div>
+  );
+}
+
+function Atmosphere() {
+  return (
+    <>
+      <div
+        className="pointer-events-none fixed -left-40 top-[20%] z-[5] h-[480px] w-[480px] rounded-full opacity-[0.08] blur-3xl"
+        style={{ background: "radial-gradient(circle, #ff2a3c, transparent 65%)", animation: "drift-a 16s ease-in-out infinite" }}
+      />
+      <div
+        className="pointer-events-none fixed -right-48 top-[58%] z-[5] h-[560px] w-[560px] rounded-full opacity-[0.05] blur-3xl"
+        style={{ background: "radial-gradient(circle, #f2efe6, transparent 65%)", animation: "drift-b 21s ease-in-out infinite" }}
+      />
+      <div
+        className="pointer-events-none fixed inset-0 z-[4]"
+        style={{ background: "radial-gradient(ellipse at center, transparent 62%, rgba(0,0,0,0.45) 100%)" }}
+      />
+    </>
+  );
+}
+
+function CityWindows() {
+  const windows = Array.from({ length: 36 }, (_, i) => ({
+    left: (i * 37) % 96,
+    top: (i * 53) % 55,
+    w: 5 + ((i * 13) % 10),
+    h: 7 + ((i * 7) % 12),
+    dur: 2.5 + ((i * 11) % 50) / 10,
+    delay: ((i * 17) % 40) / 10,
+    red: i % 9 === 0,
+  }));
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {windows.map((w, i) => (
+        <motion.div
+          key={i}
+          animate={{ opacity: [0.03, 0.12, 0.03] }}
+          transition={{ duration: w.dur, delay: w.delay, repeat: Infinity }}
+          className="absolute"
+          style={{ left: `${w.left}%`, top: `${w.top}%`, width: w.w, height: w.h, background: w.red ? "#ff2a3c" : "#f2efe6" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function FloatShapes({ variant = 0 }: { variant?: number }) {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div
+        className={`absolute h-40 w-40 rounded-full border border-[var(--neon)]/12 md:h-64 md:w-64 ${variant % 2 ? "right-[6%] top-[10%]" : "left-[4%] top-[14%]"}`}
+        style={{ animation: "drift-a 18s ease-in-out infinite" }}
+      />
+      <div
+        className={`absolute h-24 w-24 border border-white/8 md:h-36 md:w-36 ${variant % 2 ? "left-[8%] bottom-[12%]" : "right-[10%] bottom-[16%]"}`}
+        style={{ animation: "drift-b 23s ease-in-out infinite", transform: "rotate(18deg)" }}
+      />
+      <div
+        className="absolute left-[46%] top-[6%] text-6xl text-[var(--neon)]/10 md:text-8xl"
+        style={{ animation: "spin-very-slow 40s linear infinite" }}
+      >
+        ✱
+      </div>
+    </div>
+  );
+}
 
 /* ─────────────────────── Section renderers ─────────────────────── */
 
@@ -369,11 +479,12 @@ function ProjectPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      {/* atmosphere */}
+      {/* atmosphere — matches home page */}
       <div className="rain pointer-events-none fixed inset-0 z-[5] opacity-50" />
       <div className="scanlines pointer-events-none fixed inset-0 z-[6] opacity-20" />
+      <Atmosphere />
 
-      {/* NAV */}
+      {/* NAV — fixed, outside smooth scroll */}
       <nav className="fixed inset-x-0 top-0 z-50 flex items-center justify-between border-b border-[var(--divider)] bg-black/80 px-5 py-4 backdrop-blur-md md:px-10">
         <Link to="/" className="font-mono text-xs uppercase tracking-[0.3em] text-[var(--ink-soft)] transition-colors hover:text-[var(--neon)]">
           ← Back
@@ -393,117 +504,124 @@ function ProjectPage() {
         </div>
       </nav>
 
-      {/* HERO */}
-      <section className="relative flex min-h-[70vh] items-end overflow-hidden bg-black pb-12 pt-24">
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `url(${project.image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "grayscale(1) contrast(1.1)",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+      {/* SCROLLABLE CONTENT — lerp smooth scroll */}
+      <SmoothScroll>
+        <main>
+          {/* HERO */}
+          <section className="grain relative flex min-h-[70vh] items-end overflow-hidden bg-black pb-12 pt-24">
+            <CityWindows />
+            <div
+              className="absolute inset-0 opacity-25"
+              style={{
+                backgroundImage: `url(${project.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "grayscale(1) contrast(1.1)",
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
 
-        <div className="relative z-10 mx-auto w-full max-w-[1300px] px-5 md:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: EASE }}
-          >
-            <div className="mb-6 flex items-center gap-4">
-              <span className="bg-[var(--neon)] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black">
-                {project.category}
-              </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">
-                {project.year}
-              </span>
-            </div>
-            <h1 className="serif-display text-5xl leading-none md:text-8xl lg:text-[9rem]">
-              {project.title}
-            </h1>
-            {project.description && (
-              <p className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--ink-soft)] md:text-lg">
-                {project.description}
-              </p>
-            )}
-            {project.externalHref && (
-              <a
-                href={project.externalHref}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-8 inline-block border border-[var(--divider)] px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)] transition-all hover:border-[var(--neon)] hover:text-[var(--neon)]"
-              >
-                View on Behance ↗
-              </a>
-            )}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* CONTENT — sections or gallery */}
-      <section className="mx-auto max-w-[1300px] px-5 py-16 md:px-10 md:py-24">
-        {hasSections ? (
-          <div className="flex flex-col">
-            {project.sections!.map((s, i) => renderSection(s, i))}
-          </div>
-        ) : gallery.length > 0 ? (
-          <div className="flex flex-col gap-4 md:gap-6">
-            {gallery.map((src, i) => (
+            <div className="relative z-10 mx-auto w-full max-w-[1300px] px-5 md:px-10">
               <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.8, delay: i * 0.04, ease: EASE }}
-                className="overflow-hidden border border-[var(--divider)]"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, ease: EASE }}
               >
-                <img
-                  src={src}
-                  alt={`${project.title} — slide ${i + 1}`}
-                  className="w-full object-cover"
-                  loading="lazy"
-                />
+                <div className="mb-6 flex items-center gap-4">
+                  <span className="bg-[var(--neon)] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-black">
+                    {project.category}
+                  </span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">
+                    {project.year}
+                  </span>
+                </div>
+                <h1 className="serif-display text-5xl leading-none md:text-8xl lg:text-[9rem]">
+                  {project.title}
+                </h1>
+                {project.description && (
+                  <p className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--ink-soft)] md:text-lg">
+                    {project.description}
+                  </p>
+                )}
+                {project.externalHref && (
+                  <a
+                    href={project.externalHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-8 inline-block border border-[var(--divider)] px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)] transition-all hover:border-[var(--neon)] hover:text-[var(--neon)]"
+                  >
+                    View on Behance ↗
+                  </a>
+                )}
               </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex h-64 items-center justify-center border border-dashed border-[var(--divider)]">
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">
-              Gallery coming soon
-            </span>
-          </div>
-        )}
-      </section>
+            </div>
+          </section>
 
-      {/* NEXT / PREV */}
-      <section className="border-t border-[var(--divider)]">
-        <div className="mx-auto grid max-w-[1300px] grid-cols-2">
-          {prev ? (
-            <Link
-              to="/project/$slug"
-              params={{ slug: prev.slug }}
-              className="group flex flex-col gap-3 border-r border-[var(--divider)] px-5 py-10 transition-colors hover:bg-white/[0.02] md:px-10"
-            >
-              <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">← Previous</span>
-              <span className="serif-display text-2xl transition-colors group-hover:text-[var(--neon)] md:text-4xl">{prev.title}</span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{prev.category}</span>
-            </Link>
-          ) : <div />}
-          {next ? (
-            <Link
-              to="/project/$slug"
-              params={{ slug: next.slug }}
-              className="group flex flex-col items-end gap-3 px-5 py-10 text-right transition-colors hover:bg-white/[0.02] md:px-10"
-            >
-              <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Next →</span>
-              <span className="serif-display text-2xl transition-colors group-hover:text-[var(--neon)] md:text-4xl">{next.title}</span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{next.category}</span>
-            </Link>
-          ) : <div />}
-        </div>
-      </section>
+          {/* CONTENT — sections or gallery */}
+          <section className="relative mx-auto max-w-[1300px] px-5 py-16 md:px-10 md:py-24">
+            <FloatShapes variant={0} />
+            {hasSections ? (
+              <div className="relative flex flex-col">
+                {project.sections!.map((s, i) => renderSection(s, i))}
+              </div>
+            ) : gallery.length > 0 ? (
+              <div className="flex flex-col gap-4 md:gap-6">
+                {gallery.map((src, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.8, delay: i * 0.04, ease: EASE }}
+                    className="overflow-hidden border border-[var(--divider)]"
+                  >
+                    <img
+                      src={src}
+                      alt={`${project.title} — slide ${i + 1}`}
+                      className="w-full object-cover"
+                      loading="lazy"
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex h-64 items-center justify-center border border-dashed border-[var(--divider)]">
+                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">
+                  Gallery coming soon
+                </span>
+              </div>
+            )}
+          </section>
+
+          {/* NEXT / PREV */}
+          <section className="border-t border-[var(--divider)]">
+            <div className="mx-auto grid max-w-[1300px] grid-cols-2">
+              {prev ? (
+                <Link
+                  to="/project/$slug"
+                  params={{ slug: prev.slug }}
+                  className="group flex flex-col gap-3 border-r border-[var(--divider)] px-5 py-10 transition-colors hover:bg-white/[0.02] md:px-10"
+                >
+                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">← Previous</span>
+                  <span className="serif-display text-2xl transition-colors group-hover:text-[var(--neon)] md:text-4xl">{prev.title}</span>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{prev.category}</span>
+                </Link>
+              ) : <div />}
+              {next ? (
+                <Link
+                  to="/project/$slug"
+                  params={{ slug: next.slug }}
+                  className="group flex flex-col items-end gap-3 px-5 py-10 text-right transition-colors hover:bg-white/[0.02] md:px-10"
+                >
+                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Next →</span>
+                  <span className="serif-display text-2xl transition-colors group-hover:text-[var(--neon)] md:text-4xl">{next.title}</span>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{next.category}</span>
+                </Link>
+              ) : <div />}
+            </div>
+          </section>
+        </main>
+      </SmoothScroll>
     </div>
   );
 }
