@@ -14,7 +14,14 @@ export type ProjectSection =
   | { type: "route-line"; title: string; stations: { name: string; major?: boolean; interchange?: boolean }[]; color: string }
   | { type: "info-hierarchy"; title: string; levels: { name: string; examples: string[]; color: string }[] }
   | { type: "sign-system"; signs: { type: string; color: string; textColor: string; label: string; sub: string }[] }
-  | { type: "user-journey"; title: string; steps: { phase: string; action: string; pain?: string }[] };
+  | { type: "user-journey"; title: string; steps: { phase: string; action: string; pain?: string }[] }
+  | { type: "evidence-cards"; intro: string; cards: { headline: string; body: string; date: string }[] }
+  | { type: "comparison"; leftName: string; rightName: string; rows: { label: string; left: string; right: string }[] }
+  | { type: "demographic-bars"; groups: { title: string; bars: { label: string; value: number; max: number }[] }[] }
+  | { type: "area-chart"; charts: { title: string; bottomLabels: string[]; xLabels: string[]; peakX: number; peakLabel: string; valleyX?: number }[] }
+  | { type: "journey-map-full"; phases: { num: string; name: string; tasks: string[]; emotionY: number; opportunities: string[] }[] }
+  | { type: "platform-colorcode"; description: string; platforms: { num: number; color: string }[] }
+  | { type: "places-visited"; description: string; places: { name: string; x: number; y: number }[] };
 
 export type Project = {
   slug: string;
@@ -333,7 +340,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Research Context",
-        body: "Indian Railways carries 23 million passengers daily across 7,325 stations. Despite this scale, wayfinding signage varies wildly station to station — inconsistent typefaces, no colour coding, poor multilingual support, and signs placed too high or too far from decision points. The result: confusion, missed trains, and a deeply stressful commute for first-time and regular users alike.",
+        body: "Indian Railways carries 23 million passengers daily across 7,325 stations. Despite this scale, wayfinding signage varies wildly station to station — inconsistent typefaces, no colour coding, poor multilingual support, and signs placed too high or too far from decision points. The result: confusion, missed trains, and a deeply stressful commute.",
       },
       {
         type: "stat-grid",
@@ -344,25 +351,145 @@ export const projects: Project[] = [
           { value: "13,452", label: "Trains Daily", sub: "Passenger + freight" },
         ],
       },
+      { type: "label", text: "Evidence Mapping" },
       {
-        type: "bar-chart",
-        title: "Commuter Pain Points — Survey of 240 Respondents",
-        bars: [
-          { label: "Platform ID", value: 78, color: "#ff2a3c" },
-          { label: "Exit Finding", value: 65, color: "#ff2a3c" },
-          { label: "Multilingual", value: 61, color: "#ff5a3c" },
-          { label: "Train Timings", value: 57, color: "#ff7a3c" },
-          { label: "Emergency Exit", value: 44, color: "#8d8a80" },
-          { label: "Overcrowding", value: 38, color: "#8d8a80" },
+        type: "evidence-cards",
+        intro: "Evidence Mapping is a visual way to organize research and highlight key patterns. In our project, we're using it to show how poor wayfinding in railway stations impacts people — from confusion and missed trains to accessibility failures. It helps us clearly present the evidence behind why better signage and navigation design truly matter.",
+        cards: [
+          {
+            headline: "Confusion And Overcrowding At New Delhi Railway Station Triggers Stampede",
+            body: "Stampede at New Delhi station due to rapid announcements of three trains on unclear platforms. Overcrowding and poor communication about departure platforms led to the tragedy — passengers rushed simultaneously toward multiple platforms, creating chaos and panic.",
+            date: "February 17, 2025",
+          },
+          {
+            headline: "Family Misses Train At Ghaziabad Station Due To Platform Mix-Up, Railways Ordered To Pay Up",
+            body: "Family missed train at Ghaziabad due to wrong platform info and lack of announcements. Consumer Forum ruled Railways failed to provide accurate, visible information and ordered Rs 1,000 compensation.",
+            date: "July 04, 2025",
+          },
+          {
+            headline: "The First/Last Mile Challenge At Indian Railway Stations",
+            body: "India's railway network serves 22 million daily passengers, but poor first/last mile connectivity persists — badly designed drop-off zones, encroached walking spaces, unclear signage, and unsafe crossings compound station navigation failures.",
+            date: "23 March 2017",
+          },
+          {
+            headline: "Central Railway Coach Overhaul Sparks Chaos: Passengers Face Berth Mismatch And Confusion",
+            body: "Central Railway's coach layout overhaul caused widespread confusion with mismatched berth assignments. Passengers struggled to locate correct seats due to unclear information about new coach positions, resulting in significant chaos at stations.",
+            date: "September 1, 2024",
+          },
+          {
+            headline: "Delay In Two Trains Heading To Danapur Causes Commotion At Pune Railway Station",
+            body: "Delayed arrival of two Danapur-bound trains during Diwali rush sparked panic due to inadequate communication. Passengers boarded wrong trains, forcing railway staff and RPF to intervene for nearly an hour.",
+            date: "October 04, 2025",
+          },
+          {
+            headline: "Destination Boards Leave Train Passengers Confused At Hubballi Station",
+            body: "Passengers at Hubballi faced confusion and missed connections due to multi-destination boards displaying several train numbers on the same coach. Lack of clear announcements led travelers to board wrong trains.",
+            date: "Oct 21, 2017",
+          },
+          {
+            headline: "Stationed At Disadvantage: Tamil Nadu Railway Stations Fail Accessibility Standards Despite Upgrades",
+            body: "Accessibility audit of nine redeveloped Tamil Nadu stations revealed critical gaps: locked accessible toilets, missing Braille signs, inadequate ramps, and poor wheelchair availability. Deficiencies persist despite legal mandates.",
+            date: "01 Jun 2025",
+          },
+          {
+            headline: "Pune: Non-Functional Information Display Board Leaves Passengers Confused",
+            body: "Technical issues rendered Platform 6's information display board at Pune Railway Station inoperative for several days, leaving passengers unable to check arrivals and departures during peak hours.",
+            date: "February 23, 2024",
+          },
+          {
+            headline: "Act Against Officials For Wrong Train Data In Passenger Information Systems: Railway Board",
+            body: "Railway Board directed zones to act against officials responsible for incorrect passenger information system data. Board ordered urgent replacement of outdated systems causing traveler confusion across the network.",
+            date: "Oct 06, 2024",
+          },
         ],
-        caption: "Primary research — field interviews + online survey across Mumbai, Delhi, Chennai",
+      },
+      { type: "label", text: "Analysis" },
+      {
+        type: "text",
+        heading: "Station Comparison",
+        body: "Comparing CSMT (the gold standard) with Kalupur reveals critical gaps in wayfinding implementation across Indian railway stations. CSMT's success in navigation design serves as a benchmark to identify what's missing at Kalupur — highlighting specific failures in signage, accessibility, and passenger information systems that need urgent improvement.",
+      },
+      {
+        type: "comparison",
+        leftName: "Kalupur Station",
+        rightName: "Chhatrapati Shivaji Maharaj Terminus",
+        rows: [
+          { label: "Traffic", left: "Large city junction, high regional traffic, but less than CSMT", right: "One of the busiest in India, >450,000 commuters/day" },
+          { label: "Architecture", left: "Regional historic style, currently under refurbishment", right: "Iconic UNESCO site, Gothic architecture, heritage value" },
+          { label: "Signage", left: "Inconsistent, ad clutter, weaker digital displays", right: "Model signage (large, bilingual, digital, clear maps)" },
+          { label: "Accessibility", left: "Limited lifts/escalators, multimodal links improving", right: "Advanced (lifts, escalators, multiple clear connections)" },
+          { label: "Platforms", left: "Main regional/express platforms, less complex layout", right: "Strict suburban vs express division (1—7, 8—18)" },
+        ],
+      },
+      { type: "label", text: "Places Visited" },
+      {
+        type: "places-visited",
+        description: "We visited Kalupur Station, Sabarmati Station, and Asarva Station in Ahmedabad for our research purposes. These key railway stations provided insights into station layout, passenger flow, wayfinding challenges, and infrastructural facilities essential for our study on the Indian railway system.",
+        places: [
+          { name: "Kalupur Railway Station", x: 62, y: 68 },
+          { name: "Sabarmati Railway Station", x: 36, y: 50 },
+          { name: "Asarva Railway Station", x: 64, y: 36 },
+        ],
+      },
+      { type: "label", text: "Contextual Inquiry" },
+      {
+        type: "text",
+        heading: "Research Method",
+        body: "Contextual Inquiry observes passengers navigating stations in real-time to understand actual wayfinding challenges. By studying how people interpret signage and move through spaces, we uncover genuine problems that surveys alone would miss — revealing true pain points and design opportunities.",
+      },
+      {
+        type: "demographic-bars",
+        groups: [
+          {
+            title: "7.1  User Demographics",
+            bars: [
+              { label: "Total Users", value: 20, max: 20 },
+              { label: "Passengers", value: 10, max: 20 },
+              { label: "Staff", value: 8, max: 20 },
+              { label: "Coolies", value: 2, max: 20 },
+            ],
+          },
+          {
+            title: "7.1  Male to Female",
+            bars: [
+              { label: "Total Users", value: 20, max: 20 },
+              { label: "Male", value: 12, max: 20 },
+              { label: "Female", value: 8, max: 20 },
+            ],
+          },
+        ],
+      },
+      { type: "label", text: "Time of Occurrence" },
+      {
+        type: "text",
+        heading: "Peak Chaos Patterns",
+        body: "Peak chaos occurs during morning time and holiday periods, especially Diwali, when Kalupur's footfall surges from 5,000 to 20–25,000 passengers. Migrant workers traveling to UP and Bihar overwhelm the station, causing mass confusion as inadequate wayfinding systems fail under crowd pressure when clear navigation is most critical.",
+      },
+      {
+        type: "area-chart",
+        charts: [
+          {
+            title: "Footfall by Time of Day",
+            xLabels: ["Morning", "Afternoon", "Evening"],
+            bottomLabels: ["Peak Passengers", "Low Passengers", "Moderate Passengers"],
+            peakX: 0.12,
+            peakLabel: "18,000",
+          },
+          {
+            title: "Footfall by Month",
+            xLabels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            bottomLabels: ["Moderate Passengers", "Low Passengers", "Peak Passengers"],
+            peakX: 0.78,
+            peakLabel: "2,00,000",
+          },
+        ],
       },
       { type: "label", text: "User Research" },
       {
         type: "personas",
         persona: {
           name: "Priya Sharma",
-          role: "24 · Software Intern · First-Time Commuter · Mumbai",
+          role: "24 · Software Intern · First-Time Commuter · Ahmedabad",
           painPoints: [
             "Cannot tell which platform goes to which destination — signs are too small and too high",
             "Multilingual boards switch languages every 3 seconds, causing missed information",
@@ -370,7 +497,7 @@ export const projects: Project[] = [
           ],
           goals: [
             "Quickly identify the correct platform without asking anyone",
-            "Understand signage in her preferred language (Hindi/English) at a glance",
+            "Understand signage in her preferred language (Hindi/Gujarati) at a glance",
             "Know exactly where to walk — no dead-ends or doubling back",
           ],
         },
@@ -379,7 +506,7 @@ export const projects: Project[] = [
         type: "personas",
         persona: {
           name: "Ramesh Pillai",
-          role: "54 · Daily Commuter · 22 Years Experience · Churchgate–Virar Line",
+          role: "54 · Daily Commuter · 22 Years on the Kalupur–Sabarmati Line",
           painPoints: [
             "Peak hour crowds make it impossible to read overhead signs from a distance",
             "Emergency evacuation routes are unmarked — relies on memory after an incident last year",
@@ -392,41 +519,65 @@ export const projects: Project[] = [
           ],
         },
       },
+      { type: "label", text: "User Journey Map" },
       {
-        type: "user-journey",
-        title: "Commuter Journey — Station Entry to Platform",
-        steps: [
+        type: "journey-map-full",
+        phases: [
           {
-            phase: "Arrival",
-            action: "Enters through main station gate — looks for orientation map or station overview",
-            pain: "No master map visible at entry. Commuter scans around, wastes 30–60 seconds",
+            num: "01", name: "Planning",
+            tasks: ["Search train timings online", "Book ticket (online/offline)", "Check platform information"],
+            emotionY: 0.32,
+            opportunities: ["Add station map to ticket", "Include platform location details", "Provide digital wayfinding link"],
           },
           {
-            phase: "Orientation",
-            action: "Searches for platform number for intended destination",
-            pain: "Platform boards only visible at one end of concourse; blocked by crowds at peak",
+            num: "02", name: "Arrival",
+            tasks: ["Enter station premises", "Look for entry gate", "Navigate through security"],
+            emotionY: 0.50,
+            opportunities: ["Clear directional signage at entries", "Platform-wise entry guidance", "Visible station layout boards"],
           },
           {
-            phase: "Wayfinding",
-            action: "Follows directional signs to correct platform staircase",
-            pain: "Signs end mid-journey — no confirmation signs near staircase entry",
+            num: "03", name: "Navigation",
+            tasks: ["Search for platform number", "Check information displays", "Ask station staff for help"],
+            emotionY: 0.82,
+            opportunities: ["Real-time digital displays", "Clear audio announcements", "Platform-specific color coding", "Mobile app integration"],
           },
           {
-            phase: "Platform",
-            action: "Identifies correct boarding zone (AC / General / Ladies coach positions)",
-            pain: "Coach position indicators are inconsistent; some platforms have none",
+            num: "04", name: "Platform",
+            tasks: ["Navigate stairs/lifts/ramps", "Cross to correct platform", "Locate waiting area"],
+            emotionY: 0.70,
+            opportunities: ["Multi-level wayfinding signage", "Crowd management systems", "Dedicated accessible routes", "Real-time crowd alerts"],
           },
           {
-            phase: "Departure",
-            action: "Boards train and confirms destination from display inside coach",
+            num: "05", name: "Train Boarding",
+            tasks: ["Find correct coach position", "Verify train number", "Locate berth/seat"],
+            emotionY: 0.22,
+            opportunities: ["Coach-specific platform markings", "Digital coach position indicators", "Mobile alerts for changes", "Clear train identification boards"],
           },
         ],
       },
       { type: "label", text: "Design Solution" },
       {
         type: "text",
-        heading: "Design System Principles",
-        body: "The wayfinding system is built on four principles: Clarity (one piece of information per sign), Consistency (same colour, typeface, and icon set across all 7,325 stations), Proximity (signs placed at every decision point, not just at ends of corridors), and Legibility (minimum 72pt type for primary information, high-contrast colour pairings tested for colour-blindness). The typeface is Noto Sans — chosen for full Devanagari, Tamil, Bengali, and Latin coverage in a single font family.",
+        heading: "Platform Color Code",
+        body: "Our solution involves redesigning railway tickets — both online and offline — to display clear, essential information including precise station location details and platform colour codes. This ensures passengers have reliable wayfinding guidance directly on their tickets, reducing confusion and improving navigation from the moment they plan their journey.",
+      },
+      {
+        type: "platform-colorcode",
+        description: "Each platform is assigned a distinct colour — visible on tickets, overhead signs, and digital displays — so passengers know exactly where to go before they even enter the station.",
+        platforms: [
+          { num: 1, color: "#E91E63" },
+          { num: 2, color: "#9C27B0" },
+          { num: 3, color: "#673AB7" },
+          { num: 4, color: "#3F51B5" },
+          { num: 5, color: "#2196F3" },
+          { num: 6, color: "#03A9F4" },
+          { num: 7, color: "#009688" },
+          { num: 8, color: "#4CAF50" },
+          { num: 9, color: "#8BC34A" },
+          { num: 10, color: "#FFC107" },
+          { num: 11, color: "#FF9800" },
+          { num: 12, color: "#F44336" },
+        ],
       },
       {
         type: "typography",
@@ -434,6 +585,7 @@ export const projects: Project[] = [
         weights: ["400 — Regular", "600 — SemiBold", "700 — Bold"],
         description: "Noto Sans was selected for its exceptional multilingual coverage — supporting all 22 scheduled languages of India in a single, consistent type family. At 72pt+ with high contrast, it remains legible at 15 metres — the critical distance for overhead platform signs.",
       },
+      { type: "label", text: "Sign System" },
       {
         type: "sign-system",
         signs: [
@@ -459,51 +611,40 @@ export const projects: Project[] = [
       },
       { type: "label", text: "Network Map" },
       {
-        type: "text",
-        heading: "Mumbai Western Line",
-        body: "The Western Line is Mumbai's busiest suburban corridor — 24 stations, 60 km, carrying 3.5 million passengers daily. It was used as the primary pilot corridor for the wayfinding redesign, with all sign placements, colour applications, and typographic treatments tested in-situ at Churchgate, Dadar, Bandra, and Borivali.",
-      },
-      {
         type: "route-line",
-        title: "Mumbai Western Line — Churchgate to Dahanu Road",
+        title: "Mumbai Western Line — Churchgate to Borivali",
         color: "#C62828",
         stations: [
           { name: "Churchgate", major: true },
-          { name: "Marine Lines", major: false },
-          { name: "Charni Road", major: false },
-          { name: "Grant Road", major: false },
+          { name: "Marine Lines" },
+          { name: "Charni Road" },
+          { name: "Grant Road" },
           { name: "Mumbai Central", major: true, interchange: true },
-          { name: "Mahalaxmi", major: false },
-          { name: "Lower Parel", major: false },
-          { name: "Prabhadevi", major: false },
+          { name: "Mahalaxmi" },
+          { name: "Lower Parel" },
+          { name: "Prabhadevi" },
           { name: "Dadar", major: true, interchange: true },
-          { name: "Matunga Road", major: false },
-          { name: "Mahim Jn.", major: false, interchange: true },
+          { name: "Matunga Rd." },
+          { name: "Mahim Jn.", interchange: true },
           { name: "Bandra", major: true, interchange: true },
-          { name: "Khar Road", major: false },
-          { name: "Santacruz", major: false },
-          { name: "Vile Parle", major: false },
+          { name: "Khar Road" },
+          { name: "Santacruz" },
+          { name: "Vile Parle" },
           { name: "Andheri", major: true, interchange: true },
-          { name: "Jogeshwari", major: false },
-          { name: "Goregaon", major: false },
-          { name: "Malad", major: false },
-          { name: "Kandivali", major: false },
+          { name: "Jogeshwari" },
+          { name: "Goregaon" },
+          { name: "Malad" },
+          { name: "Kandivali" },
           { name: "Borivali", major: true },
         ],
-      },
-      { type: "label", text: "Design Outcomes" },
-      {
-        type: "text",
-        heading: "Impact & Learnings",
-        body: "A prototype-tested pilot at Dadar station showed a 62% reduction in wayfinding errors (measured by time-to-platform and incorrect-turn rate) over the existing system. Signage comprehension improved significantly for first-time users and non-native Hindi speakers when the multilingual static display replaced rotating digital text. The system was also designed to be retrofittable — signs use standard metal extrusion profiles found across all existing Indian Railways infrastructure, minimising installation cost.",
       },
       {
         type: "palette",
         colors: [
-          { name: "Signal Red", hex: "#C62828", role: "Platform — primary routing, most critical" },
-          { name: "Navy Blue", hex: "#1A237E", role: "Exits & Entry — direction of travel" },
-          { name: "Teal", hex: "#00695C", role: "Amenities — facilities, comfort, services" },
-          { name: "Charcoal", hex: "#212121", role: "Informational — live train data, timetables" },
+          { name: "Signal Red", hex: "#C62828", role: "Platform — primary routing" },
+          { name: "Navy Blue", hex: "#1A237E", role: "Exits & Entry — direction" },
+          { name: "Forest Teal", hex: "#00695C", role: "Amenities — facilities" },
+          { name: "Charcoal", hex: "#212121", role: "Informational — live data" },
         ],
       },
     ],

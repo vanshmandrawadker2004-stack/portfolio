@@ -561,6 +561,368 @@ function SectionScreens({ images }: { images: { src: string; caption: string }[]
   );
 }
 
+/* ─────────────────────── Research infographics ─────────────────────── */
+
+function SectionEvidenceCards({ intro, cards }: { intro: string; cards: { headline: string; body: string; date: string }[] }) {
+  return (
+    <div className="py-10">
+      <p className="mb-10 max-w-2xl text-sm leading-[1.9] text-[var(--ink-soft)]">{intro}</p>
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+        {cards.map((c, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col gap-3 border border-[var(--divider)] bg-[#0e0e10] p-5"
+          >
+            <div
+              className="text-sm font-semibold leading-snug text-[var(--foreground)]"
+              style={{ fontFamily: "var(--font-sans)" }}
+            >
+              {c.headline}
+            </div>
+            <p className="flex-1 text-[11px] leading-relaxed text-[var(--ink-soft)]">{c.body}</p>
+            <div className="mt-auto border-t border-[var(--divider)] pt-3 font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">
+              {c.date}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SectionComparison({ leftName, rightName, rows }: {
+  leftName: string; rightName: string;
+  rows: { label: string; left: string; right: string }[];
+}) {
+  return (
+    <div className="py-10">
+      <div className="grid grid-cols-[1fr_1fr] gap-px border border-[var(--divider)]">
+        {/* header row */}
+        <div className="border-b border-r border-[var(--divider)] bg-[#1565C0]/20 px-5 py-4">
+          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#2196F3]">Selected</div>
+          <div className="mt-1 font-semibold text-[var(--foreground)]">{leftName}</div>
+        </div>
+        <div className="border-b border-[var(--divider)] bg-white/[0.03] px-5 py-4">
+          <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">Benchmark</div>
+          <div className="mt-1 font-semibold text-[var(--foreground)]">{rightName}</div>
+        </div>
+        {/* data rows */}
+        {rows.map((r, i) => (
+          <>
+            <div key={`l${i}`} className="border-b border-r border-[var(--divider)] px-5 py-5 last:border-b-0">
+              <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--neon)]">{r.label}</div>
+              <div className="text-sm leading-relaxed text-[var(--ink-soft)]">{r.left}</div>
+            </div>
+            <div key={`r${i}`} className="border-b border-[var(--divider)] bg-white/[0.02] px-5 py-5 last:border-b-0">
+              <div className="mb-2 font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{r.label}</div>
+              <div className="text-sm leading-relaxed text-[var(--foreground)]">{r.right}</div>
+            </div>
+          </>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SectionPlacesVisited({ description, places }: { description: string; places: { name: string; x: number; y: number }[] }) {
+  return (
+    <div className="py-10">
+      <p className="mb-8 max-w-2xl text-sm leading-[1.9] text-[var(--ink-soft)]">{description}</p>
+      {/* SVG map — simplified Ahmedabad city grid */}
+      <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: "#111113" }}>
+        <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" className="w-full">
+          {/* city grid lines — horizontal */}
+          {Array.from({ length: 18 }, (_, i) => (
+            <line key={`h${i}`} x1="0" y1={22 * i} x2="900" y2={22 * i} stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+          ))}
+          {/* city grid lines — vertical */}
+          {Array.from({ length: 36 }, (_, i) => (
+            <line key={`v${i}`} x1={25 * i} y1="0" x2={25 * i} y2="380" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+          ))}
+          {/* river — Sabarmati */}
+          <path d="M 300 0 C 310 80 290 160 305 240 C 315 300 300 380 310 380" stroke="rgba(255,255,255,0.12)" strokeWidth="18" fill="none" strokeLinecap="round" />
+          <path d="M 300 0 C 310 80 290 160 305 240 C 315 300 300 380 310 380" stroke="rgba(255,255,255,0.06)" strokeWidth="10" fill="none" strokeLinecap="round" />
+          {/* main roads */}
+          <line x1="0" y1="190" x2="900" y2="190" stroke="rgba(255,255,255,0.09)" strokeWidth="3" />
+          <line x1="450" y1="0" x2="450" y2="380" stroke="rgba(255,255,255,0.07)" strokeWidth="2" />
+          <line x1="0" y1="95" x2="900" y2="95" stroke="rgba(255,255,255,0.05)" strokeWidth="1.5" />
+          <line x1="0" y1="285" x2="900" y2="285" stroke="rgba(255,255,255,0.05)" strokeWidth="1.5" />
+          {/* station pins */}
+          {places.map((p, i) => {
+            const cx = (p.x / 100) * 900;
+            const cy = (p.y / 100) * 380;
+            return (
+              <g key={i}>
+                {/* drop shadow */}
+                <circle cx={cx} cy={cy + 2} r={12} fill="rgba(0,0,0,0.4)" />
+                {/* pin body */}
+                <circle cx={cx} cy={cy} r={12} fill="#C62828" />
+                <circle cx={cx} cy={cy} r={5} fill="white" />
+                {/* label pill */}
+                <rect x={cx + 16} y={cy - 12} width={Math.max(160, p.name.length * 6.8)} height={24} rx="3" fill="#1a1a1c" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+                <text x={cx + 24} y={cy + 4} fill="#f2efe6" fontSize="9" fontFamily="monospace" letterSpacing="1">{p.name}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function SectionDemographicBars({ groups }: { groups: { title: string; bars: { label: string; value: number; max: number }[] }[] }) {
+  return (
+    <div className="flex flex-col gap-12 py-10">
+      {groups.map((g, gi) => (
+        <div key={gi}>
+          <div className="mb-6 font-semibold text-[var(--foreground)]" style={{ fontFamily: "var(--font-sans)" }}>{g.title}</div>
+          <div className="flex flex-col gap-4">
+            {g.bars.map((b, i) => (
+              <div key={i} className="grid items-center gap-4" style={{ gridTemplateColumns: "180px 1fr 32px" }}>
+                <div className="text-sm text-[var(--foreground)]">{b.label}</div>
+                <div className="relative h-6 overflow-hidden bg-[#1a1a1c]">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${(b.value / b.max) * 100}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.0, delay: i * 0.1 + gi * 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-y-0 left-0"
+                    style={{ background: i === 0 ? "#212121" : "rgba(255,255,255,0.18)" }}
+                  />
+                </div>
+                <div className="text-right font-mono text-[11px] text-[var(--ink-soft)]">{b.value}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string[]; bottomLabels: string[]; peakX: number; peakLabel: string }[] }) {
+  // Build a smooth SVG area for each chart. Curve shape: one clear peak based on peakX position.
+  const buildPath = (peakX: number, w: number, h: number) => {
+    // Generate a series of y-values across 20 points, shaped as a smooth hump
+    const pts = Array.from({ length: 20 }, (_, i) => {
+      const t = i / 19;
+      const dist = Math.abs(t - peakX);
+      // Gaussian-like shape for peak
+      const y = 1 - Math.exp(-dist * dist / (2 * 0.06));
+      return { x: t * w, y: y * h * 0.82 + h * 0.05 };
+    });
+    // Add a secondary smaller hump to make it more interesting
+    const pts2 = pts.map(p => {
+      const t = p.x / w;
+      const secondHump = Math.exp(-Math.pow(t - (peakX + 0.45), 2) / (2 * 0.04)) * h * 0.3;
+      return { ...p, y: p.y - secondHump };
+    });
+    const d = pts2.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(" ");
+    return `${d} L ${w} ${h} L 0 ${h} Z`;
+  };
+
+  return (
+    <div className="flex flex-col gap-10 py-10">
+      {charts.map((c, ci) => {
+        const W = 900; const H = 200;
+        const peakSvgX = c.peakX * W;
+        return (
+          <div key={ci}>
+            <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{c.title}</div>
+            <div className="relative border border-[var(--divider)]" style={{ background: "#0e0e10" }}>
+              {/* x-axis dividers */}
+              <div className="absolute inset-x-0 top-0 flex h-full">
+                {c.xLabels.map((_, i) => i > 0 && (
+                  <div key={i} className="h-full border-l border-[var(--divider)]" style={{ width: `${100 / c.xLabels.length}%`, marginLeft: i === 1 ? `${100 / c.xLabels.length}%` : 0 }} />
+                ))}
+              </div>
+              <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id={`ag${ci}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3a3a3a" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#1a1a1a" stopOpacity="0.3" />
+                  </linearGradient>
+                </defs>
+                <path d={buildPath(c.peakX, W, H)} fill={`url(#ag${ci})`} />
+              </svg>
+              {/* peak label */}
+              <div
+                className="absolute top-3 flex -translate-x-1/2 flex-col items-center"
+                style={{ left: `${c.peakX * 100}%` }}
+              >
+                <div className="rounded-sm bg-[#1a1a1c] px-2 py-1 font-mono text-[11px] font-semibold text-[var(--foreground)] shadow ring-1 ring-[var(--divider)]">
+                  {c.peakLabel}
+                </div>
+                <div className="mt-0.5 h-2 w-px bg-white/30" />
+                <div className="h-1.5 w-1.5 rounded-full bg-white/60 ring-2 ring-[var(--background)]" />
+              </div>
+              {/* x-axis labels */}
+              <div className="flex border-t border-[var(--divider)] px-1">
+                {c.xLabels.map((l, i) => (
+                  <div key={i} className="flex-1 py-2 text-center font-mono text-[8px] uppercase tracking-[0.15em] text-[var(--ink-soft)]">{l}</div>
+                ))}
+              </div>
+            </div>
+            {/* bottom labels */}
+            <div className="mt-2 grid text-center" style={{ gridTemplateColumns: `repeat(${c.bottomLabels.length}, 1fr)` }}>
+              {c.bottomLabels.map((l, i) => (
+                <div key={i} className="font-mono text-[9px] uppercase tracking-[0.15em] text-[var(--ink-soft)]">{l}</div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function SectionJourneyMapFull({ phases }: { phases: { num: string; name: string; tasks: string[]; emotionY: number; opportunities: string[] }[] }) {
+  const W = 1000; const H = 120;
+  // Build smooth SVG emotion curve through phase points
+  const pts = phases.map((p, i) => ({
+    x: (i / (phases.length - 1)) * W,
+    y: p.emotionY * H,
+  }));
+  // Catmull-Rom to bezier
+  const path = pts.map((p, i) => {
+    if (i === 0) return `M ${p.x} ${p.y}`;
+    const prev = pts[i - 1];
+    const cpx1 = prev.x + (p.x - prev.x) * 0.4;
+    const cpy1 = prev.y;
+    const cpx2 = p.x - (p.x - prev.x) * 0.4;
+    const cpy2 = p.y;
+    return `C ${cpx1} ${cpy1} ${cpx2} ${cpy2} ${p.x} ${p.y}`;
+  }).join(" ");
+
+  return (
+    <div className="py-10">
+      <div className="overflow-x-auto">
+        <div className="min-w-[700px]">
+          {/* phase headers */}
+          <div className="grid border border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${phases.length}, 1fr)` }}>
+            {phases.map((ph, i) => (
+              <div key={i} className="border-r border-[var(--divider)] bg-[#111113] p-4 last:border-r-0">
+                <div className="serif-display text-3xl text-[var(--ink-soft)] md:text-5xl">{ph.num}</div>
+                <div className="mt-1 text-sm font-semibold text-[var(--foreground)]" style={{ fontFamily: "var(--font-sans)" }}>{ph.name}</div>
+              </div>
+            ))}
+          </div>
+          {/* tasks row */}
+          <div className="grid border-x border-b border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${phases.length}, 1fr)` }}>
+            {phases.map((ph, i) => (
+              <div key={i} className="border-r border-[var(--divider)] p-4 last:border-r-0">
+                <div className="mb-2 font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Tasks</div>
+                <ul className="flex flex-col gap-1.5">
+                  {ph.tasks.map((t, j) => (
+                    <li key={j} className="flex items-start gap-1.5 text-[11px] leading-snug text-[var(--foreground)]">
+                      <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-[var(--ink-soft)]" />
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          {/* emotion curve */}
+          <div className="border-x border-b border-[var(--divider)] bg-[#0e0e10] px-4 py-2">
+            <div className="mb-1 font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Emotion</div>
+            <svg viewBox={`0 0 ${W} ${H + 20}`} className="w-full" style={{ height: 80 }}>
+              <defs>
+                <linearGradient id="emgrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="rgba(255,42,60,0.25)" />
+                  <stop offset="100%" stopColor="rgba(255,42,60,0)" />
+                </linearGradient>
+              </defs>
+              {/* filled area under curve */}
+              <path
+                d={`${path} L ${W} ${H + 10} L 0 ${H + 10} Z`}
+                fill="url(#emgrad)"
+              />
+              <path d={path} fill="none" stroke="#ff2a3c" strokeWidth="2.5" strokeLinecap="round" />
+              {/* dots at each phase point */}
+              {pts.map((p, i) => (
+                <g key={i}>
+                  <circle cx={p.x} cy={p.y} r={5} fill="#ff2a3c" />
+                  <circle cx={p.x} cy={p.y} r={3} fill="var(--background)" />
+                  {/* emoji label */}
+                  <text x={p.x} y={p.y - 10} textAnchor="middle" fontSize="14">
+                    {phases[i].emotionY > 0.65 ? "😣" : phases[i].emotionY > 0.4 ? "😕" : "😌"}
+                  </text>
+                </g>
+              ))}
+            </svg>
+          </div>
+          {/* opportunities row */}
+          <div className="grid border-x border-b border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${phases.length}, 1fr)` }}>
+            {phases.map((ph, i) => (
+              <div key={i} className="border-r border-[var(--divider)] p-4 last:border-r-0">
+                <div className="mb-2 font-mono text-[8px] uppercase tracking-[0.3em] text-[var(--neon)]">Opportunities</div>
+                <ul className="flex flex-col gap-1.5">
+                  {ph.opportunities.map((o, j) => (
+                    <li key={j} className="flex items-start gap-1.5 text-[11px] leading-snug text-[var(--ink-soft)]">
+                      <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-[var(--neon)]" />
+                      {o}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SectionPlatformColorcode({ description, platforms }: { description: string; platforms: { num: number; color: string }[] }) {
+  return (
+    <div className="py-10">
+      <p className="mb-8 max-w-2xl text-sm leading-[1.9] text-[var(--ink-soft)]">{description}</p>
+      {/* Station layout — entrance at bottom, platforms stacked up */}
+      <div className="border border-[var(--divider)] bg-[#0e0e10] p-6">
+        <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">Station Platform Layout</div>
+        <div className="flex flex-col gap-1">
+          {[...platforms].reverse().map((p, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-center gap-3"
+            >
+              <div className="w-6 shrink-0 text-right font-mono text-[10px] text-[var(--ink-soft)]">{p.num}</div>
+              <div
+                className="h-8 flex-1 transition-all duration-300 hover:brightness-110"
+                style={{ background: p.color }}
+              />
+            </motion.div>
+          ))}
+        </div>
+        {/* entrance indicator */}
+        <div className="mt-3 flex items-center justify-center gap-2 border-t border-[var(--divider)] pt-3">
+          <div className="h-px w-12 bg-[var(--ink-soft)]" />
+          <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">You Are Here · Entrance</span>
+          <div className="h-px w-12 bg-[var(--ink-soft)]" />
+        </div>
+      </div>
+      {/* platform legend */}
+      <div className="mt-3 grid grid-cols-4 gap-1 md:grid-cols-6">
+        {platforms.map((p, i) => (
+          <div key={i} className="flex items-center gap-2 p-2">
+            <div className="h-4 w-4 shrink-0 rounded-sm" style={{ background: p.color }} />
+            <span className="font-mono text-[9px] text-[var(--ink-soft)]">Pltfm {p.num}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────── Custom infographic renderers ─────────────────────── */
 
 function SectionStatGrid({ stats }: { stats: { value: string; label: string; sub?: string }[] }) {
@@ -851,6 +1213,13 @@ function renderSection(section: ProjectSection, i: number) {
       {section.type === "info-hierarchy" && <SectionInfoHierarchy title={section.title} levels={section.levels} />}
       {section.type === "sign-system" && <SectionSignSystem signs={section.signs} />}
       {section.type === "user-journey" && <SectionUserJourney title={section.title} steps={section.steps} />}
+      {section.type === "evidence-cards" && <SectionEvidenceCards intro={section.intro} cards={section.cards} />}
+      {section.type === "comparison" && <SectionComparison leftName={section.leftName} rightName={section.rightName} rows={section.rows} />}
+      {section.type === "places-visited" && <SectionPlacesVisited description={section.description} places={section.places} />}
+      {section.type === "demographic-bars" && <SectionDemographicBars groups={section.groups} />}
+      {section.type === "area-chart" && <SectionAreaChart charts={section.charts} />}
+      {section.type === "journey-map-full" && <SectionJourneyMapFull phases={section.phases} />}
+      {section.type === "platform-colorcode" && <SectionPlatformColorcode description={section.description} platforms={section.platforms} />}
     </motion.div>
   );
 }
