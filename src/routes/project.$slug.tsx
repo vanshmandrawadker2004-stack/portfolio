@@ -71,27 +71,80 @@ function Atmosphere() {
   return (
     <>
       <div
-        className="pointer-events-none fixed -left-40 top-[20%] z-[5] h-[480px] w-[480px] rounded-full opacity-[0.08] blur-3xl"
+        className="pointer-events-none fixed -left-40 top-[20%] z-[5] h-[600px] w-[600px] rounded-full opacity-[0.15] blur-3xl"
         style={{ background: "radial-gradient(circle, #ff2a3c, transparent 65%)", animation: "drift-a 16s ease-in-out infinite" }}
       />
       <div
-        className="pointer-events-none fixed -right-48 top-[58%] z-[5] h-[560px] w-[560px] rounded-full opacity-[0.05] blur-3xl"
+        className="pointer-events-none fixed -right-48 top-[55%] z-[5] h-[640px] w-[640px] rounded-full opacity-[0.1] blur-3xl"
         style={{ background: "radial-gradient(circle, #f2efe6, transparent 65%)", animation: "drift-b 21s ease-in-out infinite" }}
       />
       <div
         className="pointer-events-none fixed inset-0 z-[4]"
-        style={{ background: "radial-gradient(ellipse at center, transparent 62%, rgba(0,0,0,0.45) 100%)" }}
+        style={{ background: "radial-gradient(ellipse at 50% 120%, rgba(255,42,60,0.1), transparent 55%), radial-gradient(ellipse at center, transparent 62%, rgba(0,0,0,0.45) 100%)" }}
       />
     </>
   );
 }
 
+/* city skyline silhouette — same as home hero */
+function Skyline() {
+  const buildings = Array.from({ length: 16 }, (_, i) => ({
+    h: 32 + ((i * 53) % 58),
+    w: 4.5 + ((i * 37) % 5),
+    antenna: i % 5 === 0,
+  }));
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[45vh]">
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#ff2a3c]/[0.07] to-transparent" />
+      {/* far */}
+      <div className="absolute inset-x-0 bottom-0 flex h-full items-end justify-center gap-[2px] opacity-30">
+        {buildings.map((b, i) => (
+          <div key={`far-${i}`} className="bg-[#101012]" style={{ height: `${b.h * 0.7}%`, width: `${b.w * 0.8}%` }} />
+        ))}
+      </div>
+      {/* near */}
+      <div className="absolute inset-x-0 bottom-0 flex h-full items-end justify-between gap-1 opacity-70">
+        {buildings.map((b, i) => (
+          <div key={i} className="relative bg-[#0d0d0f]" style={{ height: `${b.h}%`, width: `${b.w}%` }}>
+            <div
+              className="absolute inset-1 opacity-50"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(0deg, rgba(242,239,230,0.13) 0 2px, transparent 2px 8px), repeating-linear-gradient(90deg, rgba(242,239,230,0.13) 0 3px, transparent 3px 10px)",
+              }}
+            />
+            {b.antenna && (
+              <motion.div
+                animate={{ opacity: [0.25, 0.9, 0.25] }}
+                transition={{ duration: 2.2 + (i % 3), repeat: Infinity }}
+                className="absolute -top-3 left-1/2 h-3 w-[3px] -translate-x-1/2 bg-[var(--neon)]"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      {/* passing traffic */}
+      <motion.div
+        animate={{ x: ["-15%", "115%"] }}
+        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-2 left-0 h-[2px] w-28 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+      />
+      <motion.div
+        animate={{ x: ["115%", "-15%"] }}
+        transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut", delay: 1.4 }}
+        className="absolute bottom-6 left-0 h-[2px] w-36 bg-gradient-to-r from-transparent via-[var(--neon)]/60 to-transparent"
+      />
+    </div>
+  );
+}
+
+/* blinking city windows */
 function CityWindows() {
-  const windows = Array.from({ length: 36 }, (_, i) => ({
+  const windows = Array.from({ length: 48 }, (_, i) => ({
     left: (i * 37) % 96,
-    top: (i * 53) % 55,
-    w: 5 + ((i * 13) % 10),
-    h: 7 + ((i * 7) % 12),
+    top: (i * 53) % 65,
+    w: 6 + ((i * 13) % 12),
+    h: 8 + ((i * 7) % 14),
     dur: 2.5 + ((i * 11) % 50) / 10,
     delay: ((i * 17) % 40) / 10,
     red: i % 9 === 0,
@@ -101,7 +154,7 @@ function CityWindows() {
       {windows.map((w, i) => (
         <motion.div
           key={i}
-          animate={{ opacity: [0.03, 0.12, 0.03] }}
+          animate={{ opacity: [0.06, 0.28, 0.06] }}
           transition={{ duration: w.dur, delay: w.delay, repeat: Infinity }}
           className="absolute"
           style={{ left: `${w.left}%`, top: `${w.top}%`, width: w.w, height: w.h, background: w.red ? "#ff2a3c" : "#f2efe6" }}
@@ -111,23 +164,21 @@ function CityWindows() {
   );
 }
 
-function FloatShapes({ variant = 0 }: { variant?: number }) {
+/* retro perspective grid — same as home Interlude */
+function RetroGrid() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[50%] overflow-hidden opacity-25">
       <div
-        className={`absolute h-40 w-40 rounded-full border border-[var(--neon)]/12 md:h-64 md:w-64 ${variant % 2 ? "right-[6%] top-[10%]" : "left-[4%] top-[14%]"}`}
-        style={{ animation: "drift-a 18s ease-in-out infinite" }}
+        className="absolute inset-x-[-30%] bottom-[-20%] top-0"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(90deg, rgba(255,42,60,0.5) 0 1px, transparent 1px 70px), repeating-linear-gradient(0deg, rgba(255,42,60,0.5) 0 1px, transparent 1px 56px)",
+          transform: "perspective(420px) rotateX(58deg)",
+          transformOrigin: "center top",
+          animation: "grid-scroll 1.6s linear infinite",
+        }}
       />
-      <div
-        className={`absolute h-24 w-24 border border-white/8 md:h-36 md:w-36 ${variant % 2 ? "left-[8%] bottom-[12%]" : "right-[10%] bottom-[16%]"}`}
-        style={{ animation: "drift-b 23s ease-in-out infinite", transform: "rotate(18deg)" }}
-      />
-      <div
-        className="absolute left-[46%] top-[6%] text-6xl text-[var(--neon)]/10 md:text-8xl"
-        style={{ animation: "spin-very-slow 40s linear infinite" }}
-      >
-        ✱
-      </div>
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[var(--background)] to-transparent" />
     </div>
   );
 }
@@ -508,10 +559,11 @@ function ProjectPage() {
       <SmoothScroll>
         <main>
           {/* HERO */}
-          <section className="grain relative flex min-h-[70vh] items-end overflow-hidden bg-black pb-12 pt-24">
+          <section className="grain relative flex min-h-[80vh] items-end overflow-hidden bg-black pb-12 pt-24">
             <CityWindows />
+            <Skyline />
             <div
-              className="absolute inset-0 opacity-25"
+              className="absolute inset-0 opacity-20"
               style={{
                 backgroundImage: `url(${project.image})`,
                 backgroundSize: "cover",
@@ -519,7 +571,7 @@ function ProjectPage() {
                 filter: "grayscale(1) contrast(1.1)",
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
 
             <div className="relative z-10 mx-auto w-full max-w-[1300px] px-5 md:px-10">
               <motion.div
@@ -558,8 +610,16 @@ function ProjectPage() {
           </section>
 
           {/* CONTENT — sections or gallery */}
-          <section className="relative mx-auto max-w-[1300px] px-5 py-16 md:px-10 md:py-24">
-            <FloatShapes variant={0} />
+          <section className="relative overflow-hidden px-5 py-16 md:px-10 md:py-24">
+            {/* retro perspective grid at bottom of content */}
+            <RetroGrid />
+            {/* huge faded project title letter in background */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center overflow-hidden select-none" aria-hidden>
+              <span className="serif-display leading-none text-white/[0.025]" style={{ fontSize: "clamp(12rem, 30vw, 28rem)" }}>
+                {project.title.charAt(0)}
+              </span>
+            </div>
+            <div className="relative mx-auto max-w-[1300px]">
             {hasSections ? (
               <div className="relative flex flex-col">
                 {project.sections!.map((s, i) => renderSection(s, i))}
@@ -591,6 +651,7 @@ function ProjectPage() {
                 </span>
               </div>
             )}
+            </div>
           </section>
 
           {/* NEXT / PREV */}
