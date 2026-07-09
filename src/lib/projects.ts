@@ -1,3 +1,12 @@
+export type ProjectSection =
+  | { type: "label"; text: string }
+  | { type: "text"; heading?: string; body: string }
+  | { type: "palette"; colors: { name: string; hex: string; role: string }[] }
+  | { type: "typography"; name: string; weights: string[]; description: string }
+  | { type: "personas"; persona: { name: string; role: string; painPoints: string[]; goals: string[] } }
+  | { type: "image"; src: string; caption?: string }
+  | { type: "screens"; images: { src: string; caption: string }[] };
+
 export type Project = {
   slug: string;
   title: string;
@@ -5,13 +14,14 @@ export type Project = {
   category: "Brand Identity" | "UI/UX" | "Industrial Design" | "Web / Brand";
   meta?: string;
   href: string;
-  externalHref?: string; // original Behance/external link
+  externalHref?: string;
   image: string;
   featured?: boolean;
   span?: "full" | "half";
   contain?: boolean;
   description?: string;
   gallery?: string[];
+  sections?: ProjectSection[];
 };
 
 export const projects: Project[] = [
@@ -79,7 +89,76 @@ export const projects: Project[] = [
     image: "https://mir-s3-cdn-cf.behance.net/projects/404/f8e1ac237702741.Y3JvcCwyNTEwLDE5NjMsMTEzMCwyOTI.png",
     span: "half",
     description: "A health-tech product connecting patients and caregivers through a seamless digital interface.",
-    gallery: [],
+    sections: [
+      {
+        type: "text",
+        heading: "Overview",
+        body: "Vitalink is a healthcare platform redesign focused on removing friction between patients and doctors. The brief was simple: make finding and booking a trusted doctor feel as easy as ordering food. We explored how clarity, accessible design language, and thoughtful information hierarchy can transform a stressful experience into a confident one.",
+      },
+      {
+        type: "label",
+        text: "Brand Identity",
+      },
+      {
+        type: "text",
+        heading: "The Mark",
+        body: "The LV logomark fuses a pulse waveform with the letterform itself — a direct metaphor for life, technology, and connection. Paired with the wordmark and two supporting descriptors (Wellbeing · Health), the system is built to feel both clinical and approachable. The pulse detail adds humanity to what could otherwise be a cold, institutional logo.",
+      },
+      {
+        type: "image",
+        src: "https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/8d840f237702741.6905f135cecd5.png",
+        caption: "Logo mark exploration — LV pulse concept",
+      },
+      {
+        type: "label",
+        text: "Design System",
+      },
+      {
+        type: "typography",
+        name: "Inter",
+        weights: ["400 — Regular", "500 — Medium", "600 — SemiBold"],
+        description: "Inter was selected for its exceptional legibility at small sizes and neutral authority. It reads as trustworthy without being cold — critical in a healthcare context where users are already navigating stress.",
+      },
+      {
+        type: "palette",
+        colors: [
+          { name: "Indigo", hex: "#5B5FF8", role: "Primary — trust, calm, action" },
+          { name: "Soft Purple", hex: "#8B8EFA", role: "Secondary — gentle interactions" },
+          { name: "Ink", hex: "#2D2D3B", role: "Text — approachable authority" },
+          { name: "Cloud", hex: "#F5F5FB", role: "Background — clean, clinical feel" },
+        ],
+      },
+      {
+        type: "label",
+        text: "User Research",
+      },
+      {
+        type: "personas",
+        persona: {
+          name: "Akshay Singh",
+          role: "28 · Working Professional · Mumbai",
+          painPoints: [
+            "Difficulty finding trusted specialists nearby without word-of-mouth",
+            "Doctor profiles lack credentials, reviews, or wait-time info",
+            "Appointment booking is phone-based — long holds, uncertain availability",
+          ],
+          goals: [
+            "Discover verified doctors quickly with confidence",
+            "Read transparent profiles before committing to a visit",
+            "Book, reschedule, and track appointments entirely in-app",
+          ],
+        },
+      },
+      {
+        type: "label",
+        text: "UI Design",
+      },
+      {
+        type: "text",
+        heading: "Screens",
+        body: "The product flows through four core interactions: discovery (search and filter by specialty and location), browse (a doctor listing with key trust signals surfaced at a glance), profile (deep-dive on a specific doctor with credentials, reviews, and next available slots), and booking (a streamlined 3-step appointment confirmation). Every screen was built to reduce cognitive load — fewer decisions per screen, clearer hierarchy, and instant feedback on actions.",
+      },
+    ],
   },
   {
     slug: "thrive",
