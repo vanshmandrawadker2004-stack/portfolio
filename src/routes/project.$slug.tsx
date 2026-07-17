@@ -751,15 +751,22 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
     [0.40, 0.26, 0.18, 0.28, 0.40, 0.52, 0.62, 0.70, 0.74, 0.76, 0.78, 0.79, 0.78, 0.76, 0.80, 0.06, 0.64, 0.56, 0.50, 0.46],
   ];
 
+  // Proper Catmull-Rom → Cubic Bezier: control points derived from neighboring segments
   const buildCurve = (W: number, H: number, yVals: number[], closed: boolean): string => {
-    const pts = yVals.map((y, i) => ({ x: (i / (yVals.length - 1)) * W, y: y * (H - 8) + 4 }));
-    const d = pts.map((p, i) => {
-      if (i === 0) return `M ${p.x} ${p.y}`;
-      const prev = pts[i - 1];
-      const cx1 = prev.x + (p.x - prev.x) * 0.45;
-      const cx2 = p.x - (p.x - prev.x) * 0.45;
-      return `C ${cx1} ${prev.y} ${cx2} ${p.y} ${p.x} ${p.y}`;
-    }).join(" ");
+    const n = yVals.length;
+    const pts = yVals.map((y, i) => ({ x: (i / (n - 1)) * W, y: y * (H - 8) + 4 }));
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 0; i < n - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[Math.min(n - 1, i + 2)];
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+      d += ` C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${p2.x} ${p2.y}`;
+    }
     return closed ? `${d} L ${W} ${H} L 0 ${H} Z` : d;
   };
 
@@ -768,7 +775,12 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
       {charts.map((c, ci) => {
         const W = 900; const H = 200;
         const yVals = yValSets[ci] ?? yValSets[0];
-        const peakPct = c.peakX * 100; // use data value, not hardcoded
+        // Find the actual peak: minimum yVal = highest point on screen
+        const peakIdx = yVals.indexOf(Math.min(...yVals));
+        const peakSvgX = (peakIdx / (yVals.length - 1)) * W;
+        const peakSvgY = yVals[peakIdx] * (H - 8) + 4;
+        const peakXpct = (peakSvgX / W) * 100;
+        const peakYpct = (peakSvgY / H) * 100;
         return (
           <div key={ci}>
             <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: "#0d0d0f" }}>
@@ -800,15 +812,17 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
                 <path d={buildCurve(W, H, yVals, true)} fill={`url(#ac${ci})`} filter={`url(#acgrain${ci})`} />
                 {/* curve stroke */}
                 <path d={buildCurve(W, H, yVals, false)} fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="2" strokeLinecap="round" />
+                {/* peak dot exactly on the curve */}
+                <circle cx={peakSvgX} cy={peakSvgY} r={5} fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" />
+                <circle cx={peakSvgX} cy={peakSvgY} r={2.5} fill="rgba(255,255,255,0.9)" />
               </svg>
-              {/* peak badge */}
+              {/* peak label — bottom edge anchored at the curve's peak position */}
               <div className="absolute z-20 flex flex-col items-center -translate-x-1/2"
-                style={{ left: `${peakPct}%`, top: "6%" }}>
-                <div className="rounded bg-[#1c1c1e] px-2.5 py-1 font-mono text-[11px] font-bold text-[var(--foreground)] ring-1 ring-white/20 shadow-lg">
+                style={{ left: `${peakXpct}%`, bottom: `${100 - peakYpct}%` }}>
+                <div className="rounded bg-[#1c1c1e] px-2.5 py-1 font-mono text-[11px] font-bold text-[var(--foreground)] ring-1 ring-white/20 shadow-lg whitespace-nowrap">
                   {c.peakLabel}
                 </div>
                 <div className="mt-1 h-3 w-px bg-white/30" />
-                <div className="h-2 w-2 rounded-full bg-white/60 ring-2 ring-[var(--background)]" />
               </div>
             </div>
             <div className="mt-2 grid text-center font-mono text-[9px] uppercase tracking-[0.15em] text-[var(--ink-soft)]"
