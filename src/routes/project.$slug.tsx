@@ -744,6 +744,8 @@ function SectionDemographicBars({ groups }: { groups: { title: string; bars: { l
 
 function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string[]; bottomLabels: string[]; peakX: number; peakLabel: string }[] }) {
   // y values: low = curve near top = large fill area = PEAK; high = near bottom = small fill = TROUGH
+  // topPad reserves px above the peak so the label badge never clips the top border
+  const topPad = 56, botPad = 8;
   const yValSets: number[][] = [
     // Chart 0 — bimodal: moderate start → morning peak ~10% → long afternoon trough → evening rise
     [0.36, 0.22, 0.10, 0.14, 0.24, 0.38, 0.56, 0.70, 0.80, 0.84, 0.82, 0.76, 0.66, 0.54, 0.44, 0.36, 0.24, 0.18, 0.20, 0.24],
@@ -754,7 +756,7 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
   // Proper Catmull-Rom → Cubic Bezier: control points derived from neighboring segments
   const buildCurve = (W: number, H: number, yVals: number[], closed: boolean): string => {
     const n = yVals.length;
-    const pts = yVals.map((y, i) => ({ x: (i / (n - 1)) * W, y: y * (H - 8) + 4 }));
+    const pts = yVals.map((y, i) => ({ x: (i / (n - 1)) * W, y: topPad + y * (H - topPad - botPad) }));
     let d = `M ${pts[0].x} ${pts[0].y}`;
     for (let i = 0; i < n - 1; i++) {
       const p0 = pts[Math.max(0, i - 1)];
@@ -778,7 +780,7 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
         // Find the actual peak: minimum yVal = highest point on screen
         const peakIdx = yVals.indexOf(Math.min(...yVals));
         const peakSvgX = (peakIdx / (yVals.length - 1)) * W;
-        const peakSvgY = yVals[peakIdx] * (H - 8) + 4;
+        const peakSvgY = topPad + yVals[peakIdx] * (H - topPad - botPad);
         const peakXpct = (peakSvgX / W) * 100;
         const peakYpct = (peakSvgY / H) * 100;
         return (
