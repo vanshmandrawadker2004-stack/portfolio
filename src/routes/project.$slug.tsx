@@ -577,7 +577,7 @@ function SectionEvidenceCards({ intro, cards }: { intro: string; cards: { headli
             transition={{ duration: 0.5, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col gap-3 border border-[var(--divider)] bg-[#111113] p-5"
           >
-            <div className="text-sm font-semibold leading-snug" style={{ color: "#4a9eff" }}>
+            <div className="text-sm font-semibold leading-snug" style={{ color: "#e07070" }}>
               {c.headline}
             </div>
             <p className="flex-1 text-[11px] leading-relaxed text-[var(--ink-soft)]">{c.body}</p>
@@ -599,8 +599,8 @@ function SectionComparison({ leftName, rightName, rows }: {
     <div className="py-10">
       <div className="grid grid-cols-2">
         {/* column headers */}
-        <div className="border-2 border-[#1565C0] bg-[#0d1525] px-6 py-5">
-          <div className="font-mono text-[9px] uppercase tracking-[0.35em] text-[#4a9eff] mb-1">Selected Station</div>
+        <div className="border-2 border-[#7a1a1a] bg-[#130808] px-6 py-5">
+          <div className="font-mono text-[9px] uppercase tracking-[0.35em] text-[#e07070] mb-1">Selected Station</div>
           <div className="font-semibold text-lg text-[var(--foreground)]">{leftName}</div>
         </div>
         <div className="border border-l-0 border-[var(--divider)] bg-[#111113] px-6 py-5">
@@ -610,8 +610,8 @@ function SectionComparison({ leftName, rightName, rows }: {
         {/* rows */}
         {rows.map((r, i) => (
           <>
-            <div key={`l${i}`} className="border-b border-l-2 border-r border-[var(--divider)] border-l-[#1565C0] px-6 py-5">
-              <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.25em] text-[#4a9eff]">{r.label}</div>
+            <div key={`l${i}`} className="border-b border-l-2 border-r border-[var(--divider)] border-l-[#7a1a1a] px-6 py-5">
+              <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.25em] text-[#e07070]">{r.label}</div>
               <div className="text-sm leading-relaxed text-[var(--ink-soft)]">{r.left}</div>
             </div>
             <div key={`r${i}`} className="border-b border-r border-[var(--divider)] bg-white/[0.01] px-6 py-5">
@@ -714,12 +714,13 @@ function SectionDemographicBars({ groups }: { groups: { title: string; bars: { l
                 className="flex items-center gap-0"
               >
                 {/* label + dotted leader + number */}
-                <div className="flex items-end gap-0 shrink-0" style={{ width: "52%" }}>
+                <div className="flex items-baseline gap-0 shrink-0" style={{ width: "52%" }}>
                   <span className="text-sm text-[var(--foreground)] whitespace-nowrap">{b.label}</span>
-                  <span className="flex-1 mx-1 font-mono text-[10px] text-[var(--ink-soft)] overflow-hidden whitespace-nowrap" style={{ letterSpacing: "0.3em", minWidth: 20 }}>
-                    {"·".repeat(40)}
-                  </span>
-                  <span className="text-sm font-medium text-[var(--foreground)] whitespace-nowrap pr-4">{b.value}</span>
+                  <span className="flex-1 mx-2 pb-[3px]" style={{
+                    borderBottom: "1.5px dotted rgba(255,255,255,0.18)",
+                    minWidth: 16,
+                  }} />
+                  <span className="text-sm font-mono text-[var(--ink-soft)] whitespace-nowrap pr-3">{b.value}</span>
                 </div>
                 {/* bar */}
                 <div className="relative h-7 flex-1 bg-[#1a1a1c]">
@@ -780,12 +781,28 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
               <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none" style={{ display: "block" }}>
                 <defs>
                   <linearGradient id={`ac${ci}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#555555" stopOpacity="1" />
-                    <stop offset="60%" stopColor="#2e2e2e" stopOpacity="0.85" />
-                    <stop offset="100%" stopColor="#111111" stopOpacity="0.5" />
+                    <stop offset="0%" stopColor="rgba(195,195,205,0.58)" />
+                    <stop offset="55%" stopColor="rgba(80,80,92,0.28)" />
+                    <stop offset="100%" stopColor="rgba(0,0,0,0)" />
                   </linearGradient>
                 </defs>
+                {/* area fill */}
                 <path d={buildPath(W, H, ci)} fill={`url(#ac${ci})`} />
+                {/* curve stroke on top */}
+                {(() => {
+                  const yVals = ci === 0
+                    ? [0.08,0.09,0.12,0.18,0.30,0.55,0.80,0.86,0.84,0.78,0.70,0.62,0.57,0.54,0.51,0.50,0.47,0.45,0.43,0.42]
+                    : [0.44,0.40,0.42,0.50,0.68,0.80,0.84,0.82,0.78,0.09,0.52,0.64,0.68,0.70,0.72,0.73,0.72,0.71,0.70,0.68];
+                  const pts2 = yVals.map((y, i2) => ({ x: (i2 / (yVals.length - 1)) * W, y: y * (H - 8) + 4 }));
+                  const stroke = pts2.map((p, i2) => {
+                    if (i2 === 0) return `M ${p.x} ${p.y}`;
+                    const prev = pts2[i2 - 1];
+                    const cx1 = prev.x + (p.x - prev.x) * 0.45;
+                    const cx2 = p.x - (p.x - prev.x) * 0.45;
+                    return `C ${cx1} ${prev.y} ${cx2} ${p.y} ${p.x} ${p.y}`;
+                  }).join(" ");
+                  return <path d={stroke} fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="2" strokeLinecap="round" />;
+                })()}
               </svg>
               {/* peak badge */}
               <div className="absolute z-20 flex flex-col items-center -translate-x-1/2"
@@ -809,79 +826,169 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
 }
 
 function SectionChokePoints({ intro }: { intro: string }) {
-  const platforms = [
-    { x: 60,  w: 760, y: 46,  h: 28, label: "Platform 1" },
-    { x: 60,  w: 760, y: 90,  h: 28, label: "Platform 2" },
-    { x: 60,  w: 760, y: 134, h: 28, label: "Platform 3" },
-    { x: 60,  w: 760, y: 178, h: 28, label: "Platform 4" },
-    { x: 60,  w: 760, y: 222, h: 28, label: "Platform 5" },
+  const W = 900, H = 380;
+  const pfX = 80, pfW = 640;          // platform zone x=80 → x=720
+  const platformH = 44, trackH = 20;
+  const startY = 40;
+  const numPlatforms = 5;
+
+  // platform y positions: 40, 104, 168, 232, 296
+  const platforms = Array.from({ length: numPlatforms }, (_, i) => ({
+    y: startY + i * (platformH + trackH),
+    name: `Platform ${i + 1}`,
+  }));
+  const bottomY = startY + numPlatforms * platformH + (numPlatforms - 1) * trackH; // 340
+
+  // Three FOB stairway bands crossing all platforms vertically
+  const fobBands = [
+    { x: 188, w: 24 },
+    { x: 383, w: 24 },
+    { x: 578, w: 24 },
   ];
-  // FOB = foot over bridge, crossing all platforms
-  const fobY = 40;
-  const stairs = [180, 310, 460, 600];
+
+  const annX = pfX + pfW + 28; // 748 — right-side annotation start
 
   return (
     <div className="py-10">
       <p className="mb-8 max-w-2xl text-sm leading-[1.9] text-[var(--ink-soft)]">{intro}</p>
-      <div className="border border-[var(--divider)] bg-[#0d0d0f]">
-        <svg viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" className="w-full">
-          {/* background grid */}
-          {Array.from({ length: 22 }, (_, i) => (
-            <line key={`h${i}`} x1="0" y1={14 * i} x2="880" y2={14 * i} stroke="rgba(255,255,255,0.025)" strokeWidth="1" />
-          ))}
-          {Array.from({ length: 44 }, (_, i) => (
-            <line key={`v${i}`} x1={20 * i} y1="0" x2={20 * i} y2="310" stroke="rgba(255,255,255,0.025)" strokeWidth="1" />
+      <div className="border border-[var(--divider)] bg-[#0d0d0f] overflow-hidden">
+        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full">
+          <defs>
+            <pattern id="ck-hatch" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="10" stroke="rgba(255,255,255,0.03)" strokeWidth="4" />
+            </pattern>
+            <linearGradient id="ck-pf-g" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#3a3a3e" />
+              <stop offset="50%" stopColor="#2e2e32" />
+              <stop offset="100%" stopColor="#3a3a3e" />
+            </linearGradient>
+          </defs>
+
+          {/* subtle background grid */}
+          {Array.from({ length: 20 }, (_, i) => (
+            <line key={`bg${i}`} x1="0" y1={H / 20 * i} x2={W} y2={H / 20 * i}
+              stroke="rgba(255,255,255,0.018)" strokeWidth="1" />
           ))}
 
-          {/* PLATFORMS — horizontal grey bars */}
+          {/* station boundary box */}
+          <rect x={pfX - 8} y={startY - 12} width={pfW + 16} height={bottomY - startY + 24}
+            fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="1.5" rx="2" />
+
+          {/* railway tracks between platforms */}
+          {Array.from({ length: numPlatforms - 1 }, (_, i) => {
+            const ty = startY + (i + 1) * platformH + i * trackH;
+            return (
+              <g key={`tr${i}`}>
+                <rect x={pfX} y={ty} width={pfW} height={trackH} fill="#0b0b0d" />
+                {/* rail lines */}
+                <line x1={pfX} y1={ty + 4} x2={pfX + pfW} y2={ty + 4}
+                  stroke="rgba(255,255,255,0.22)" strokeWidth="2.5" />
+                <line x1={pfX} y1={ty + trackH - 4} x2={pfX + pfW} y2={ty + trackH - 4}
+                  stroke="rgba(255,255,255,0.22)" strokeWidth="2.5" />
+                {/* sleepers */}
+                {Array.from({ length: 14 }, (_, t) => (
+                  <rect key={t}
+                    x={pfX + 6 + t * Math.floor(pfW / 14)} y={ty + 3}
+                    width={Math.floor(pfW / 14) - 4} height={trackH - 6}
+                    fill="rgba(255,255,255,0.022)" rx="0.5" />
+                ))}
+              </g>
+            );
+          })}
+
+          {/* PLATFORMS */}
           {platforms.map((p, i) => (
-            <g key={i}>
-              <rect x={p.x} y={p.y} width={p.w} height={p.h} fill="#2e2e32" rx="2" />
-              {/* platform edge highlight */}
-              <rect x={p.x} y={p.y} width={p.w} height={2} fill="rgba(255,255,255,0.12)" rx="1" />
-              <text x={p.x + 8} y={p.y + 18} fill="rgba(255,255,255,0.3)" fontSize="9" fontFamily="monospace">{p.label}</text>
+            <g key={`pf${i}`}>
+              <rect x={pfX} y={p.y} width={pfW} height={platformH} fill="url(#ck-pf-g)" />
+              <rect x={pfX} y={p.y} width={pfW} height={platformH} fill="url(#ck-hatch)" />
+              {/* top edge highlight */}
+              <rect x={pfX} y={p.y} width={pfW} height={2} fill="rgba(255,255,255,0.1)" />
+              {/* bottom shadow */}
+              <rect x={pfX} y={p.y + platformH - 2} width={pfW} height={2} fill="rgba(0,0,0,0.22)" />
+              {/* platform name */}
+              <text x={pfX + 14} y={p.y + platformH / 2 + 4}
+                fill="rgba(255,255,255,0.2)" fontSize="10" fontFamily="monospace" letterSpacing="3">
+                {p.name.toUpperCase()}
+              </text>
             </g>
           ))}
 
-          {/* FOB / BRIDGE — red horizontal bar crossing all platforms at left side */}
-          <rect x="168" y="30" width="18" height="232" fill="#C62828" rx="2" opacity="0.9" />
-          <rect x="298" y="30" width="18" height="232" fill="#C62828" rx="2" opacity="0.9" />
-          <rect x="448" y="30" width="18" height="232" fill="#C62828" rx="2" opacity="0.9" />
-          <rect x="588" y="30" width="18" height="232" fill="#C62828" rx="2" opacity="0.9" />
-
-          {/* Horizontal FOB connector */}
-          <rect x="168" y="30" width="438" height="14" fill="#E53935" rx="2" opacity="0.8" />
-          {/* stair step marks on FOB */}
-          {stairs.map((x, i) => (
-            <g key={i}>
-              {[0,1,2,3,4].map(s => (
-                <rect key={s} x={x + 2} y={32 + s * 2} width={14} height={1.5}
-                  fill="rgba(255,150,150,0.5)" />
+          {/* FOB BANDS (foot over bridge) */}
+          {fobBands.map((fb, fi) => (
+            <g key={`fob${fi}`}>
+              {/* main red column */}
+              <rect x={fb.x} y={startY - 14} width={fb.w} height={bottomY - startY + 28}
+                fill="#B71C1C" rx="1" opacity="0.88" />
+              {/* left-edge highlight */}
+              <rect x={fb.x} y={startY - 14} width={3} height={bottomY - startY + 28}
+                fill="rgba(255,130,130,0.28)" />
+              {/* choke point circles at each platform intersection */}
+              {platforms.map((p, pi) => (
+                <g key={`cp${fi}-${pi}`}>
+                  <circle cx={fb.x + fb.w / 2} cy={p.y + platformH / 2}
+                    r={11} fill="rgba(229,57,53,0.18)" stroke="#EF5350" strokeWidth="1.5" />
+                  <circle cx={fb.x + fb.w / 2} cy={p.y + platformH / 2}
+                    r={4} fill="rgba(255,255,255,0.88)" />
+                </g>
               ))}
+              {/* FOB label at top */}
+              {fi === 1 && (
+                <text x={fb.x + fb.w / 2} y={startY - 20} textAnchor="middle"
+                  fill="rgba(239,83,80,0.7)" fontSize="8" fontFamily="monospace" letterSpacing="2.5">
+                  FOB
+                </text>
+              )}
             </g>
           ))}
 
-          {/* Entrance at bottom */}
-          <rect x="340" y="270" width="200" height="28" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="4 3" rx="2" />
-          <text x="440" y="288" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="monospace" letterSpacing="2">ENTRANCE</text>
-          <line x1="440" y1="262" x2="440" y2="270" stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="3 2" />
+          {/* Station entrance at bottom */}
+          <line x1={pfX + pfW / 2} y1={bottomY + 10} x2={pfX + pfW / 2} y2={bottomY + 22}
+            stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+          <rect x={pfX + pfW / 2 - 58} y={bottomY + 22} width={116} height={20}
+            fill="#0f0f12" stroke="rgba(255,255,255,0.12)" strokeWidth="1" strokeDasharray="4 3" rx="2" />
+          <text x={pfX + pfW / 2} y={bottomY + 36} textAnchor="middle"
+            fill="rgba(255,255,255,0.27)" fontSize="9" fontFamily="monospace" letterSpacing="3">
+            ENTRANCE
+          </text>
 
-          {/* LABELS with dotted leaders */}
-          {/* Stairs */}
-          <line x1="177" y1="28" x2="177" y2="14" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="3 2" />
-          <line x1="177" y1="14" x2="240" y2="14" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="3 2" />
-          <rect x="240" y="6" width="52" height="18" rx="2" fill="#1c1c1e" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-          <text x="248" y="18" fill="#f2efe6" fontSize="9" fontFamily="monospace">Stairs</text>
+          {/* RIGHT-SIDE ANNOTATIONS */}
+          {/* "Choke Point" annotation */}
+          <line x1={pfX + pfW + 2} y1={platforms[1].y + platformH / 2}
+            x2={pfX + pfW + 20} y2={platforms[1].y + platformH / 2}
+            stroke="rgba(239,83,80,0.6)" strokeWidth="1" strokeDasharray="3 2" />
+          <rect x={annX} y={platforms[1].y + platformH / 2 - 10}
+            width={100} height={20} rx="2" fill="#1d0f0f" stroke="rgba(239,83,80,0.32)" strokeWidth="1" />
+          <text x={annX + 8} y={platforms[1].y + platformH / 2 + 4}
+            fill="#EF9A9A" fontSize="9" fontFamily="monospace">Choke Point</text>
 
-          {/* Bridge */}
-          <line x1="390" y1="36" x2="390" y2="6" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="3 2" />
-          <rect x="398" y="-1" width="58" height="18" rx="2" fill="#1c1c1e" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-          <text x="406" y="11" fill="#f2efe6" fontSize="9" fontFamily="monospace">Bridge</text>
+          {/* "Platform" annotation */}
+          <line x1={pfX + pfW + 2} y1={platforms[0].y + platformH / 2}
+            x2={pfX + pfW + 20} y2={platforms[0].y + platformH / 2}
+            stroke="rgba(255,255,255,0.22)" strokeWidth="1" strokeDasharray="3 2" />
+          <text x={annX} y={platforms[0].y + platformH / 2 + 4}
+            fill="rgba(255,255,255,0.35)" fontSize="9" fontFamily="monospace">Platform</text>
 
-          {/* Station Entrance */}
-          <line x1="340" y1="284" x2="290" y2="284" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="3 2" />
-          <rect x="175" y="275" width="115" height="18" rx="2" fill="#1c1c1e" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-          <text x="183" y="287" fill="#f2efe6" fontSize="9" fontFamily="monospace">Station Entrance</text>
+          {/* "Railway Track" annotation */}
+          {(() => {
+            const ty = startY + platformH + trackH / 2;
+            return (
+              <g>
+                <line x1={pfX + pfW + 2} y1={ty} x2={pfX + pfW + 20} y2={ty}
+                  stroke="rgba(255,255,255,0.22)" strokeWidth="1" strokeDasharray="3 2" />
+                <text x={annX} y={ty + 4}
+                  fill="rgba(255,255,255,0.35)" fontSize="9" fontFamily="monospace">Track</text>
+              </g>
+            );
+          })()}
+
+          {/* Legend */}
+          <g>
+            <circle cx={annX + 6} cy={bottomY + 10} r={5}
+              fill="rgba(229,57,53,0.18)" stroke="#EF5350" strokeWidth="1.5" />
+            <circle cx={annX + 6} cy={bottomY + 10} r={2} fill="rgba(255,255,255,0.8)" />
+            <text x={annX + 16} y={bottomY + 14}
+              fill="rgba(255,255,255,0.3)" fontSize="8" fontFamily="monospace">= stairway crossing</text>
+          </g>
         </svg>
       </div>
     </div>
@@ -958,20 +1065,13 @@ function SectionJourneyMapFull({ phases }: { phases: { num: string; name: string
             <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: 90, display: "block" }}>
               <defs>
                 <linearGradient id="emg" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="rgba(80,80,80,0.6)" />
-                  <stop offset="100%" stopColor="rgba(20,20,20,0)" />
+                  <stop offset="0%" stopColor="rgba(160,160,170,0.5)" />
+                  <stop offset="60%" stopColor="rgba(60,60,70,0.2)" />
+                  <stop offset="100%" stopColor="rgba(0,0,0,0)" />
                 </linearGradient>
-                <filter id="emgrain">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" result="n"/>
-                  <feColorMatrix type="saturate" values="0" in="n" result="g"/>
-                  <feBlend in="SourceGraphic" in2="g" mode="multiply" result="b"/>
-                  <feComposite in="b" in2="SourceGraphic" operator="in"/>
-                </filter>
               </defs>
-              <g filter="url(#emgrain)">
-                <path d={`${curvePath} L ${W} ${H} L 0 ${H} Z`} fill="url(#emg)" />
-              </g>
-              <path d={curvePath} fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" />
+              <path d={`${curvePath} L ${W} ${H} L 0 ${H} Z`} fill="url(#emg)" />
+              <path d={curvePath} fill="none" stroke="rgba(255,255,255,0.62)" strokeWidth="2" strokeLinecap="round" />
               {pts.map((p, i) => (
                 <g key={i}>
                   <circle cx={p.x} cy={p.y} r={5} fill="rgba(255,255,255,0.7)" />
@@ -1082,7 +1182,7 @@ function SectionTicketRedesign() {
           <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--neon)]">16.2.2  After — Redesigned Reservation Slip</div>
           <div className="border border-[var(--divider)] bg-[#111113] overflow-hidden">
             {/* Platform colour band at top */}
-            <div className="flex items-center gap-3 bg-[#3F51B5] px-5 py-3">
+            <div className="flex items-center gap-3 bg-[#7a1a1a] px-5 py-3">
               <div className="text-white">
                 <div className="font-mono text-[8px] uppercase tracking-[0.25em] opacity-70">Platform</div>
                 <div className="text-3xl font-bold leading-none">3</div>
