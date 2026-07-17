@@ -839,124 +839,135 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
 }
 
 function SectionChokePoints({ intro }: { intro: string }) {
-  // Side-elevation view: dark structural columns + red FOB bridge (matches Figma)
-  const W = 900, H = 310;
-  const ground = 268;
-  const bridgeY = 116, bridgeH = 30;
+  // Side-elevation architectural diagram: structural columns + red FOB bridge
+  const W = 900, H = 330;
+  const ground = 280;
+  const bridgeY = 118, bridgeH = 26;
 
   const cols = [
-    { x: 80,  w: 14, h: 150, entrance: true },  // entrance pillar (red)
-    { x: 122, w: 26, h: 192 },
-    { x: 162, w: 26, h: 224 },
-    { x: 202, w: 26, h: 232 },  // tallest
-    { x: 244, w: 26, h: 196 },
-    { x: 292, w: 26, h: 214 },
-    { x: 344, w: 26, h: 204 },
-    { x: 402, w: 26, h: 190 },
-    { x: 462, w: 40, h: 178 },  // wider
-    { x: 516, w: 40, h: 162 },  // wider
+    { x: 72,  w: 18, h: 155, entrance: true },
+    { x: 118, w: 22, h: 182 },
+    { x: 158, w: 22, h: 216 },
+    { x: 198, w: 22, h: 238 },  // tallest
+    { x: 238, w: 22, h: 222 },
+    { x: 284, w: 22, h: 232 },
+    { x: 330, w: 22, h: 212 },
+    { x: 378, w: 22, h: 194 },
+    { x: 428, w: 36, h: 174 },  // wider — station building
+    { x: 478, w: 36, h: 160 },
   ];
   const bridgeX1 = cols[0].x;
   const bridgeX2 = cols[cols.length - 1].x + cols[cols.length - 1].w;
-  const stairCols = cols.filter((_, i) => i > 0); // non-entrance columns
+  const stairCols = cols.filter((_, i) => i > 0);
 
   return (
     <div className="py-10">
       <p className="mb-8 max-w-2xl text-sm leading-[1.9] text-[var(--ink-soft)]">{intro}</p>
-      <div className="border border-[var(--divider)] bg-[#0d0d0f] overflow-hidden">
+      <div className="border border-[var(--divider)] bg-[#0c0c0e] overflow-hidden">
         <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full">
           <defs>
-            <pattern id="stair-lines" patternUnits="userSpaceOnUse" width="40" height="5">
-              <rect width="40" height="5" fill="#B71C1C" />
-              <line x1="0" y1="2.5" x2="40" y2="2.5" stroke="rgba(255,210,210,0.18)" strokeWidth="1.5" />
+            {/* Architectural section hatch: thin horizontal white lines on dark */}
+            <pattern id="sec-hatch" patternUnits="userSpaceOnUse" width="22" height="3.5">
+              <rect width="22" height="3.5" fill="#0c0c0e" />
+              <line x1="0" y1="3" x2="22" y2="3" stroke="rgba(255,255,255,0.2)" strokeWidth="0.6" />
             </pattern>
           </defs>
 
-          {/* ground line */}
-          <line x1={20} y1={ground} x2={W - 20} y2={ground}
-            stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
+          {/* subtle ground line */}
+          <line x1={32} y1={ground} x2={W - 32} y2={ground}
+            stroke="rgba(255,255,255,0.07)" strokeWidth="1" />
 
-          {/* columns (drawn first, behind bridge) */}
+          {/* columns — drawn first (behind bridge) */}
           {cols.map((col, i) => {
             const topY = ground - col.h;
+            const isEnt = col.entrance;
             return (
               <g key={i}>
                 <rect x={col.x} y={topY} width={col.w} height={col.h}
-                  fill={col.entrance ? "#6e1414" : "#212128"} />
-                <rect x={col.x} y={topY} width={2} height={col.h}
-                  fill={col.entrance ? "rgba(255,130,130,0.2)" : "rgba(255,255,255,0.06)"} />
-                <rect x={col.x} y={topY} width={col.w} height={2}
-                  fill={col.entrance ? "rgba(255,120,120,0.28)" : "rgba(255,255,255,0.1)"} />
+                  fill={isEnt ? "#4e1010" : "#1c1c22"} />
+                <rect x={col.x} y={topY} width={1} height={col.h}
+                  fill={isEnt ? "rgba(255,90,90,0.14)" : "rgba(255,255,255,0.04)"} />
+                <rect x={col.x + col.w - 1} y={topY} width={1} height={col.h}
+                  fill="rgba(0,0,0,0.18)" />
+                <rect x={col.x} y={topY} width={col.w} height={1}
+                  fill={isEnt ? "rgba(255,90,90,0.18)" : "rgba(255,255,255,0.06)"} />
               </g>
             );
           })}
 
-          {/* bridge body */}
+          {/* bridge slab — solid dark red */}
           <rect x={bridgeX1} y={bridgeY} width={bridgeX2 - bridgeX1} height={bridgeH}
-            fill="#B71C1C" />
-          <rect x={bridgeX1} y={bridgeY} width={bridgeX2 - bridgeX1} height={3}
-            fill="rgba(255,150,150,0.28)" />
+            fill="#8B1212" />
+          {/* bridge top sheen */}
+          <rect x={bridgeX1} y={bridgeY} width={bridgeX2 - bridgeX1} height={1.5}
+            fill="rgba(255,120,120,0.18)" />
+          {/* bridge bottom shadow */}
+          <rect x={bridgeX1} y={bridgeY + bridgeH - 1.5} width={bridgeX2 - bridgeX1} height={1.5}
+            fill="rgba(0,0,0,0.35)" />
 
-          {/* stair crosshatch at each non-entrance column */}
-          {stairCols.map((col, i) => (
-            <rect key={i} x={col.x} y={bridgeY} width={col.w} height={bridgeH}
-              fill="url(#stair-lines)" />
-          ))}
-
-          {/* white access dots on bridge at each stair column */}
+          {/* Section cut at each stair column: architectural hatch showing column passing through bridge */}
           {stairCols.map((col, i) => (
             <g key={i}>
-              <circle cx={col.x + col.w / 2} cy={bridgeY + bridgeH / 2}
-                r={5} fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" />
-              <circle cx={col.x + col.w / 2} cy={bridgeY + bridgeH / 2}
-                r={2} fill="rgba(255,255,255,0.85)" />
+              <rect x={col.x} y={bridgeY} width={col.w} height={bridgeH}
+                fill="url(#sec-hatch)" />
+              <line x1={col.x} y1={bridgeY} x2={col.x} y2={bridgeY + bridgeH}
+                stroke="rgba(255,255,255,0.1)" strokeWidth="0.75" />
+              <line x1={col.x + col.w} y1={bridgeY} x2={col.x + col.w} y2={bridgeY + bridgeH}
+                stroke="rgba(0,0,0,0.25)" strokeWidth="0.75" />
             </g>
           ))}
 
-          {/* ANNOTATIONS */}
-          {/* Stairs → tallest column bridge intersection */}
-          {(() => {
-            const col = cols[3]; // tallest
+          {/* Access point dots — centred on bridge at each stair column */}
+          {stairCols.map((col, i) => {
             const cx = col.x + col.w / 2;
-            const dotY = bridgeY + bridgeH / 2;
+            const cy = bridgeY + bridgeH / 2;
+            return (
+              <g key={i}>
+                <circle cx={cx} cy={cy} r={4} fill="rgba(255,255,255,0.88)" />
+                <circle cx={cx} cy={cy} r={1.8} fill="#0c0c0e" />
+              </g>
+            );
+          })}
+
+          {/* ── ANNOTATIONS ── */}
+
+          {/* Stairs — above the tallest column's bridge section */}
+          {(() => {
+            const col = cols[3];
+            const cx = col.x + col.w / 2;
             return (
               <g>
-                <line x1={cx} y1={dotY - 6} x2={cx} y2={bridgeY - 20}
-                  stroke="rgba(255,255,255,0.35)" strokeWidth="1" strokeDasharray="3 2" />
-                <rect x={cx + 6} y={bridgeY - 36} width={44} height={16} rx="2"
-                  fill="rgba(14,14,16,0.9)" />
-                <text x={cx + 12} y={bridgeY - 24} fill="rgba(255,255,255,0.75)"
-                  fontSize="9" fontFamily="sans-serif">Stairs</text>
+                <line x1={cx} y1={bridgeY - 1} x2={cx} y2={bridgeY - 26}
+                  stroke="rgba(255,255,255,0.25)" strokeWidth="0.75" strokeDasharray="3 2" />
+                <text x={cx + 6} y={bridgeY - 14} fill="rgba(255,255,255,0.55)"
+                  fontSize="9" fontFamily="sans-serif" letterSpacing="0.3">Stairs</text>
               </g>
             );
           })()}
 
-          {/* Bridge → right side */}
-          <circle cx={bridgeX2 - 3} cy={bridgeY + bridgeH / 2} r={2.5}
-            fill="rgba(255,255,255,0.55)" />
-          <line x1={bridgeX2} y1={bridgeY + bridgeH / 2} x2={bridgeX2 + 16} y2={bridgeY + bridgeH / 2}
-            stroke="rgba(255,255,255,0.35)" strokeWidth="1" strokeDasharray="3 2" />
-          <rect x={bridgeX2 + 18} y={bridgeY + bridgeH / 2 - 9} width={50} height={16} rx="2"
-            fill="rgba(14,14,16,0.9)" />
-          <text x={bridgeX2 + 24} y={bridgeY + bridgeH / 2 + 4} fill="rgba(255,255,255,0.75)"
-            fontSize="9" fontFamily="sans-serif">Bridge</text>
+          {/* Bridge — right of slab */}
+          {(() => {
+            const midY = bridgeY + bridgeH / 2;
+            return (
+              <g>
+                <line x1={bridgeX2} y1={midY} x2={bridgeX2 + 20} y2={midY}
+                  stroke="rgba(255,255,255,0.25)" strokeWidth="0.75" strokeDasharray="3 2" />
+                <text x={bridgeX2 + 24} y={midY + 4} fill="rgba(255,255,255,0.55)"
+                  fontSize="9" fontFamily="sans-serif" letterSpacing="0.3">Bridge</text>
+              </g>
+            );
+          })()}
 
-          {/* Station Entrance → left side of entrance pillar */}
+          {/* Station Entrance — below ground under entrance pillar */}
           {(() => {
             const col = cols[0];
             const cx = col.x + col.w / 2;
-            const dotY = (bridgeY + bridgeH + ground) / 2; // midpoint below bridge
             return (
               <g>
-                <circle cx={cx} cy={dotY} r={2.5} fill="rgba(255,255,255,0.55)" />
-                <line x1={cx - 8} y1={dotY} x2={56} y2={dotY}
-                  stroke="rgba(255,255,255,0.35)" strokeWidth="1" strokeDasharray="3 2" />
-                <rect x={2} y={dotY - 14} width={54} height={28} rx="2"
-                  fill="rgba(14,14,16,0.9)" />
-                <text x={5} y={dotY - 2} fill="rgba(255,255,255,0.7)"
-                  fontSize="8" fontFamily="sans-serif">Station</text>
-                <text x={5} y={dotY + 10} fill="rgba(255,255,255,0.7)"
-                  fontSize="8" fontFamily="sans-serif">Entrance</text>
+                <line x1={cx} y1={ground + 1} x2={cx} y2={ground + 14}
+                  stroke="rgba(255,255,255,0.2)" strokeWidth="0.75" />
+                <text x={cx} y={ground + 26} textAnchor="middle" fill="rgba(255,255,255,0.45)"
+                  fontSize="8" fontFamily="sans-serif" letterSpacing="0.3">Station Entrance</text>
               </g>
             );
           })()}
