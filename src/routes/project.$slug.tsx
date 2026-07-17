@@ -599,19 +599,19 @@ function SectionComparison({ leftName, rightName, rows }: {
     <div className="py-10">
       <div className="grid grid-cols-2">
         {/* column headers */}
-        <div className="border-2 border-[#7a1a1a] bg-[#130808] px-6 py-5">
-          <div className="font-mono text-[9px] uppercase tracking-[0.35em] text-[#e07070] mb-1">Selected Station</div>
+        <div className="border border-r-0 border-[var(--divider)] bg-[#111113] px-6 py-5">
+          <div className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)] mb-1">Selected Station</div>
           <div className="font-semibold text-lg text-[var(--foreground)]">{leftName}</div>
         </div>
-        <div className="border border-l-0 border-[var(--divider)] bg-[#111113] px-6 py-5">
+        <div className="border border-[var(--divider)] bg-[#111113] px-6 py-5">
           <div className="font-mono text-[9px] uppercase tracking-[0.35em] text-[var(--ink-soft)] mb-1">Benchmark</div>
           <div className="font-semibold text-lg text-[var(--foreground)]">{rightName}</div>
         </div>
         {/* rows */}
         {rows.map((r, i) => (
           <>
-            <div key={`l${i}`} className="border-b border-l-2 border-r border-[var(--divider)] border-l-[#7a1a1a] px-6 py-5">
-              <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.25em] text-[#e07070]">{r.label}</div>
+            <div key={`l${i}`} className="border-b border-r border-[var(--divider)] px-6 py-5">
+              <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{r.label}</div>
               <div className="text-sm leading-relaxed text-[var(--ink-soft)]">{r.left}</div>
             </div>
             <div key={`r${i}`} className="border-b border-r border-[var(--divider)] bg-white/[0.01] px-6 py-5">
@@ -743,12 +743,15 @@ function SectionDemographicBars({ groups }: { groups: { title: string; bars: { l
 }
 
 function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string[]; bottomLabels: string[]; peakX: number; peakLabel: string }[] }) {
-  const buildPath = (W: number, H: number, chartIdx: number) => {
-    const yVals = chartIdx === 0
-      // Time of day: morning peak, afternoon trough, moderate evening
-      ? [0.08,0.09,0.12,0.18,0.30,0.55,0.80,0.86,0.84,0.78,0.70,0.62,0.57,0.54,0.51,0.50,0.47,0.45,0.43,0.42]
-      // Monthly: moderate Jan-Apr, low May-Sep, massive Oct, moderate Nov-Dec
-      : [0.44,0.40,0.42,0.50,0.68,0.80,0.84,0.82,0.78,0.09,0.52,0.64,0.68,0.70,0.72,0.73,0.72,0.71,0.70,0.68];
+  // y values: low = curve near top = large fill area = PEAK; high = near bottom = small fill = TROUGH
+  const yValSets: number[][] = [
+    // Chart 0 — time of day: sharp morning peak (idx 0-1), low afternoon, significant evening recovery
+    [0.07,0.08,0.11,0.17,0.29,0.52,0.78,0.85,0.84,0.78,0.70,0.62,0.57,0.54,0.52,0.50,0.45,0.38,0.30,0.25],
+    // Chart 1 — monthly: moderate Jan–Sep, Diwali/Oct spike at index 15 (≈79%), moderate Nov–Dec
+    [0.48,0.46,0.44,0.46,0.50,0.52,0.55,0.58,0.62,0.66,0.70,0.72,0.75,0.78,0.82,0.06,0.70,0.60,0.54,0.50],
+  ];
+
+  const buildCurve = (W: number, H: number, yVals: number[], closed: boolean): string => {
     const pts = yVals.map((y, i) => ({ x: (i / (yVals.length - 1)) * W, y: y * (H - 8) + 4 }));
     const d = pts.map((p, i) => {
       if (i === 0) return `M ${p.x} ${p.y}`;
@@ -757,14 +760,15 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
       const cx2 = p.x - (p.x - prev.x) * 0.45;
       return `C ${cx1} ${prev.y} ${cx2} ${p.y} ${p.x} ${p.y}`;
     }).join(" ");
-    return `${d} L ${W} ${H} L 0 ${H} Z`;
+    return closed ? `${d} L ${W} ${H} L 0 ${H} Z` : d;
   };
 
   return (
     <div className="flex flex-col gap-10 py-10">
       {charts.map((c, ci) => {
         const W = 900; const H = 200;
-        const peakPct = ci === 0 ? 8 : 79; // % position of peak from left
+        const yVals = yValSets[ci] ?? yValSets[0];
+        const peakPct = c.peakX * 100; // use data value, not hardcoded
         return (
           <div key={ci}>
             <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: "#0d0d0f" }}>
@@ -787,22 +791,9 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
                   </linearGradient>
                 </defs>
                 {/* area fill */}
-                <path d={buildPath(W, H, ci)} fill={`url(#ac${ci})`} />
-                {/* curve stroke on top */}
-                {(() => {
-                  const yVals = ci === 0
-                    ? [0.08,0.09,0.12,0.18,0.30,0.55,0.80,0.86,0.84,0.78,0.70,0.62,0.57,0.54,0.51,0.50,0.47,0.45,0.43,0.42]
-                    : [0.44,0.40,0.42,0.50,0.68,0.80,0.84,0.82,0.78,0.09,0.52,0.64,0.68,0.70,0.72,0.73,0.72,0.71,0.70,0.68];
-                  const pts2 = yVals.map((y, i2) => ({ x: (i2 / (yVals.length - 1)) * W, y: y * (H - 8) + 4 }));
-                  const stroke = pts2.map((p, i2) => {
-                    if (i2 === 0) return `M ${p.x} ${p.y}`;
-                    const prev = pts2[i2 - 1];
-                    const cx1 = prev.x + (p.x - prev.x) * 0.45;
-                    const cx2 = p.x - (p.x - prev.x) * 0.45;
-                    return `C ${cx1} ${prev.y} ${cx2} ${p.y} ${p.x} ${p.y}`;
-                  }).join(" ");
-                  return <path d={stroke} fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="2" strokeLinecap="round" />;
-                })()}
+                <path d={buildCurve(W, H, yVals, true)} fill={`url(#ac${ci})`} />
+                {/* curve stroke */}
+                <path d={buildCurve(W, H, yVals, false)} fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="2" strokeLinecap="round" />
               </svg>
               {/* peak badge */}
               <div className="absolute z-20 flex flex-col items-center -translate-x-1/2"
