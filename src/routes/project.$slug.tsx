@@ -841,16 +841,28 @@ function SectionAreaChart({ charts }: { charts: { title: string; xLabels: string
 
 function SectionJourneyMapFull({ phases }: { phases: { num: string; name: string; tasks: string[]; emotionY: number; opportunities: string[] }[] }) {
   const W = 1000; const H = 180;
+  const n = phases.length;
+  // Dots at column centres: (i + 0.5) / n * W
   const pts = phases.map((p, i) => ({
-    x: (i / (phases.length - 1)) * W,
+    x: (i + 0.5) / n * W,
     y: p.emotionY * H * 0.88 + 8,
   }));
-  const curvePath = pts.map((p, i) => {
+  // Extend to left/right edges so the fill covers the full width
+  const allPts = [
+    { x: 0, y: pts[0].y },
+    ...pts,
+    { x: W, y: pts[n - 1].y },
+  ];
+  const curvePath = allPts.map((p, i) => {
     if (i === 0) return `M ${p.x} ${p.y}`;
-    const prev = pts[i - 1];
-    const cx1 = prev.x + (p.x - prev.x) * 0.45;
-    const cx2 = p.x - (p.x - prev.x) * 0.45;
-    return `C ${cx1} ${prev.y} ${cx2} ${p.y} ${p.x} ${p.y}`;
+    const prev = allPts[i - 1];
+    const p0 = allPts[Math.max(0, i - 2)];
+    const p2 = allPts[Math.min(allPts.length - 1, i + 1)];
+    const cp1x = prev.x + (p.x - p0.x) / 6;
+    const cp1y = prev.y + (p.y - p0.y) / 6;
+    const cp2x = p.x - (p2.x - prev.x) / 6;
+    const cp2y = p.y - (p2.y - prev.y) / 6;
+    return `C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${p.x} ${p.y}`;
   }).join(" ");
 
   return (
@@ -903,7 +915,7 @@ function SectionJourneyMapFull({ phases }: { phases: { num: string; name: string
           </div>
           {/* emotion curve */}
           <div className="border-x border-b border-[var(--divider)] bg-[#0d0d0f]">
-            <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: 180, display: "block" }}>
+            <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none" style={{ height: 180, display: "block" }}>
               <defs>
                 <linearGradient id="emg" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="rgba(168,160,160,0.55)" />
