@@ -22,7 +22,13 @@ export type ProjectSection =
   | { type: "journey-map-full"; phases: { num: string; name: string; tasks: string[]; emotionY: number; opportunities: string[] }[] }
   | { type: "platform-colorcode"; description: string; platforms: { num: number; color: string }[] }
   | { type: "places-visited"; description: string; places: { name: string; x: number; y: number }[] }
-  | { type: "ticket-redesign" };
+  | { type: "ticket-redesign" }
+  | { type: "symptom-wheel"; heading: string; body: string; symptoms: string[] }
+  | { type: "concentric-impact"; rings: { label: string; value: string; color: string }[] }
+  | { type: "solution-timeline" }
+  | { type: "symptom-solution"; heading: string; body?: string; symptoms: string[]; solution: string }
+  | { type: "ideation-grid" }
+  | { type: "hand-positions" };
 
 export type Project = {
   slug: string;
@@ -75,16 +81,17 @@ export const projects: Project[] = [
       },
       { type: "label", text: "The Problem" },
       {
-        type: "text",
+        type: "symptom-wheel",
         heading: "What is Glossophobia?",
         body: "The fear of public speaking is called Glossophobia. It's a common anxiety disorder that can cause physical symptoms like sweating, trembling, and rapid heart rate. People with glossophobia often experience intense anxiety and discomfort when they have to speak in front of an audience.",
+        symptoms: ["Hyperventilation", "Dizziness", "Anxiety Attack", "Rapid Heartbeat", "Trembling", "Sweating"],
       },
       {
-        type: "stat-grid",
-        stats: [
-          { value: "30%", label: "Suffer from Glossophobia", sub: "Fear of public speaking" },
-          { value: "−10%", label: "Wage Decrease", sub: "Impact on career earnings" },
-          { value: "−15%", label: "Promotion Opportunities", sub: "Lost career advancement" },
+        type: "concentric-impact",
+        rings: [
+          { label: "Wage Decrease", value: "−10%", color: "rgba(90,16,16,0.78)" },
+          { label: "Promotion Decrease", value: "−15%", color: "rgba(148,22,22,0.88)" },
+          { label: "Suffer from Glossophobia", value: "30%", color: "#C62828" },
         ],
       },
       { type: "label", text: "Primary Research" },
@@ -106,34 +113,26 @@ export const projects: Project[] = [
         ],
       },
       { type: "label", text: "Our Solution" },
-      {
-        type: "text",
-        heading: "Why Presto?",
-        body: "Existing solutions like medications and CBT (Cognitive Behavioural Therapy) help people manage glossophobia but fall short of enabling confident, in-the-moment performance. Presto bridges the gap — a wearable device that addresses both the physical and psychological symptoms of stage fright, right when it matters most.",
-      },
+      { type: "solution-timeline" },
       { type: "label", text: "Design" },
       {
-        type: "text",
+        type: "symptom-solution",
         heading: "Physical Symptoms — Cold Distraction",
-        body: "To mitigate the physical symptoms of stage fright, we chose distraction for its effectiveness and ease of use. Specifically, we selected cold as the method based on research and interviews. Cold sensations act as sudden stimuli, shifting focus from anxiety to physical sensation in the palm. Cooling occurs via an endothermic reaction between water and ammonium nitrate, lowering the hand's temperature when an integrated pod in the glove is ruptured.",
+        body: "To mitigate the physical symptoms of stage fright, we chose distraction for its effectiveness and ease of use. Specifically, we selected cold as the method based on research and interviews. Cold sensations act as sudden stimuli, shifting focus from anxiety to physical sensation in the palm.",
+        symptoms: ["Sweating", "Rapid Heartbeat", "Hyperventilation"],
+        solution: "DISTRACTION",
       },
       {
-        type: "text",
+        type: "symptom-solution",
         heading: "Psychological Symptoms — Hand Prompter",
-        body: "To address the psychological symptoms associated with stage fright, we selected a prompter as the solution due to its proven effectiveness and ease of implementation. Our approach involves using a screen that fits on the user's hand, inspired by the common practice of using cue cards for speeches and presentations. By transitioning to a screen, we enhance usability and visibility for the presenter.",
+        body: "To address the psychological symptoms associated with stage fright, we selected a prompter as the solution due to its proven effectiveness and ease of implementation. Our approach involves using a screen that fits on the user's hand, inspired by the common practice of using cue cards for speeches and presentations.",
+        symptoms: ["Underprepared", "Forgetting Material"],
+        solution: "PROMPTER",
       },
       { type: "label", text: "Ideation" },
-      {
-        type: "text",
-        heading: "Design Challenges",
-        body: "Early prototyping surfaced four key challenges: the placement of the screen was not ergonomic, button placement conflicted with screen position, overall form was too bulky, and the display location on initial iterations was poorly positioned. Each iteration refined these issues toward a sleek dorsal design with enhanced visibility.",
-      },
+      { type: "ideation-grid" },
       { type: "label", text: "Final Design" },
-      {
-        type: "text",
-        heading: "Sleek Dorsal Design",
-        body: "The final Presto device positions the prompter screen on the dorsal (back) side of the hand with the activation button accessible without disrupting the natural hand position during a presentation. The cooling pod is integrated into the wrist band, providing discreet cold distraction when ruptured by the presenter.",
-      },
+      { type: "hand-positions" },
       {
         type: "image",
         src: "/projects/presto/renders.png",

@@ -1393,6 +1393,399 @@ function SectionUserJourney({ title, steps }: { title: string; steps: { phase: s
   );
 }
 
+/* ─────────────────────── Presto infographic renderers ─────────────────────── */
+
+function SectionSymptomWheel({ heading, body, symptoms }: { heading: string; body: string; symptoms: string[] }) {
+  const cx = 250, cy = 210, R = 135, r = 46;
+  const positions = symptoms.map((_, i) => {
+    const a = (i * 60 - 90) * (Math.PI / 180);
+    return { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) };
+  });
+  const hexPts = Array.from({ length: 6 }, (_, i) => {
+    const a = (i * 60 - 30) * (Math.PI / 180);
+    return `${cx + 55 * Math.cos(a)},${cy + 55 * Math.sin(a)}`;
+  }).join(' ');
+
+  function labelLines(text: string): [string, string | null] {
+    const parts = text.split(' ');
+    if (parts.length >= 2) return [parts[0], parts.slice(1).join(' ')];
+    if (text.length > 9) {
+      const mid = Math.ceil(text.length / 2);
+      return [text.slice(0, mid) + '-', text.slice(mid)];
+    }
+    return [text, null];
+  }
+
+  return (
+    <div className="grid gap-10 py-12 md:grid-cols-[1fr_1.2fr] md:gap-16">
+      <div className="flex flex-col justify-center">
+        <h2 className="mb-5 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</h2>
+        <p className="text-base leading-[1.85] text-[var(--ink-soft)]">{body}</p>
+      </div>
+      <svg viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg" className="w-full">
+        {/* connector lines */}
+        {positions.map((p, i) => (
+          <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y}
+            stroke="rgba(198,40,40,0.35)" strokeWidth="1.5" />
+        ))}
+        {/* satellite circles */}
+        {positions.map((p, i) => {
+          const [l1, l2] = labelLines(symptoms[i]);
+          return (
+            <g key={i}>
+              <circle cx={p.x} cy={p.y} r={r} fill="#160606" stroke="#C62828" strokeWidth="1.5" />
+              {l2 ? (
+                <text>
+                  <tspan x={p.x} y={p.y - 4} textAnchor="middle" fill="#f2efe6" fontSize="8.5" fontFamily="monospace">{l1}</tspan>
+                  <tspan x={p.x} y={p.y + 10} textAnchor="middle" fill="#f2efe6" fontSize="8.5" fontFamily="monospace">{l2}</tspan>
+                </text>
+              ) : (
+                <text x={p.x} y={p.y + 4} textAnchor="middle" fill="#f2efe6" fontSize="8.5" fontFamily="monospace">{l1}</text>
+              )}
+            </g>
+          );
+        })}
+        {/* center hexagon */}
+        <polygon points={hexPts} fill="#C62828" />
+        <text x={cx} y={cy - 7} textAnchor="middle" fill="white" fontSize="11" fontFamily="monospace" letterSpacing="1.5" fontWeight="bold">SYMPTOMS</text>
+        <text x={cx} y={cy + 9} textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="8.5" fontFamily="monospace">of glossophobia</text>
+      </svg>
+    </div>
+  );
+}
+
+function SectionConcentricImpact({ rings }: { rings: { label: string; value: string; color: string }[] }) {
+  // rings[0]=outer/lightest, rings[2]=inner/darkest
+  const cx = 300, cy = 200;
+  const radii = [170, 112, 58];
+
+  return (
+    <div className="py-10">
+      <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: '#0a0a0b' }}>
+        {/* 3×3 greyscale photo grid (simulated) */}
+        <div className="absolute inset-0 grid" style={{ gridTemplateColumns: 'repeat(3,1fr)', gridTemplateRows: 'repeat(3,1fr)' }}>
+          {Array.from({ length: 9 }).map((_, i) => (
+            <div key={i} style={{
+              background: `linear-gradient(${135 + i * 18}deg, rgba(38,30,30,0.9), rgba(15,10,10,0.95))`,
+              borderRight: i % 3 < 2 ? '1px solid rgba(255,255,255,0.03)' : undefined,
+              borderBottom: i < 6 ? '1px solid rgba(255,255,255,0.03)' : undefined,
+            }} />
+          ))}
+        </div>
+        {/* SVG concentric circles */}
+        <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" className="relative w-full" style={{ display: 'block' }}>
+          {/* draw outermost first so inner layers paint on top */}
+          {radii.map((rad, ri) => (
+            <circle key={ri} cx={cx} cy={cy} r={rad} fill={rings[ri].color} />
+          ))}
+          {/* outer ring label: between r[1] and r[0] */}
+          <text x={cx} y={cy - 133} textAnchor="middle" fill="white" fontSize="20" fontFamily="Georgia, serif" fontWeight="bold">{rings[0].value}</text>
+          <text x={cx} y={cy - 114} textAnchor="middle" fill="rgba(255,255,255,0.65)" fontSize="9" fontFamily="monospace" letterSpacing="1">{rings[0].label.toUpperCase()}</text>
+          {/* middle ring label: between r[2] and r[1] */}
+          <text x={cx} y={cy - 77} textAnchor="middle" fill="white" fontSize="18" fontFamily="Georgia, serif" fontWeight="bold">{rings[1].value}</text>
+          <text x={cx} y={cy - 60} textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9" fontFamily="monospace" letterSpacing="1">{rings[1].label.toUpperCase()}</text>
+          {/* inner circle label: center */}
+          <text x={cx} y={cy - 8} textAnchor="middle" fill="white" fontSize="28" fontFamily="Georgia, serif" fontWeight="bold">{rings[2].value}</text>
+          <text x={cx} y={cy + 12} textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9" fontFamily="monospace" letterSpacing="1">{rings[2].label.toUpperCase()}</text>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function SectionSolutionTimeline() {
+  const steps1 = ["Scared", "Medications", "CBT", "Confident Speaker"];
+  const steps2 = ["Scared", "Medications", "CBT", "PRESTO", "Confident Speaker"];
+  const W = 900, rowY1 = 80, rowY2 = 170;
+  const x1 = (steps: string[], i: number) => 60 + (i / (steps.length - 1)) * 780;
+
+  return (
+    <div className="py-10">
+      <div className="overflow-hidden border border-[var(--divider)] bg-[#0d0d0f] p-8 md:p-12">
+        <div className="mb-8 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Solution Timeline</div>
+        <svg viewBox={`0 0 ${W} 250`} xmlns="http://www.w3.org/2000/svg" className="w-full">
+          {/* Row 1 label */}
+          <text x="0" y={rowY1 - 28} fill="rgba(242,239,230,0.35)" fontSize="9" fontFamily="monospace" letterSpacing="1.5">WITHOUT PRESTO</text>
+          {/* Row 1 lines: solid between 0-1, 1-2, dashed 2-3 */}
+          <line x1={x1(steps1, 0)} y1={rowY1} x2={x1(steps1, 2)} y2={rowY1} stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+          <line x1={x1(steps1, 2)} y1={rowY1} x2={x1(steps1, 3)} y2={rowY1} stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeDasharray="8 5" />
+          {/* Row 1 dots */}
+          {steps1.map((s, i) => (
+            <g key={i}>
+              <circle cx={x1(steps1, i)} cy={rowY1} r={i === steps1.length - 1 ? 10 : 6}
+                fill={i === steps1.length - 1 ? "rgba(255,255,255,0.15)" : "#0d0d0f"}
+                stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
+              <text x={x1(steps1, i)} y={rowY1 + 22} textAnchor="middle" fill="rgba(242,239,230,0.5)"
+                fontSize="9.5" fontFamily="monospace">{s}</text>
+            </g>
+          ))}
+
+          {/* Row 2 label */}
+          <text x="0" y={rowY2 - 28} fill="#C62828" fontSize="9" fontFamily="monospace" letterSpacing="1.5">WITH PRESTO</text>
+          {/* Row 2 lines: solid throughout */}
+          <line x1={x1(steps2, 0)} y1={rowY2} x2={x1(steps2, 4)} y2={rowY2} stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+          {/* PRESTO highlight segment */}
+          <line x1={x1(steps2, 2)} y1={rowY2} x2={x1(steps2, 4)} y2={rowY2} stroke="#C62828" strokeWidth="2" />
+          {/* Row 2 dots */}
+          {steps2.map((s, i) => {
+            const isPresto = s === "PRESTO";
+            const isEnd = i === steps2.length - 1;
+            return (
+              <g key={i}>
+                <circle cx={x1(steps2, i)} cy={rowY2} r={isPresto ? 12 : isEnd ? 10 : 6}
+                  fill={isPresto ? "#C62828" : isEnd ? "rgba(255,255,255,0.2)" : "#0d0d0f"}
+                  stroke={isPresto ? "#C62828" : "rgba(255,255,255,0.4)"} strokeWidth={isPresto ? 0 : 1.5} />
+                {isPresto && (
+                  <text x={x1(steps2, i)} y={rowY2 + 4} textAnchor="middle" fill="white" fontSize="8" fontFamily="monospace" fontWeight="bold">P</text>
+                )}
+                <text x={x1(steps2, i)} y={rowY2 + 22} textAnchor="middle"
+                  fill={isPresto ? "#C62828" : "rgba(242,239,230,0.6)"}
+                  fontSize={isPresto ? "10" : "9.5"} fontFamily="monospace"
+                  fontWeight={isPresto ? "bold" : "normal"}>{s}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function SectionSymptomSolution({ heading, body, symptoms, solution }: {
+  heading: string; body?: string; symptoms: string[]; solution: string;
+}) {
+  const svgW = 800, svgH = 300;
+  const lCx = 180, cy = 150, outerR = 125, innerR = 40;
+  const rCx = 620, solR = 90;
+
+  // Position inner symptom circles
+  const innerPos = symptoms.length === 3
+    ? [
+      { x: lCx, y: cy - 72 },
+      { x: lCx - 63, y: cy + 42 },
+      { x: lCx + 63, y: cy + 42 },
+    ]
+    : [
+      { x: lCx, y: cy - 58 },
+      { x: lCx, y: cy + 58 },
+    ];
+
+  function label2(text: string): [string, string | null] {
+    const parts = text.split(' ');
+    if (parts.length >= 2) return [parts[0], parts.slice(1).join(' ')];
+    return [text, null];
+  }
+
+  const arrowX1 = lCx + outerR + 18;
+  const arrowX2 = rCx - solR - 18;
+  const arrowMid = (arrowX1 + arrowX2) / 2;
+
+  return (
+    <div className="py-6">
+      {heading && (
+        <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</div>
+      )}
+      {body && (
+        <p className="mb-6 max-w-3xl text-sm leading-[1.9] text-[var(--ink-soft)]">{body}</p>
+      )}
+      <div className="overflow-hidden border border-[var(--divider)] bg-[#0d0d0f]">
+        <svg viewBox={`0 0 ${svgW} ${svgH}`} xmlns="http://www.w3.org/2000/svg" className="w-full">
+          {/* Outer dashed circle */}
+          <circle cx={lCx} cy={cy} r={outerR} fill="none" stroke="rgba(198,40,40,0.45)" strokeWidth="1.5" strokeDasharray="6 4" />
+          {/* "SYMPTOMS" faint center label */}
+          <text x={lCx} y={cy + 4} textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="11" fontFamily="monospace" letterSpacing="1.5">SYMPTOMS</text>
+          {/* inner symptom circles */}
+          {innerPos.map((p, i) => {
+            const [l1, l2] = label2(symptoms[i]);
+            return (
+              <g key={i}>
+                <circle cx={p.x} cy={p.y} r={innerR} fill="#1a0606" stroke="#C62828" strokeWidth="1.5" />
+                {l2 ? (
+                  <text>
+                    <tspan x={p.x} y={p.y - 4} textAnchor="middle" fill="#f2efe6" fontSize="8" fontFamily="monospace">{l1}</tspan>
+                    <tspan x={p.x} y={p.y + 9} textAnchor="middle" fill="#f2efe6" fontSize="8" fontFamily="monospace">{l2}</tspan>
+                  </text>
+                ) : (
+                  <text x={p.x} y={p.y + 4} textAnchor="middle" fill="#f2efe6" fontSize="8" fontFamily="monospace">{l1}</text>
+                )}
+              </g>
+            );
+          })}
+          {/* Arrow shaft */}
+          <line x1={arrowX1} y1={cy} x2={arrowX2} y2={cy} stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
+          {/* Arrow head */}
+          <polygon points={`${arrowX2 - 10},${cy - 6} ${arrowX2},${cy} ${arrowX2 - 10},${cy + 6}`} fill="rgba(255,255,255,0.35)" />
+          {/* "SOLUTION" label */}
+          <text x={arrowMid} y={cy - 14} textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="9" fontFamily="monospace" letterSpacing="2">SOLUTION</text>
+          {/* Solution circle */}
+          <circle cx={rCx} cy={cy} r={solR} fill="#C62828" />
+          <text x={rCx} y={cy + 6} textAnchor="middle" fill="white" fontSize="15" fontFamily="monospace" letterSpacing="2" fontWeight="bold">{solution}</text>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function HandSketchCell({ variant }: { variant: number }) {
+  // 5 hand variants with different device placements
+  const rot = (variant * 7 - 14);
+  const hasScreen = variant !== 2;
+  const screenY = 34 + (variant % 2) * 5;
+
+  return (
+    <svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" fill="none"
+      stroke="rgba(242,239,230,0.65)" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"
+      style={{ width: '100%', height: '100%', transform: `rotate(${rot}deg)` }}>
+      {/* Palm */}
+      <path d="M14 42 C12 38 11 48 11 58 C11 70 18 76 30 76 C42 76 49 70 49 58 C49 48 48 38 46 42" />
+      {/* Finger 1 */}
+      <rect x="14" y="16" width="7" height="30" rx="3.5" />
+      {/* Finger 2 */}
+      <rect x="23" y="10" width="7" height="35" rx="3.5" />
+      {/* Finger 3 */}
+      <rect x="32" y="12" width="7" height="33" rx="3.5" />
+      {/* Finger 4 */}
+      <rect x="41" y="18" width="7" height="27" rx="3.5" />
+      {/* Thumb */}
+      <ellipse cx="8" cy="54" rx="5" ry="13" transform="rotate(-8 8 54)" />
+      {/* Device / screen on dorsal side */}
+      {hasScreen && (
+        <rect x="17" y={screenY} width="26" height="17" rx="2"
+          stroke={variant === 0 || variant === 3 ? "rgba(198,40,40,0.8)" : "rgba(255,255,255,0.35)"}
+          strokeWidth="1" strokeDasharray="3 2" />
+      )}
+    </svg>
+  );
+}
+
+function SectionIdeationGrid() {
+  const rows = 3, cols = 5;
+  const clusters = [
+    { col: 0, label: "Placement of Screen", sub: "Not ergonomic" },
+    { col: 2, label: "Placement of Button", sub: "Screen position conflict" },
+    { col: 4, label: "Overall Design", sub: "Too bulky" },
+  ];
+
+  return (
+    <div className="py-10">
+      <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Design Challenges</div>
+      <div className="overflow-hidden border border-[var(--divider)] bg-[#0d0d0f]">
+        {/* problem cluster labels */}
+        <div className="relative grid border-b border-[var(--divider)]" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+          {Array.from({ length: cols }).map((_, ci) => {
+            const cluster = clusters.find(c => c.col === ci);
+            return (
+              <div key={ci}
+                className="flex flex-col items-center border-r border-[var(--divider)] px-3 py-4 last:border-r-0"
+                style={{ borderTop: cluster ? `2px solid #C62828` : undefined }}>
+                {cluster && (
+                  <>
+                    <div className="text-center font-mono text-[8px] font-semibold uppercase tracking-[0.2em] text-[var(--foreground)] leading-snug">{cluster.label}</div>
+                    <div className="mt-1 text-center font-mono text-[7px] uppercase tracking-[0.15em] text-[var(--ink-soft)]">{cluster.sub}</div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        {/* grid of hand sketches */}
+        <div className="grid" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+          {Array.from({ length: rows * cols }).map((_, idx) => {
+            const col = idx % cols;
+            const variant = (idx + col * 2) % 5;
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: (idx % cols) * 0.06 + Math.floor(idx / cols) * 0.1 }}
+                className="flex items-center justify-center border-b border-r border-[var(--divider)] last:border-r-0 p-4"
+                style={{ minHeight: 110 }}
+              >
+                <HandSketchCell variant={variant} />
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DorsalHand({ label, sublabel, screenSide }: { label: string; sublabel?: string; screenSide?: 'top' | 'right' }) {
+  return (
+    <div className="flex flex-col border border-[var(--divider)] bg-[#0d0d0f]">
+      <div className="flex flex-1 items-center justify-center p-6">
+        <svg viewBox="0 0 120 170" xmlns="http://www.w3.org/2000/svg" fill="none"
+          stroke="rgba(242,239,230,0.7)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="h-40">
+          {/* Wrist */}
+          <path d="M38 150 C35 165 85 165 82 150" />
+          {/* Palm body */}
+          <path d="M22 78 C18 70 18 130 18 140 C18 152 30 158 60 158 C90 158 102 152 102 140 C102 130 102 70 98 78" />
+          {/* Finger 1 (index) */}
+          <rect x="22" y="28" width="16" height="54" rx="8" />
+          {/* Finger 2 (middle) */}
+          <rect x="40" y="18" width="16" height="64" rx="8" />
+          {/* Finger 3 (ring) */}
+          <rect x="58" y="22" width="16" height="60" rx="8" />
+          {/* Finger 4 (pinky) */}
+          <rect x="76" y="36" width="14" height="46" rx="7" />
+          {/* Thumb */}
+          <ellipse cx="12" cy="105" rx="10" ry="26" transform="rotate(-12 12 105)" />
+          {/* Screen on dorsal side */}
+          <rect x="28" y="95" width="64" height="40" rx="5" stroke="#C62828" strokeWidth="1.8" />
+          {/* Screen detail */}
+          <rect x="33" y="100" width="54" height="30" rx="3" stroke="rgba(198,40,40,0.45)" strokeWidth="1" />
+          <line x1="40" y1="108" x2="80" y2="108" stroke="rgba(198,40,40,0.4)" strokeWidth="1" />
+          <line x1="40" y1="116" x2="72" y2="116" stroke="rgba(198,40,40,0.3)" strokeWidth="1" />
+          <line x1="40" y1="124" x2="66" y2="124" stroke="rgba(198,40,40,0.2)" strokeWidth="1" />
+          {/* Button */}
+          {screenSide === 'right' && (
+            <circle cx="102" cy="110" r="6" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" />
+          )}
+          {screenSide === 'top' && (
+            <circle cx="60" cy="82" r="6" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" />
+          )}
+        </svg>
+      </div>
+      <div className="border-t border-[var(--divider)] px-5 py-4">
+        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-[var(--foreground)]">{label}</div>
+        {sublabel && <div className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{sublabel}</div>}
+      </div>
+    </div>
+  );
+}
+
+function SectionHandPositions() {
+  return (
+    <div className="py-10">
+      <div className="mb-6 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Final Design</div>
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+        <DorsalHand label="Dorsal View" sublabel="Screen on back of hand" screenSide="right" />
+        <DorsalHand label="Button Placement" sublabel="Side activation" screenSide="right" />
+        <DorsalHand label="Sleek Dorsal Design" sublabel="Enhanced visibility" screenSide="top" />
+        <DorsalHand label="Presentation Mode" sublabel="Natural hand position" screenSide="top" />
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-8 border border-[var(--divider)] bg-[#0d0d0f] p-6 md:grid-cols-2">
+        <div>
+          <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">Sleek Dorsal Design</div>
+          <p className="text-sm leading-relaxed text-[var(--ink-soft)]">
+            The prompter screen is positioned on the dorsal (back) side of the hand — invisible to the audience but perfectly readable to the presenter at a natural downward glance.
+          </p>
+        </div>
+        <div>
+          <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">Enhanced Visibility</div>
+          <p className="text-sm leading-relaxed text-[var(--ink-soft)]">
+            The activation button sits at the side of the wrist band, allowing the presenter to advance prompts without breaking their natural stance or drawing attention.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function renderSection(section: ProjectSection, i: number) {
   return (
     <motion.div
@@ -1435,6 +1828,16 @@ function renderSection(section: ProjectSection, i: number) {
       {section.type === "journey-map-full" && <SectionJourneyMapFull phases={section.phases} />}
       {section.type === "platform-colorcode" && <SectionPlatformColorcode description={section.description} platforms={section.platforms} />}
       {section.type === "ticket-redesign" && <SectionTicketRedesign />}
+      {section.type === "symptom-wheel" && (
+        <SectionSymptomWheel heading={section.heading} body={section.body} symptoms={section.symptoms} />
+      )}
+      {section.type === "concentric-impact" && <SectionConcentricImpact rings={section.rings} />}
+      {section.type === "solution-timeline" && <SectionSolutionTimeline />}
+      {section.type === "symptom-solution" && (
+        <SectionSymptomSolution heading={section.heading} body={section.body} symptoms={section.symptoms} solution={section.solution} />
+      )}
+      {section.type === "ideation-grid" && <SectionIdeationGrid />}
+      {section.type === "hand-positions" && <SectionHandPositions />}
     </motion.div>
   );
 }
