@@ -1485,15 +1485,17 @@ function ProjectPage() {
           <section className="grain relative flex min-h-[80vh] items-end overflow-hidden bg-black pb-12 pt-24">
             <CityWindows />
             <Skyline />
-            <div
-              className="absolute inset-0 opacity-20"
-              style={{
-                backgroundImage: `url(${project.image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                filter: "grayscale(1) contrast(1.1)",
-              }}
-            />
+            {!project.hideHeroImage && (
+              <div
+                className="absolute inset-0 opacity-20"
+                style={{
+                  backgroundImage: `url(${project.image})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  filter: "grayscale(1) contrast(1.1)",
+                }}
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
 
             <div className="relative z-10 mx-auto w-full max-w-[1300px] px-5 md:px-10">

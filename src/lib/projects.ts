@@ -36,6 +36,7 @@ export type Project = {
   featured?: boolean;
   span?: "full" | "half";
   contain?: boolean;
+  hideHeroImage?: boolean;
   description?: string;
   gallery?: string[];
   sections?: ProjectSection[];
@@ -328,6 +329,7 @@ export const projects: Project[] = [
     externalHref: "https://www.behance.net/gallery/239501841/Railway-Way-Finding",
     image: "https://mir-s3-cdn-cf.behance.net/projects/404/0d7157239501841.Y3JvcCw4MDcsNjMxLDE0NSwxNjM.png",
     span: "full",
+    hideHeroImage: true,
     description: "A wayfinding system redesign for Indian Railways — simplifying navigation for millions of daily commuters through better signage and digital interfaces.",
     sections: [
       {
