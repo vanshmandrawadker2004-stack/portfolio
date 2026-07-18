@@ -1002,115 +1002,136 @@ function SectionPlatformColorcode({ description, platforms }: { description: str
   );
 }
 
+function IRCTCTicket({ redesigned }: { redesigned: boolean }) {
+  const acc = redesigned ? "#7B2D12" : "#1A3580";
+  const bg = "#F2E4CF";
+  const cardBg = "#F8EDD9";
+  const cardBorder = "#D8C4A0";
+  const lbl: React.CSSProperties = { fontSize: 9, color: "#888", marginBottom: 3 };
+  const val = (size = 13): React.CSSProperties => ({ fontSize: size, fontWeight: 700, color: acc });
+  const card: React.CSSProperties = {
+    background: cardBg, border: `1.5px solid ${cardBorder}`, borderRadius: 8,
+    padding: "12px 14px", marginBottom: 8,
+  };
+  return (
+    <div style={{ background: bg, borderRadius: 12, padding: 14, fontFamily: "system-ui, sans-serif" }}>
+      {/* ── Header ── */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+        {/* IR logo */}
+        <svg width="34" height="34" viewBox="0 0 34 34">
+          <circle cx="17" cy="17" r="16" fill="#1a3580" stroke="#fff" strokeWidth="1"/>
+          <text x="17" y="21" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="sans-serif">IR</text>
+        </svg>
+        <span style={{ fontSize: 10, fontWeight: 600, color: "#444", letterSpacing: "0.07em" }}>
+          ELECTRONIC RESERVATION SLIP
+        </span>
+        {/* IRCTC logo */}
+        <svg width="34" height="34" viewBox="0 0 34 34">
+          <rect width="34" height="34" rx="6" fill="#1a3580"/>
+          <text x="17" y="14" textAnchor="middle" fill="white" fontSize="6.5" fontWeight="bold" fontFamily="sans-serif">IRCTC</text>
+          <text x="17" y="24" textAnchor="middle" fill="#FFD700" fontSize="5.5" fontFamily="sans-serif">Rail Connect</text>
+        </svg>
+      </div>
+
+      {/* ── Train info ── */}
+      <div style={card}>
+        <div style={{ textAlign: "center", marginBottom: 10 }}>
+          <div style={lbl}>Train no./ name</div>
+          <div style={{ fontSize: 15, fontWeight: 800, color: "#1a1a2e" }}>22961 – VANDE BHARAT EXPRESS</div>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", textAlign: "center" }}>
+          <div><div style={lbl}>PNR</div><div style={val(13)}>8337025429</div></div>
+          <div><div style={lbl}>Quota</div><div style={val(13)}>General(GN)</div></div>
+          <div><div style={lbl}>Class</div><div style={val(13)}>Chair class(CC)</div></div>
+        </div>
+      </div>
+
+      {/* ── Journey ── */}
+      <div style={card}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 64px 1fr", gap: 6, alignItems: "start" }}>
+          {/* Departure */}
+          <div>
+            <div style={lbl}>Departure</div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: acc }}>AHEMEDABAD JUNCTION (ADI)</div>
+            <div style={{ marginTop: 10 }}>
+              <div style={val(12)}>05- Sept- 2025</div>
+              <div style={lbl}>Departure date</div>
+            </div>
+            <div style={{ marginTop: 6 }}>
+              <div style={val(15)}>15 : 45</div>
+              <div style={lbl}>Departure time</div>
+            </div>
+          </div>
+          {/* Arrow */}
+          <div style={{ textAlign: "center", paddingTop: 18 }}>
+            <svg width="64" height="16" viewBox="0 0 64 16">
+              <line x1="0" y1="8" x2="54" y2="8" stroke={acc} strokeWidth="1.5"/>
+              <polygon points="54,4 64,8 54,12" fill={acc}/>
+            </svg>
+            <div style={{ fontSize: 10, fontWeight: 700, color: acc, marginTop: 4 }}>491 km</div>
+            <div style={lbl}>Distance</div>
+          </div>
+          {/* Arrival */}
+          <div style={{ textAlign: "right" }}>
+            <div style={lbl}>Arrival</div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: acc }}>MUMBAI CENTRAL (MMCT)</div>
+            <div style={{ marginTop: 10 }}>
+              <div style={val(12)}>05- Sept- 2025</div>
+              <div style={lbl}>Arrival date</div>
+            </div>
+            <div style={{ marginTop: 6 }}>
+              <div style={val(15)}>21 : 15</div>
+              <div style={lbl}>Arrival time</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Platform + Seat ── */}
+      <div style={{ ...card, display: "flex", gap: 0, padding: 0, overflow: "hidden", marginBottom: 0 }}>
+        {/* Platform box */}
+        <div style={{ minWidth: 90, borderRight: `1.5px solid ${cardBorder}`, padding: "12px 14px" }}>
+          <div style={lbl}>Platform no.</div>
+          {redesigned ? (
+            <div style={{ fontSize: 42, fontWeight: 800, color: acc, lineHeight: 1.1, marginTop: 4 }}>02</div>
+          ) : (
+            <div style={{ fontSize: 9, color: acc, lineHeight: 1.6, marginTop: 6, opacity: 0.75 }}>
+              Will update<br />24 hrs prior<br />to departure
+            </div>
+          )}
+        </div>
+        {/* Seat status */}
+        <div style={{ flex: 1, padding: "12px 14px" }}>
+          <div style={lbl}>Current seat status</div>
+          <div style={{ fontSize: 10.5, fontWeight: 800, color: acc, lineHeight: 1.4 }}>
+            CHAIR CLASS (CC) - CNF /C2 / 50 / WINDOW SIDE
+          </div>
+          <div style={{ marginTop: 10 }}>
+            <div style={lbl}>Name / Age / Gender</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: acc }}>Rohan Mehta – 25 – Male</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SectionTicketRedesign() {
-  const beforeFields = [
-    "TRAIN NO / NAME","DATE OF JOURNEY","QUOTA",
-    "CLASS","BOOKING DATE","CHART PREPARED",
-    "PNR NUMBER","TRANSACTION ID","ADULT",
-    "CHILD","FARE","TAT NO",
-    "FROM","TO","BOARDING",
-    "RESERVATION UPTO","DEP TIME","ARR TIME",
-    "COACH NO","BERTH NO","BERTH TYPE",
-    "PASSENGER NAME","AGE","GENDER",
-    "CONCESSION","STATUS","FOOD",
-    "CONTACT","REMARKS","DISTANCE",
-  ];
-  const afterFields = [
-    { label: "TRAIN NO.", value: "12952 RAJDHANI EXP" },
-    { label: "FROM", value: "NDLS (New Delhi)" },
-    { label: "TO", value: "MMCT (Mumbai Central)" },
-    { label: "DATE", value: "15-Oct-2024" },
-    { label: "COACH", value: "B1 · Berth 32 (Side Upper)" },
-    { label: "PLATFORM", value: "Platform 3" },
-  ];
   return (
     <div className="py-10">
       <div className="grid gap-8 md:grid-cols-2">
-
-        {/* ── BEFORE ── */}
         <div>
           <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.28em] text-[var(--ink-soft)]">
             16.2.1 Before — Current Reservation Slip
           </div>
-          <div className="border border-[var(--divider)] bg-[#f4efe6] p-5 font-mono">
-            <div className="mb-3 border-b border-gray-400 pb-3 text-center text-[8.5px] font-bold uppercase tracking-widest text-gray-800">
-              Indian Railways — Reservation Cum Journey Ticket
-            </div>
-            <div className="grid grid-cols-3 border-l border-t border-gray-300">
-              {beforeFields.map((f, i) => (
-                <div key={i} className="border-b border-r border-gray-300 px-1.5 py-1">
-                  <div className="text-[6.5px] uppercase tracking-wide text-gray-500">{f}</div>
-                  <div className="mt-0.5 text-[7.5px] font-semibold text-gray-800">— — —</div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-3 border-t border-gray-300 pt-2 text-[6px] leading-relaxed text-gray-500">
-              *THIS IS NOT A VALID TICKET WITHOUT CONDUCTOR'S SIGNATURE. PASSENGERS ARE ADVISED TO CARRY VALID PHOTO ID.
-              T&amp;C APPLY. VALID ONLY IF SIGNED BY AUTHORISED RAILWAY OFFICIAL.
-            </div>
-          </div>
+          <IRCTCTicket redesigned={false} />
         </div>
-
-        {/* ── AFTER ── */}
         <div>
           <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.28em] text-[var(--neon)]">
             16.2.2 After — Redesigned Reservation Slip
           </div>
-          <div className="overflow-hidden border border-[var(--divider)] bg-[#111214]">
-
-            {/* Header band */}
-            <div className="flex items-stretch bg-[#6e1010]">
-              {/* Platform number */}
-              <div className="flex flex-col justify-center px-5 py-4">
-                <span className="font-mono text-[7px] uppercase tracking-[0.35em] text-white/60">Platform</span>
-                <span className="font-bold leading-none text-white" style={{ fontSize: "3.2rem" }}>3</span>
-              </div>
-              {/* Divider */}
-              <div className="my-4 w-px bg-white/15" />
-              {/* Train info */}
-              <div className="flex flex-col justify-center px-5 py-4">
-                <span className="font-mono text-[7px] uppercase tracking-[0.3em] text-white/55">Rajdhani Express</span>
-                <span className="mt-1 text-[15px] font-semibold text-white">12952 · B1 · 32</span>
-              </div>
-              {/* Date / dep — pushed right */}
-              <div className="ml-auto flex flex-col items-end justify-center px-5 py-4">
-                <span className="font-mono text-[7.5px] text-white/55">15 Oct 2024</span>
-                <span className="mt-0.5 font-mono text-[7.5px] text-white/55">DEP 16:55</span>
-              </div>
-            </div>
-
-            {/* Info grid */}
-            <div className="grid grid-cols-2" style={{ gap: "1px", background: "var(--divider)" }}>
-              {afterFields.map((f, i) => (
-                <div key={i} className="bg-[#111214] px-5 py-4">
-                  <div className="font-mono text-[7.5px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{f.label}</div>
-                  <div className="mt-1 text-[13px] font-medium text-[var(--foreground)]">{f.value}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* PNR + barcode */}
-            <div className="flex items-center justify-between border-t border-[var(--divider)] bg-[#0d0d0f] px-5 py-4">
-              <div>
-                <div className="font-mono text-[7.5px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">PNR</div>
-                <div className="mt-1 font-mono text-[15px] font-bold tracking-[0.12em] text-[var(--foreground)]">
-                  4124 5678 90
-                </div>
-              </div>
-              {/* barcode */}
-              <svg width="96" height="40" viewBox="0 0 96 40" xmlns="http://www.w3.org/2000/svg">
-                {[2,1,3,1,2,1,1,2,3,1,2,1,1,3,1,2,1,2,1,3,2,1,1,2,3,1,1,2].map((w, i, arr) => {
-                  const x = arr.slice(0, i).reduce((s, v) => s + v + 1, 0);
-                  return i % 2 === 0 ? (
-                    <rect key={i} x={x} y="0" width={w} height="40"
-                      fill="rgba(255,255,255,0.75)" />
-                  ) : null;
-                })}
-              </svg>
-            </div>
-          </div>
+          <IRCTCTicket redesigned={true} />
         </div>
-
       </div>
     </div>
   );
