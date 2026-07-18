@@ -202,13 +202,13 @@ function SectionTagline({ attributes, headline, body, meta }: {
     <div className="grid gap-12 py-14 md:grid-cols-[1fr_2fr] md:gap-24 md:py-20">
       {/* left — stacked attributes */}
       <div className="flex flex-col gap-1 pt-1">
-        <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Vitalink</div>
+        <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Overview</div>
         {attributes.map(a => (
           <span key={a} className="serif-display text-2xl leading-snug text-[var(--ink-soft)] md:text-3xl">{a}</span>
         ))}
         {meta && (
           <div className="mt-8 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">
-            Services / {meta}
+            {meta}
           </div>
         )}
       </div>
