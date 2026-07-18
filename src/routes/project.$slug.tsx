@@ -1003,81 +1003,114 @@ function SectionPlatformColorcode({ description, platforms }: { description: str
 }
 
 function SectionTicketRedesign() {
-  const fields = [
-    { label: "Train No.", value: "12952 RAJDHANI EXP" },
-    { label: "From", value: "NDLS (New Delhi)" },
-    { label: "To", value: "MMCT (Mumbai Central)" },
-    { label: "Date", value: "15-Oct-2024" },
-    { label: "Coach", value: "B1 · Berth 32 (Side Upper)" },
-    { label: "Platform", value: "Platform 3" },
+  const beforeFields = [
+    "TRAIN NO / NAME","DATE OF JOURNEY","QUOTA",
+    "CLASS","BOOKING DATE","CHART PREPARED",
+    "PNR NUMBER","TRANSACTION ID","ADULT",
+    "CHILD","FARE","TAT NO",
+    "FROM","TO","BOARDING",
+    "RESERVATION UPTO","DEP TIME","ARR TIME",
+    "COACH NO","BERTH NO","BERTH TYPE",
+    "PASSENGER NAME","AGE","GENDER",
+    "CONCESSION","STATUS","FOOD",
+    "CONTACT","REMARKS","DISTANCE",
+  ];
+  const afterFields = [
+    { label: "TRAIN NO.", value: "12952 RAJDHANI EXP" },
+    { label: "FROM", value: "NDLS (New Delhi)" },
+    { label: "TO", value: "MMCT (Mumbai Central)" },
+    { label: "DATE", value: "15-Oct-2024" },
+    { label: "COACH", value: "B1 · Berth 32 (Side Upper)" },
+    { label: "PLATFORM", value: "Platform 3" },
   ];
   return (
     <div className="py-10">
-      <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">16.2  Digital Ticket Redesign</div>
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* BEFORE */}
+      <div className="grid gap-8 md:grid-cols-2">
+
+        {/* ── BEFORE ── */}
         <div>
-          <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">16.2.1  Before — Current Reservation Slip</div>
-          <div className="border border-[var(--divider)] bg-[#f5f0e8] p-4 font-mono">
-            {/* simulate chaotic current Indian Railways ticket */}
-            <div className="mb-2 border-b border-gray-400 pb-2 text-[9px] font-bold text-gray-800 uppercase tracking-wider text-center">
+          <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.28em] text-[var(--ink-soft)]">
+            16.2.1 Before — Current Reservation Slip
+          </div>
+          <div className="border border-[var(--divider)] bg-[#f4efe6] p-5 font-mono">
+            <div className="mb-3 border-b border-gray-400 pb-3 text-center text-[8.5px] font-bold uppercase tracking-widest text-gray-800">
               Indian Railways — Reservation Cum Journey Ticket
             </div>
-            <div className="grid grid-cols-3 gap-1 text-[7px] text-gray-700">
-              {["TRAIN NO / NAME","DATE OF JOURNEY","QUOTA","CLASS","BOOKING DATE","CHART PREPARED","PNR NUMBER","TRANSACTION ID","ADULT","CHILD","FARE","TAT NO","FROM","TO","BOARDING","RESERVATION UPTO","DEP TIME","ARR TIME","COACH NO","BERTH NO","BERTH TYPE","PASSENGER NAME","AGE","GENDER","CONCESSION","STATUS","FOOD","CONTACT","REMARKS","DISTANCE"].map((f, i) => (
-                <div key={i} className="border border-gray-300 px-1 py-0.5 leading-tight">
-                  <div className="text-[6px] text-gray-500 uppercase">{f}</div>
-                  <div className="text-[7px] font-bold text-gray-800">{"— — —"}</div>
+            <div className="grid grid-cols-3 border-l border-t border-gray-300">
+              {beforeFields.map((f, i) => (
+                <div key={i} className="border-b border-r border-gray-300 px-1.5 py-1">
+                  <div className="text-[6.5px] uppercase tracking-wide text-gray-500">{f}</div>
+                  <div className="mt-0.5 text-[7.5px] font-semibold text-gray-800">— — —</div>
                 </div>
               ))}
             </div>
-            <div className="mt-2 border-t border-gray-400 pt-1 text-[6px] text-gray-500 leading-tight">
-              *THIS IS NOT A VALID TICKET WITHOUT CONDUCTOR'S SIGNATURE. PASSENGERS ARE ADVISED TO CARRY VALID PHOTO ID. T&C APPLY. VALID ONLY IF SIGNED BY AUTHORISED RAILWAY OFFICIAL.
+            <div className="mt-3 border-t border-gray-300 pt-2 text-[6px] leading-relaxed text-gray-500">
+              *THIS IS NOT A VALID TICKET WITHOUT CONDUCTOR'S SIGNATURE. PASSENGERS ARE ADVISED TO CARRY VALID PHOTO ID.
+              T&amp;C APPLY. VALID ONLY IF SIGNED BY AUTHORISED RAILWAY OFFICIAL.
             </div>
           </div>
         </div>
-        {/* AFTER */}
+
+        {/* ── AFTER ── */}
         <div>
-          <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--neon)]">16.2.2  After — Redesigned Reservation Slip</div>
-          <div className="border border-[var(--divider)] bg-[#111113] overflow-hidden">
-            {/* Platform colour band at top */}
-            <div className="flex items-center gap-3 bg-[#7a1a1a] px-5 py-3">
-              <div className="text-white">
-                <div className="font-mono text-[8px] uppercase tracking-[0.25em] opacity-70">Platform</div>
-                <div className="text-3xl font-bold leading-none">3</div>
+          <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.28em] text-[var(--neon)]">
+            16.2.2 After — Redesigned Reservation Slip
+          </div>
+          <div className="overflow-hidden border border-[var(--divider)] bg-[#111214]">
+
+            {/* Header band */}
+            <div className="flex items-stretch bg-[#6e1010]">
+              {/* Platform number */}
+              <div className="flex flex-col justify-center px-5 py-4">
+                <span className="font-mono text-[7px] uppercase tracking-[0.35em] text-white/60">Platform</span>
+                <span className="font-bold leading-none text-white" style={{ fontSize: "3.2rem" }}>3</span>
               </div>
-              <div className="h-10 w-px bg-white/20" />
-              <div className="text-white">
-                <div className="font-mono text-[8px] uppercase tracking-[0.2em] opacity-70">Rajdhani Express</div>
-                <div className="text-sm font-semibold">12952 · B1 · 32</div>
+              {/* Divider */}
+              <div className="my-4 w-px bg-white/15" />
+              {/* Train info */}
+              <div className="flex flex-col justify-center px-5 py-4">
+                <span className="font-mono text-[7px] uppercase tracking-[0.3em] text-white/55">Rajdhani Express</span>
+                <span className="mt-1 text-[15px] font-semibold text-white">12952 · B1 · 32</span>
               </div>
-              <div className="ml-auto font-mono text-[8px] text-white/60 text-right">15 Oct 2024<br/>DEP 16:55</div>
+              {/* Date / dep — pushed right */}
+              <div className="ml-auto flex flex-col items-end justify-center px-5 py-4">
+                <span className="font-mono text-[7.5px] text-white/55">15 Oct 2024</span>
+                <span className="mt-0.5 font-mono text-[7.5px] text-white/55">DEP 16:55</span>
+              </div>
             </div>
-            {/* Clean field grid */}
-            <div className="grid grid-cols-2 gap-px bg-[var(--divider)] border-t border-[var(--divider)]">
-              {fields.map((f, i) => (
-                <div key={i} className="bg-[#111113] px-4 py-3">
-                  <div className="font-mono text-[8px] uppercase tracking-[0.25em] text-[var(--ink-soft)]">{f.label}</div>
-                  <div className="mt-0.5 text-sm font-medium text-[var(--foreground)]">{f.value}</div>
+
+            {/* Info grid */}
+            <div className="grid grid-cols-2" style={{ gap: "1px", background: "var(--divider)" }}>
+              {afterFields.map((f, i) => (
+                <div key={i} className="bg-[#111214] px-5 py-4">
+                  <div className="font-mono text-[7.5px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">{f.label}</div>
+                  <div className="mt-1 text-[13px] font-medium text-[var(--foreground)]">{f.value}</div>
                 </div>
               ))}
             </div>
-            {/* Bottom PNR bar */}
-            <div className="flex items-center justify-between border-t border-[var(--divider)] bg-[#0d0d0f] px-4 py-2">
+
+            {/* PNR + barcode */}
+            <div className="flex items-center justify-between border-t border-[var(--divider)] bg-[#0d0d0f] px-5 py-4">
               <div>
-                <div className="font-mono text-[8px] text-[var(--ink-soft)]">PNR</div>
-                <div className="font-mono text-sm font-bold text-[var(--foreground)]">4124 5678 90</div>
+                <div className="font-mono text-[7.5px] uppercase tracking-[0.3em] text-[var(--ink-soft)]">PNR</div>
+                <div className="mt-1 font-mono text-[15px] font-bold tracking-[0.12em] text-[var(--foreground)]">
+                  4124 5678 90
+                </div>
               </div>
-              {/* barcode placeholder */}
-              <svg width="80" height="32" viewBox="0 0 80 32">
-                {Array.from({ length: 24 }, (_, i) => (
-                  <rect key={i} x={i * 3.2 + (i % 3 === 0 ? 1 : 0)} y="0" width={i % 4 === 0 ? 2 : 1} height="32"
-                    fill="rgba(255,255,255,0.7)" />
-                ))}
+              {/* barcode */}
+              <svg width="96" height="40" viewBox="0 0 96 40" xmlns="http://www.w3.org/2000/svg">
+                {[2,1,3,1,2,1,1,2,3,1,2,1,1,3,1,2,1,2,1,3,2,1,1,2,3,1,1,2].map((w, i, arr) => {
+                  const x = arr.slice(0, i).reduce((s, v) => s + v + 1, 0);
+                  return i % 2 === 0 ? (
+                    <rect key={i} x={x} y="0" width={w} height="40"
+                      fill="rgba(255,255,255,0.75)" />
+                  ) : null;
+                })}
               </svg>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
