@@ -89,9 +89,9 @@ export const projects: Project[] = [
       {
         type: "concentric-impact",
         rings: [
-          { label: "Wage Decrease", value: "−10%", color: "rgba(90,16,16,0.78)" },
-          { label: "Promotion Decrease", value: "−15%", color: "rgba(148,22,22,0.88)" },
-          { label: "Suffer from Glossophobia", value: "30%", color: "#C62828" },
+          { label: "DECREASE IN WAGES UP TO", value: "10%", color: "#8b2040" },
+          { label: "DECREASE IN PROMOTION OPPORTUNITIES", value: "15%", color: "#6b1830" },
+          { label: "PEOPLE SUFFERING FROM GLOSSOPHOBIA", value: "30%", color: "#220c14" },
         ],
       },
       { type: "label", text: "Primary Research" },

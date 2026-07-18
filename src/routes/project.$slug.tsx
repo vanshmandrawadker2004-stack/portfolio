@@ -1396,97 +1396,116 @@ function SectionUserJourney({ title, steps }: { title: string; steps: { phase: s
 /* ─────────────────────── Presto infographic renderers ─────────────────────── */
 
 function SectionSymptomWheel({ heading, body, symptoms }: { heading: string; body: string; symptoms: string[] }) {
-  const cx = 250, cy = 210, R = 135, r = 46;
+  // i=0 top, i=1 top-right, i=2 bottom-right, i=3 bottom, i=4 bottom-left, i=5 top-left
+  // filled at 0 (HYPERVENTILATION), 3 (RAPID HEARTBEAT), 5 (SWEATING)
+  const filled = [true, false, false, true, false, true];
+  const W = 900, H = 900;
+  const cx = 450, cy = 450;
+  const centerR = 238;
+  const satR = 116;
+  const satD = 308; // center → satellite center distance
+
   const positions = symptoms.map((_, i) => {
     const a = (i * 60 - 90) * (Math.PI / 180);
-    return { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) };
+    return { x: cx + satD * Math.cos(a), y: cy + satD * Math.sin(a) };
   });
-  const hexPts = Array.from({ length: 6 }, (_, i) => {
-    const a = (i * 60 - 30) * (Math.PI / 180);
-    return `${cx + 55 * Math.cos(a)},${cy + 55 * Math.sin(a)}`;
-  }).join(' ');
 
-  function labelLines(text: string): [string, string | null] {
+  function symText(text: string, x: number, y: number) {
     const parts = text.split(' ');
-    if (parts.length >= 2) return [parts[0], parts.slice(1).join(' ')];
-    if (text.length > 9) {
-      const mid = Math.ceil(text.length / 2);
-      return [text.slice(0, mid) + '-', text.slice(mid)];
+    const fs = parts.length > 1 ? 19 : (text.length > 10 ? 16 : 21);
+    if (parts.length === 1) {
+      return <text x={x} y={y + 7} textAnchor="middle" fill="white" fontSize={fs} fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="0.5">{text}</text>;
     }
-    return [text, null];
+    return (
+      <text textAnchor="middle" fill="white" fontSize={fs} fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="0.5">
+        <tspan x={x} y={y - 5}>{parts[0]}</tspan>
+        <tspan x={x} y={y + 18}>{parts.slice(1).join(' ')}</tspan>
+      </text>
+    );
   }
 
   return (
-    <div className="grid gap-10 py-12 md:grid-cols-[1fr_1.2fr] md:gap-16">
-      <div className="flex flex-col justify-center">
-        <h2 className="mb-5 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</h2>
-        <p className="text-base leading-[1.85] text-[var(--ink-soft)]">{body}</p>
+    <div className="py-8">
+      {heading && <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</div>}
+      {body && <p className="mb-8 max-w-3xl text-sm leading-[1.9] text-[var(--ink-soft)]">{body}</p>}
+      <div className="mx-auto max-w-2xl overflow-hidden" style={{ background: '#161012' }}>
+        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block', background: '#161012' }}>
+          {/* center dark circle (drawn first — satellites paint over it) */}
+          <circle cx={cx} cy={cy} r={centerR} fill="#220c14" />
+          {/* satellite circles */}
+          {positions.map((p, i) => (
+            <circle key={i} cx={p.x} cy={p.y} r={satR}
+              fill={filled[i] ? '#7d1c36' : 'none'}
+              stroke={filled[i] ? 'none' : '#8b2040'}
+              strokeWidth="2" />
+          ))}
+          {/* "SYMPTOMS" centered on center circle */}
+          <text x={cx} y={cy + 22} textAnchor="middle" fill="white" fontSize="70" fontFamily="Arial, sans-serif" fontWeight="bold">SYMPTOMS</text>
+          {/* satellite labels (drawn on top of circles) */}
+          {positions.map((p, i) => (
+            <g key={i}>{symText(symptoms[i], p.x, p.y)}</g>
+          ))}
+        </svg>
       </div>
-      <svg viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg" className="w-full">
-        {/* connector lines */}
-        {positions.map((p, i) => (
-          <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y}
-            stroke="rgba(198,40,40,0.35)" strokeWidth="1.5" />
-        ))}
-        {/* satellite circles */}
-        {positions.map((p, i) => {
-          const [l1, l2] = labelLines(symptoms[i]);
-          return (
-            <g key={i}>
-              <circle cx={p.x} cy={p.y} r={r} fill="#160606" stroke="#C62828" strokeWidth="1.5" />
-              {l2 ? (
-                <text>
-                  <tspan x={p.x} y={p.y - 4} textAnchor="middle" fill="#f2efe6" fontSize="8.5" fontFamily="monospace">{l1}</tspan>
-                  <tspan x={p.x} y={p.y + 10} textAnchor="middle" fill="#f2efe6" fontSize="8.5" fontFamily="monospace">{l2}</tspan>
-                </text>
-              ) : (
-                <text x={p.x} y={p.y + 4} textAnchor="middle" fill="#f2efe6" fontSize="8.5" fontFamily="monospace">{l1}</text>
-              )}
-            </g>
-          );
-        })}
-        {/* center hexagon */}
-        <polygon points={hexPts} fill="#C62828" />
-        <text x={cx} y={cy - 7} textAnchor="middle" fill="white" fontSize="11" fontFamily="monospace" letterSpacing="1.5" fontWeight="bold">SYMPTOMS</text>
-        <text x={cx} y={cy + 9} textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="8.5" fontFamily="monospace">of glossophobia</text>
-      </svg>
     </div>
   );
 }
 
 function SectionConcentricImpact({ rings }: { rings: { label: string; value: string; color: string }[] }) {
-  // rings[0]=outer/lightest, rings[2]=inner/darkest
-  const cx = 300, cy = 200;
-  const radii = [170, 112, 58];
+  // rings[0]=outer(lightest, 10% wages), rings[1]=middle(15% promo), rings[2]=inner(darkest, 30% glossophobia)
+  // Wide 16:9 layout. Photo panels fill background, circles overlay center.
+  const W = 1200, H = 675;
+  const cx = 590, cy = 338;
+  const radii = [268, 182, 98];
+
+  // Simulated photo panels — 4 columns × 3 rows covering the full bg
+  const cols = 4, rows = 3;
+  const cw = W / cols, rh = H / rows;
+  const panelTones = [
+    [22,28,24,18],[20,26,22,16],[18,24,20,14]
+  ];
 
   return (
     <div className="py-10">
-      <div className="relative overflow-hidden border border-[var(--divider)]" style={{ background: '#0a0a0b' }}>
-        {/* 3×3 greyscale photo grid (simulated) */}
-        <div className="absolute inset-0 grid" style={{ gridTemplateColumns: 'repeat(3,1fr)', gridTemplateRows: 'repeat(3,1fr)' }}>
-          {Array.from({ length: 9 }).map((_, i) => (
-            <div key={i} style={{
-              background: `linear-gradient(${135 + i * 18}deg, rgba(38,30,30,0.9), rgba(15,10,10,0.95))`,
-              borderRight: i % 3 < 2 ? '1px solid rgba(255,255,255,0.03)' : undefined,
-              borderBottom: i < 6 ? '1px solid rgba(255,255,255,0.03)' : undefined,
-            }} />
-          ))}
-        </div>
-        {/* SVG concentric circles */}
-        <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" className="relative w-full" style={{ display: 'block' }}>
-          {/* draw outermost first so inner layers paint on top */}
-          {radii.map((rad, ri) => (
-            <circle key={ri} cx={cx} cy={cy} r={rad} fill={rings[ri].color} />
-          ))}
-          {/* outer ring label: between r[1] and r[0] */}
-          <text x={cx} y={cy - 133} textAnchor="middle" fill="white" fontSize="20" fontFamily="Georgia, serif" fontWeight="bold">{rings[0].value}</text>
-          <text x={cx} y={cy - 114} textAnchor="middle" fill="rgba(255,255,255,0.65)" fontSize="9" fontFamily="monospace" letterSpacing="1">{rings[0].label.toUpperCase()}</text>
-          {/* middle ring label: between r[2] and r[1] */}
-          <text x={cx} y={cy - 77} textAnchor="middle" fill="white" fontSize="18" fontFamily="Georgia, serif" fontWeight="bold">{rings[1].value}</text>
-          <text x={cx} y={cy - 60} textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9" fontFamily="monospace" letterSpacing="1">{rings[1].label.toUpperCase()}</text>
-          {/* inner circle label: center */}
-          <text x={cx} y={cy - 8} textAnchor="middle" fill="white" fontSize="28" fontFamily="Georgia, serif" fontWeight="bold">{rings[2].value}</text>
-          <text x={cx} y={cy + 12} textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9" fontFamily="monospace" letterSpacing="1">{rings[2].label.toUpperCase()}</text>
+      <div className="relative overflow-hidden" style={{ background: '#0d0d0f' }}>
+        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block' }}>
+          <defs>
+            {/* Grain texture for photo simulation */}
+            <filter id="pgrain" x="0%" y="0%" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" result="n"/>
+              <feColorMatrix type="saturate" values="0" in="n" result="g"/>
+              <feBlend in="SourceGraphic" in2="g" mode="overlay"/>
+            </filter>
+          </defs>
+          {/* Simulated photo panels */}
+          {Array.from({ length: cols * rows }).map((_, idx) => {
+            const col = idx % cols, row = Math.floor(idx / cols);
+            const tone = panelTones[row][col];
+            return (
+              <rect key={idx} x={col * cw} y={row * rh} width={cw} height={rh}
+                fill={`rgb(${tone},${tone - 3},${tone - 3})`} filter="url(#pgrain)" />
+            );
+          })}
+          {/* Grid lines between panels */}
+          {[1,2,3].map(c => <line key={`vc${c}`} x1={c*cw} y1={0} x2={c*cw} y2={H} stroke="#0d0d0f" strokeWidth="3" />)}
+          {[1,2].map(r => <line key={`hr${r}`} x1={0} y1={r*rh} x2={W} y2={r*rh} stroke="#0d0d0f" strokeWidth="3" />)}
+          {/* Concentric circles — outermost first */}
+          <circle cx={cx} cy={cy} r={radii[0]} fill={rings[0].color} />
+          <circle cx={cx} cy={cy} r={radii[1]} fill={rings[1].color} />
+          <circle cx={cx} cy={cy} r={radii[2]} fill={rings[2].color} />
+          {/* Outer ring text — upper portion of outer ring band */}
+          <text x={cx} y={cy - 228} textAnchor="middle" fill="rgba(255,255,255,0.85)" fontSize="14" fontFamily="Arial, sans-serif" letterSpacing="2" fontWeight="600">
+            {rings[0].label.toUpperCase()}
+          </text>
+          <text x={cx} y={cy - 188} textAnchor="middle" fill="white" fontSize="68" fontFamily="Arial, sans-serif" fontWeight="bold">{rings[0].value}</text>
+          {/* Middle ring text */}
+          <text x={cx} y={cy - 130} textAnchor="middle" fill="rgba(255,255,255,0.85)" fontSize="13" fontFamily="Arial, sans-serif" letterSpacing="2" fontWeight="600">DECREASE IN PROMOTION</text>
+          <text x={cx} y={cy - 112} textAnchor="middle" fill="rgba(255,255,255,0.85)" fontSize="13" fontFamily="Arial, sans-serif" letterSpacing="2" fontWeight="600">OPPORTUNITIES</text>
+          <text x={cx} y={cy - 60} textAnchor="middle" fill="white" fontSize="62" fontFamily="Arial, sans-serif" fontWeight="bold">{rings[1].value}</text>
+          {/* Inner circle text */}
+          <text x={cx} y={cy + 20} textAnchor="middle" fill="rgba(255,255,255,0.85)" fontSize="12" fontFamily="Arial, sans-serif" letterSpacing="2" fontWeight="600">PEOPLE SUFFERING FROM</text>
+          <text x={cx} y={cy + 38} textAnchor="middle" fill="rgba(255,255,255,0.85)" fontSize="12" fontFamily="Arial, sans-serif" letterSpacing="2" fontWeight="600">GLOSSOPHOBIA</text>
+          <text x={cx} y={cy + 88} textAnchor="middle" fill="white" fontSize="68" fontFamily="Arial, sans-serif" fontWeight="bold">{rings[2].value}</text>
         </svg>
       </div>
     </div>
@@ -1494,54 +1513,47 @@ function SectionConcentricImpact({ rings }: { rings: { label: string; value: str
 }
 
 function SectionSolutionTimeline() {
-  const steps1 = ["Scared", "Medications", "CBT", "Confident Speaker"];
-  const steps2 = ["Scared", "Medications", "CBT", "PRESTO", "Confident Speaker"];
-  const W = 900, rowY1 = 80, rowY2 = 170;
-  const x1 = (steps: string[], i: number) => 60 + (i / (steps.length - 1)) * 780;
+  // Row 1: 4 nodes (no PRESTO), gap from CBT→Confident Speaker is dashed
+  // Row 2: 5 nodes, PRESTO is crimson filled, rest white filled
+  const W = 1200, H = 500;
+  const dotR = 22;
+  const rowY1 = 130, rowY2 = 340;
+  // x positions shared: Scared, Medications, CBT, [PRESTO], Confident Speaker
+  const xPositions = [90, 370, 650, 930, 1110];
+  // Row 1 uses indices 0,1,2,4 (skips PRESTO slot but stretches to same end)
+  const r1x = [90, 390, 690, 1110];
+  const r1Labels = [["SCARED TO GIVE", "PRESENTATIONS"], ["MEDICATIONS"], ["CBT"], ["CONFIDENT SPEAKER"]];
+  const r2Labels = [["SCARED TO GIVE", "PRESENTATIONS"], ["MEDICATIONS"], ["CBT"], ["PRESTO"], ["CONFIDENT SPEAKER"]];
 
   return (
     <div className="py-10">
-      <div className="overflow-hidden border border-[var(--divider)] bg-[#0d0d0f] p-8 md:p-12">
-        <div className="mb-8 font-mono text-[10px] uppercase tracking-[0.4em] text-[var(--neon)]">Solution Timeline</div>
-        <svg viewBox={`0 0 ${W} 250`} xmlns="http://www.w3.org/2000/svg" className="w-full">
-          {/* Row 1 label */}
-          <text x="0" y={rowY1 - 28} fill="rgba(242,239,230,0.35)" fontSize="9" fontFamily="monospace" letterSpacing="1.5">WITHOUT PRESTO</text>
-          {/* Row 1 lines: solid between 0-1, 1-2, dashed 2-3 */}
-          <line x1={x1(steps1, 0)} y1={rowY1} x2={x1(steps1, 2)} y2={rowY1} stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
-          <line x1={x1(steps1, 2)} y1={rowY1} x2={x1(steps1, 3)} y2={rowY1} stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeDasharray="8 5" />
-          {/* Row 1 dots */}
-          {steps1.map((s, i) => (
+      <div className="overflow-hidden" style={{ background: '#161012' }}>
+        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block', background: '#161012' }}>
+          {/* Row 1 — solid line then dashed */}
+          <line x1={r1x[0]} y1={rowY1} x2={r1x[2]} y2={rowY1} stroke="white" strokeWidth="1.5" />
+          <line x1={r1x[2]} y1={rowY1} x2={r1x[3]} y2={rowY1} stroke="white" strokeWidth="1.5" strokeDasharray="10 8" />
+          {r1x.map((x, i) => (
             <g key={i}>
-              <circle cx={x1(steps1, i)} cy={rowY1} r={i === steps1.length - 1 ? 10 : 6}
-                fill={i === steps1.length - 1 ? "rgba(255,255,255,0.15)" : "#0d0d0f"}
-                stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
-              <text x={x1(steps1, i)} y={rowY1 + 22} textAnchor="middle" fill="rgba(242,239,230,0.5)"
-                fontSize="9.5" fontFamily="monospace">{s}</text>
+              <circle cx={x} cy={rowY1} r={dotR} fill="white" />
+              {r1Labels[i].map((line, li) => (
+                <text key={li} x={x} y={rowY1 + dotR + 26 + li * 22}
+                  textAnchor="middle" fill="white" fontSize="16"
+                  fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="1">{line}</text>
+              ))}
             </g>
           ))}
-
-          {/* Row 2 label */}
-          <text x="0" y={rowY2 - 28} fill="#C62828" fontSize="9" fontFamily="monospace" letterSpacing="1.5">WITH PRESTO</text>
-          {/* Row 2 lines: solid throughout */}
-          <line x1={x1(steps2, 0)} y1={rowY2} x2={x1(steps2, 4)} y2={rowY2} stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
-          {/* PRESTO highlight segment */}
-          <line x1={x1(steps2, 2)} y1={rowY2} x2={x1(steps2, 4)} y2={rowY2} stroke="#C62828" strokeWidth="2" />
-          {/* Row 2 dots */}
-          {steps2.map((s, i) => {
-            const isPresto = s === "PRESTO";
-            const isEnd = i === steps2.length - 1;
+          {/* Row 2 — all solid */}
+          <line x1={xPositions[0]} y1={rowY2} x2={xPositions[4]} y2={rowY2} stroke="white" strokeWidth="1.5" />
+          {xPositions.map((x, i) => {
+            const isPresto = i === 3;
             return (
               <g key={i}>
-                <circle cx={x1(steps2, i)} cy={rowY2} r={isPresto ? 12 : isEnd ? 10 : 6}
-                  fill={isPresto ? "#C62828" : isEnd ? "rgba(255,255,255,0.2)" : "#0d0d0f"}
-                  stroke={isPresto ? "#C62828" : "rgba(255,255,255,0.4)"} strokeWidth={isPresto ? 0 : 1.5} />
-                {isPresto && (
-                  <text x={x1(steps2, i)} y={rowY2 + 4} textAnchor="middle" fill="white" fontSize="8" fontFamily="monospace" fontWeight="bold">P</text>
-                )}
-                <text x={x1(steps2, i)} y={rowY2 + 22} textAnchor="middle"
-                  fill={isPresto ? "#C62828" : "rgba(242,239,230,0.6)"}
-                  fontSize={isPresto ? "10" : "9.5"} fontFamily="monospace"
-                  fontWeight={isPresto ? "bold" : "normal"}>{s}</text>
+                <circle cx={x} cy={rowY2} r={dotR} fill={isPresto ? '#7d1c36' : 'white'} />
+                {r2Labels[i].map((line, li) => (
+                  <text key={li} x={x} y={rowY2 + dotR + 26 + li * 22}
+                    textAnchor="middle" fill={isPresto ? '#c0395c' : 'white'} fontSize="16"
+                    fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="1">{line}</text>
+                ))}
               </g>
             );
           })}
@@ -1554,72 +1566,73 @@ function SectionSolutionTimeline() {
 function SectionSymptomSolution({ heading, body, symptoms, solution }: {
   heading: string; body?: string; symptoms: string[]; solution: string;
 }) {
-  const svgW = 800, svgH = 300;
-  const lCx = 180, cy = 150, outerR = 125, innerR = 40;
-  const rCx = 620, solR = 90;
+  // Layout from image: outer DASHED circle > inner SOLID circle with SYMPTOMS text
+  // symptom circles sit ON the inner circle's border (half inside, half outside)
+  // Arrow + SOLUTION label → solution circle on right
+  const W = 1200, H = 720;
+  const lCx = 340, cy = 360;
+  const innerR = 188;  // solid border circle
+  const outerR = 298;  // dashed border circle
+  const symR = 110;    // individual symptom circles, centered on inner circle border
+  const rCx = 990, solR = 130;
 
-  // Position inner symptom circles
-  const innerPos = symptoms.length === 3
+  // Symptom circle centers are ON the inner circle's circumference
+  const symPos = symptoms.length === 3
     ? [
-      { x: lCx, y: cy - 72 },
-      { x: lCx - 63, y: cy + 42 },
-      { x: lCx + 63, y: cy + 42 },
+      { x: lCx, y: cy - innerR },           // top
+      { x: lCx - innerR * 0.866, y: cy + innerR * 0.5 },  // bottom-left
+      { x: lCx + innerR * 0.866, y: cy + innerR * 0.5 },  // bottom-right
     ]
     : [
-      { x: lCx, y: cy - 58 },
-      { x: lCx, y: cy + 58 },
+      { x: lCx, y: cy - innerR },   // top
+      { x: lCx, y: cy + innerR },   // bottom
     ];
 
-  function label2(text: string): [string, string | null] {
+  function symLabel(text: string, x: number, y: number) {
     const parts = text.split(' ');
-    if (parts.length >= 2) return [parts[0], parts.slice(1).join(' ')];
-    return [text, null];
+    const fs = 18;
+    if (parts.length === 1) {
+      return <text x={x} y={y + 7} textAnchor="middle" fill="white" fontSize={fs} fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="0.5">{text}</text>;
+    }
+    return (
+      <text textAnchor="middle" fill="white" fontSize={fs} fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="0.5">
+        <tspan x={x} y={y - 6}>{parts[0]}</tspan>
+        <tspan x={x} y={y + 16}>{parts.slice(1).join(' ')}</tspan>
+      </text>
+    );
   }
 
-  const arrowX1 = lCx + outerR + 18;
-  const arrowX2 = rCx - solR - 18;
+  const arrowX1 = lCx + outerR + 30;
+  const arrowX2 = rCx - solR - 30;
   const arrowMid = (arrowX1 + arrowX2) / 2;
 
   return (
     <div className="py-6">
-      {heading && (
-        <div className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</div>
-      )}
-      {body && (
-        <p className="mb-6 max-w-3xl text-sm leading-[1.9] text-[var(--ink-soft)]">{body}</p>
-      )}
-      <div className="overflow-hidden border border-[var(--divider)] bg-[#0d0d0f]">
-        <svg viewBox={`0 0 ${svgW} ${svgH}`} xmlns="http://www.w3.org/2000/svg" className="w-full">
+      {heading && <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</div>}
+      {body && <p className="mb-6 max-w-3xl text-sm leading-[1.9] text-[var(--ink-soft)]">{body}</p>}
+      <div className="overflow-hidden" style={{ background: '#161012' }}>
+        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block', background: '#161012' }}>
           {/* Outer dashed circle */}
-          <circle cx={lCx} cy={cy} r={outerR} fill="none" stroke="rgba(198,40,40,0.45)" strokeWidth="1.5" strokeDasharray="6 4" />
-          {/* "SYMPTOMS" faint center label */}
-          <text x={lCx} y={cy + 4} textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="11" fontFamily="monospace" letterSpacing="1.5">SYMPTOMS</text>
-          {/* inner symptom circles */}
-          {innerPos.map((p, i) => {
-            const [l1, l2] = label2(symptoms[i]);
-            return (
-              <g key={i}>
-                <circle cx={p.x} cy={p.y} r={innerR} fill="#1a0606" stroke="#C62828" strokeWidth="1.5" />
-                {l2 ? (
-                  <text>
-                    <tspan x={p.x} y={p.y - 4} textAnchor="middle" fill="#f2efe6" fontSize="8" fontFamily="monospace">{l1}</tspan>
-                    <tspan x={p.x} y={p.y + 9} textAnchor="middle" fill="#f2efe6" fontSize="8" fontFamily="monospace">{l2}</tspan>
-                  </text>
-                ) : (
-                  <text x={p.x} y={p.y + 4} textAnchor="middle" fill="#f2efe6" fontSize="8" fontFamily="monospace">{l1}</text>
-                )}
-              </g>
-            );
-          })}
-          {/* Arrow shaft */}
-          <line x1={arrowX1} y1={cy} x2={arrowX2} y2={cy} stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
-          {/* Arrow head */}
-          <polygon points={`${arrowX2 - 10},${cy - 6} ${arrowX2},${cy} ${arrowX2 - 10},${cy + 6}`} fill="rgba(255,255,255,0.35)" />
-          {/* "SOLUTION" label */}
-          <text x={arrowMid} y={cy - 14} textAnchor="middle" fill="rgba(255,255,255,0.45)" fontSize="9" fontFamily="monospace" letterSpacing="2">SOLUTION</text>
+          <circle cx={lCx} cy={cy} r={outerR} fill="none" stroke="#8b2040" strokeWidth="2" strokeDasharray="10 7" />
+          {/* Inner solid circle */}
+          <circle cx={lCx} cy={cy} r={innerR} fill="none" stroke="#8b2040" strokeWidth="2" />
+          {/* Symptom circles (drawn over both circles) */}
+          {symPos.map((p, i) => (
+            <circle key={i} cx={p.x} cy={p.y} r={symR} fill="#7d1c36" />
+          ))}
+          {/* SYMPTOMS text in center of inner circle */}
+          <text x={lCx} y={cy + 16} textAnchor="middle" fill="white" fontSize="46" fontFamily="Arial, sans-serif" fontWeight="bold">SYMPTOMS</text>
+          {/* Symptom labels on top of circles */}
+          {symPos.map((p, i) => (
+            <g key={i}>{symLabel(symptoms[i], p.x, p.y)}</g>
+          ))}
+          {/* SOLUTION arrow */}
+          <line x1={arrowX1} y1={cy} x2={arrowX2 - 14} y2={cy} stroke="white" strokeWidth="2" />
+          <polygon points={`${arrowX2 - 16},${cy - 10} ${arrowX2},${cy} ${arrowX2 - 16},${cy + 10}`} fill="white" />
+          <text x={arrowMid} y={cy - 22} textAnchor="middle" fill="white" fontSize="20" fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="3">SOLUTION</text>
           {/* Solution circle */}
-          <circle cx={rCx} cy={cy} r={solR} fill="#C62828" />
-          <text x={rCx} y={cy + 6} textAnchor="middle" fill="white" fontSize="15" fontFamily="monospace" letterSpacing="2" fontWeight="bold">{solution}</text>
+          <circle cx={rCx} cy={cy} r={solR} fill="#7d1c36" />
+          <text x={rCx} y={cy + 10} textAnchor="middle" fill="white" fontSize="22" fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="1">{solution}</text>
         </svg>
       </div>
     </div>
