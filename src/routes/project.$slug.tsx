@@ -1124,13 +1124,13 @@ function SectionTicketRedesign() {
           <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.28em] text-[var(--ink-soft)]">
             16.2.1 Before — Current Reservation Slip
           </div>
-          <IRCTCTicket redesigned={false} />
+          <img src="/projects/ticket-before.png" alt="Current IRCTC reservation slip" className="w-full rounded" />
         </div>
         <div>
           <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.28em] text-[var(--neon)]">
             16.2.2 After — Redesigned Reservation Slip
           </div>
-          <IRCTCTicket redesigned={true} />
+          <img src="/projects/ticket-after.png" alt="Redesigned reservation slip" className="w-full rounded" />
         </div>
       </div>
     </div>
