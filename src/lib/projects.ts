@@ -86,14 +86,6 @@ export const projects: Project[] = [
         body: "The fear of public speaking is called Glossophobia. It's a common anxiety disorder that can cause physical symptoms like sweating, trembling, and rapid heart rate. People with glossophobia often experience intense anxiety and discomfort when they have to speak in front of an audience.",
         symptoms: ["Hyperventilation", "Dizziness", "Anxiety Attack", "Rapid Heartbeat", "Trembling", "Sweating"],
       },
-      {
-        type: "concentric-impact",
-        rings: [
-          { label: "DECREASE IN WAGES UP TO", value: "10%", color: "#8b2040" },
-          { label: "DECREASE IN PROMOTION OPPORTUNITIES", value: "15%", color: "#6b1830" },
-          { label: "PEOPLE SUFFERING FROM GLOSSOPHOBIA", value: "30%", color: "#220c14" },
-        ],
-      },
       { type: "label", text: "Primary Research" },
       {
         type: "text",
