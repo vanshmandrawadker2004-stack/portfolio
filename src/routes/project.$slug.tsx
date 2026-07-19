@@ -1905,11 +1905,12 @@ function ProjectPage() {
             <Skyline />
             {!project.hideHeroImage && (
               <div
-                className="absolute inset-0 opacity-20"
+                className="absolute inset-0 opacity-35"
                 style={{
                   backgroundImage: `url(${project.image})`,
-                  backgroundSize: "cover",
+                  backgroundSize: "80%",
                   backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                   filter: "grayscale(1) contrast(1.1)",
                 }}
               />
