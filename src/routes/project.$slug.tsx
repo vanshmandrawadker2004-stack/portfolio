@@ -1433,10 +1433,12 @@ function SectionSymptomWheel({ heading, body, symptoms }: { heading: string; bod
           {/* center dark circle (drawn first — satellites paint over it) */}
           <circle cx={cx} cy={cy} r={centerR} fill="#220c14" />
           {/* satellite circles */}
+          {/* Outer dashed bounding circle enclosing all satellites */}
+          <circle cx={cx} cy={cy} r={satD + satR + 18} fill="none" stroke="#8b2040" strokeWidth="2" strokeDasharray="12 8" />
           {positions.map((p, i) => (
             <circle key={i} cx={p.x} cy={p.y} r={satR}
               fill={filled[i] ? '#7d1c36' : 'none'}
-              stroke={filled[i] ? 'none' : 'white'}
+              stroke={filled[i] ? 'none' : '#8b2040'}
               strokeWidth="2" />
           ))}
           {/* "SYMPTOMS" centered on center circle */}
