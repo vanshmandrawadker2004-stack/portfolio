@@ -1613,7 +1613,7 @@ function SectionSymptomSolution({ heading, body, symptoms, solution }: {
       <div className="overflow-hidden">
         <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block' }}>
           {/* Outer dashed circle */}
-          <circle cx={lCx} cy={cy} r={outerR} fill="none" stroke="#8b2040" strokeWidth="2" strokeDasharray="10 7" />
+          <circle cx={lCx} cy={cy} r={outerR} fill="none" stroke="white" strokeWidth="2" strokeDasharray="10 7" />
           {/* Inner solid circle */}
           <circle cx={lCx} cy={cy} r={innerR} fill="none" stroke="#8b2040" strokeWidth="2" />
           {/* Symptom circles (drawn over both circles) */}
