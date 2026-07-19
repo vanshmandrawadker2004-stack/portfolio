@@ -1521,9 +1521,9 @@ function SectionSolutionTimeline() {
   const dotR = 22;
   const rowY1 = 130, rowY2 = 340;
   // x positions shared: Scared, Medications, CBT, [PRESTO], Confident Speaker
-  const xPositions = [90, 370, 650, 930, 1110];
-  // Row 1 uses indices 0,1,2,4 (skips PRESTO slot but stretches to same end)
-  const r1x = [90, 390, 690, 1110];
+  const xPositions = [90, 370, 650, 880, 1110];
+  // Row 1 uses same x positions as row 2 but skips PRESTO
+  const r1x = [90, 370, 650, 1110];
   const r1Labels = [["SCARED TO GIVE", "PRESENTATIONS"], ["MEDICATIONS"], ["CBT"], ["CONFIDENT SPEAKER"]];
   const r2Labels = [["SCARED TO GIVE", "PRESENTATIONS"], ["MEDICATIONS"], ["CBT"], ["PRESTO"], ["CONFIDENT SPEAKER"]];
 
