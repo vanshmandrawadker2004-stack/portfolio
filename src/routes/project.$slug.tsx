@@ -1436,7 +1436,7 @@ function SectionSymptomWheel({ heading, body, symptoms }: { heading: string; bod
           {positions.map((p, i) => (
             <circle key={i} cx={p.x} cy={p.y} r={satR}
               fill={filled[i] ? '#7d1c36' : 'none'}
-              stroke={filled[i] ? 'none' : '#8b2040'}
+              stroke={filled[i] ? 'none' : 'white'}
               strokeWidth="2" />
           ))}
           {/* "SYMPTOMS" centered on center circle */}
