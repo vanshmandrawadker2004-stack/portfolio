@@ -1623,7 +1623,7 @@ function SectionSymptomSolution({ heading, body, symptoms, solution }: {
             <circle key={i} cx={p.x} cy={p.y} r={symR} fill="#7d1c36" />
           ))}
           {/* SYMPTOMS text in center of inner circle */}
-          <text x={lCx} y={cy + 16} textAnchor="middle" fill="white" fontSize="46" fontFamily="Arial, sans-serif" fontWeight="bold">SYMPTOMS</text>
+          <text x={lCx} y={cy + 12} textAnchor="middle" fill="white" fontSize="30" fontFamily="Arial, sans-serif" fontWeight="bold">SYMPTOMS</text>
           {/* Symptom labels on top of circles */}
           {symPos.map((p, i) => (
             <g key={i}>{symLabel(symptoms[i], p.x, p.y)}</g>
