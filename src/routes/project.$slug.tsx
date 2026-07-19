@@ -1428,8 +1428,8 @@ function SectionSymptomWheel({ heading, body, symptoms }: { heading: string; bod
     <div className="py-8">
       {heading && <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</div>}
       {body && <p className="mb-8 max-w-3xl text-sm leading-[1.9] text-[var(--ink-soft)]">{body}</p>}
-      <div className="mx-auto max-w-2xl overflow-hidden" style={{ background: '#161012' }}>
-        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block', background: '#161012' }}>
+      <div className="mx-auto max-w-2xl overflow-hidden">
+        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block' }}>
           {/* center dark circle (drawn first — satellites paint over it) */}
           <circle cx={cx} cy={cy} r={centerR} fill="#220c14" />
           {/* satellite circles */}
@@ -1527,8 +1527,8 @@ function SectionSolutionTimeline() {
 
   return (
     <div className="py-10">
-      <div className="overflow-hidden" style={{ background: '#161012' }}>
-        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block', background: '#161012' }}>
+      <div className="overflow-hidden">
+        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block' }}>
           {/* Row 1 — solid line then dashed */}
           <line x1={r1x[0]} y1={rowY1} x2={r1x[2]} y2={rowY1} stroke="white" strokeWidth="1.5" />
           <line x1={r1x[2]} y1={rowY1} x2={r1x[3]} y2={rowY1} stroke="white" strokeWidth="1.5" strokeDasharray="10 8" />
@@ -1610,8 +1610,8 @@ function SectionSymptomSolution({ heading, body, symptoms, solution }: {
     <div className="py-6">
       {heading && <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--neon)]">{heading}</div>}
       {body && <p className="mb-6 max-w-3xl text-sm leading-[1.9] text-[var(--ink-soft)]">{body}</p>}
-      <div className="overflow-hidden" style={{ background: '#161012' }}>
-        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block', background: '#161012' }}>
+      <div className="overflow-hidden">
+        <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" className="w-full" style={{ display: 'block' }}>
           {/* Outer dashed circle */}
           <circle cx={lCx} cy={cy} r={outerR} fill="none" stroke="#8b2040" strokeWidth="2" strokeDasharray="10 7" />
           {/* Inner solid circle */}
