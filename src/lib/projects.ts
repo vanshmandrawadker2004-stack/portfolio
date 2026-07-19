@@ -68,7 +68,7 @@ export const projects: Project[] = [
     year: "2025",
     category: "Industrial Design",
     href: "/project/presto",
-    image: "https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/7273b2224137575.6806307d64251.png",
+    image: "/hero.png",
     span: "half",
     description: "A wearable device helping presenters overcome glossophobia — combining cold distraction for physical symptoms and a hand-mounted prompter screen for confidence under pressure.",
     sections: [
