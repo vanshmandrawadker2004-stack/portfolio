@@ -68,7 +68,7 @@ export const projects: Project[] = [
     year: "2025",
     category: "Industrial Design",
     href: "/project/presto",
-    image: "/hero.png",
+    image: "/projects/hero.png",
     span: "half",
     description: "A wearable device helping presenters overcome glossophobia — combining cold distraction for physical symptoms and a hand-mounted prompter screen for confidence under pressure.",
     sections: [
