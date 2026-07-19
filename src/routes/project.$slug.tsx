@@ -1575,7 +1575,7 @@ function SectionSymptomSolution({ heading, body, symptoms, solution }: {
   const lCx = 340, cy = 360;
   const innerR = 188;  // solid border circle
   const outerR = 298;  // dashed border circle
-  const symR = 110;    // individual symptom circles, centered on inner circle border
+  const symR = 78;    // individual symptom circles, centered on inner circle border
   const rCx = 990, solR = 130;
 
   // Symptom circle centers are ON the inner circle's circumference
@@ -1592,7 +1592,7 @@ function SectionSymptomSolution({ heading, body, symptoms, solution }: {
 
   function symLabel(text: string, x: number, y: number) {
     const parts = text.split(' ');
-    const fs = 18;
+    const fs = 13;
     if (parts.length === 1) {
       return <text x={x} y={y + 7} textAnchor="middle" fill="white" fontSize={fs} fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="0.5">{text}</text>;
     }
@@ -1623,7 +1623,7 @@ function SectionSymptomSolution({ heading, body, symptoms, solution }: {
             <circle key={i} cx={p.x} cy={p.y} r={symR} fill="#7d1c36" />
           ))}
           {/* SYMPTOMS text in center of inner circle */}
-          <text x={lCx} y={cy + 12} textAnchor="middle" fill="white" fontSize="30" fontFamily="Arial, sans-serif" fontWeight="bold">SYMPTOMS</text>
+          <text x={lCx} y={cy + 10} textAnchor="middle" fill="white" fontSize="22" fontFamily="Arial, sans-serif" fontWeight="bold">SYMPTOMS</text>
           {/* Symptom labels on top of circles */}
           {symPos.map((p, i) => (
             <g key={i}>{symLabel(symptoms[i], p.x, p.y)}</g>
