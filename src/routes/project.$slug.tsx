@@ -1437,7 +1437,7 @@ function SectionSymptomWheel({ heading, body, symptoms }: { heading: string; bod
           <circle cx={cx} cy={cy} r={satD} fill="none" stroke="#8b2040" strokeWidth="2" strokeDasharray="12 8" />
           {positions.map((p, i) => (
             <circle key={i} cx={p.x} cy={p.y} r={satR}
-              fill={filled[i] ? '#7d1c36' : 'none'}
+              fill={filled[i] ? '#7d1c36' : '#0d0d0f'}
               stroke={filled[i] ? 'none' : '#8b2040'}
               strokeWidth="2" />
           ))}
