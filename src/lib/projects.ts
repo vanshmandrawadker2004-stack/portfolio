@@ -122,14 +122,9 @@ export const projects: Project[] = [
         solution: "PROMPTER",
       },
       { type: "label", text: "Design Challenges" },
-      {
-        type: "screens",
-        images: [
-          { src: "/projects/1.png", caption: "Design Challenge 1" },
-          { src: "/projects/2.png", caption: "Design Challenge 2" },
-          { src: "/projects/3.png", caption: "Design Challenge 3" },
-        ],
-      },
+      { type: "image", src: "/projects/1.png" },
+      { type: "image", src: "/projects/2.png" },
+      { type: "image", src: "/projects/3.png" },
       { type: "label", text: "Final Design" },
       { type: "image", src: "/projects/Hand position.png", caption: "Hand Position" },
       { type: "image", src: "/projects/presto with hand final PNG.24.png", caption: "Presto — Final Render" },
