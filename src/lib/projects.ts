@@ -171,6 +171,8 @@ export const projects: Project[] = [
         heading: "Excel Logging",
         body: "Every order is also automatically logged to a Google Sheet (accessible as Excel) so the owner has a running record of orders, customer names, and totals without writing anything down. At the end of each day, the sheet gives a clear picture of what was ordered and what to prepare — the kitchen's entire operation managed in a tool the owner already knows.",
       },
+      { type: "label", text: "Live Site" },
+      { type: "image", src: "/projects/batter-fire.png", caption: "batterandfire.shop" },
     ],
   },
   {
