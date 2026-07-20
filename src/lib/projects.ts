@@ -133,17 +133,66 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "logo-design",
-    title: "Logo Design",
-    year: "2025",
+    slug: "thrive",
+    title: "Thrive",
+    year: "2024",
     category: "Brand Identity",
-    href: "/project/logo-design",
-    externalHref: "https://www.behance.net/gallery/231316289/Logo-Design",
-    image: "https://mir-s3-cdn-cf.behance.net/projects/404/e1e027231316289.Y3JvcCwxMDczLDgzOSw0NDYsMTM1.png",
+    href: "/project/thrive",
+    externalHref: "https://www.behance.net/gallery/222992479/Thrive",
+    image: "/projects/thrive/mockup-sign.png",
     span: "half",
-    description: "A collection of logo marks and brand identity systems crafted for startups and independent businesses.",
-    gallery: [
-      "https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/69acd6231316289.6887539fd8b70.png",
+    description: "Brand identity for a growth-focused startup — rooted in sustainability, innovation, and a forward-thinking design language.",
+    sections: [
+      {
+        type: "tagline",
+        attributes: ["Growth", "Innovation", "Impact"],
+        headline: "Thrive delivers smart solutions for sustainable growth. Powered by innovation, built for impact.",
+        body: "Thrive is a forward-thinking brand built around the belief that sustainable growth and bold innovation go hand in hand. Designed to inspire confidence and clarity, the identity reflects a company that moves with purpose — empowering people, businesses, and communities to reach their full potential. Every element of the brand communicates momentum, resilience, and a commitment to making meaningful impact.",
+        meta: "Logo & Brand Identity",
+      },
+      { type: "label", text: "Brand Identity" },
+      {
+        type: "concept-mark",
+        heading: "Concept:",
+        body: "The Thrive logo mark is a dynamic fusion of the letter T and a sprouting leaf, representing the brand's dual commitment to structured growth and natural sustainability. The bold geometric T provides a foundation of strength and reliability, while the leaf element introduces organic vitality and forward momentum. Together, they create a mark that is instantly recognizable — communicating that Thrive is where ambition meets purpose.",
+        variant: "thrive",
+      },
+      {
+        type: "screens",
+        images: [
+          { src: "/projects/thrive/logo-light.png", caption: "Logo mark — light" },
+          { src: "/projects/thrive/logo-dark.png", caption: "Logo mark — dark" },
+        ],
+      },
+      { type: "label", text: "Design System" },
+      {
+        type: "palette",
+        colors: [
+          { name: "Thrive Lime", hex: "#A7C955", role: "Primary — growth, vitality" },
+          { name: "Leafy Jade", hex: "#317E3D", role: "Secondary — depth, balance" },
+          { name: "Urban Charcoal", hex: "#212121", role: "Text — strength, grounding" },
+        ],
+      },
+      { type: "label", text: "Brand Applications" },
+      {
+        type: "image",
+        src: "/projects/thrive/mockup-sign.png",
+        caption: "Outdoor signage — brand at scale",
+      },
+      {
+        type: "screens",
+        images: [
+          { src: "/projects/thrive/mockup-citylight.png", caption: "Citylight poster — street presence" },
+          { src: "/projects/thrive/mockup-billboard.png", caption: "Billboard — brand in the wild" },
+        ],
+      },
+      {
+        type: "screens",
+        images: [
+          { src: "/projects/thrive/mockup-tote.png", caption: "Tote bag — everyday touchpoint" },
+          { src: "/projects/thrive/mockup-app.png", caption: "App icon — digital presence" },
+        ],
+      },
     ],
   },
   {
@@ -302,69 +351,6 @@ export const projects: Project[] = [
         images: [
           { src: "/projects/acoform/mockup-card.png", caption: "Business card — minimal, black" },
           { src: "/projects/acoform/mockup-billboard.png", caption: "Fence billboard — site presence" },
-        ],
-      },
-    ],
-  },
-  {
-    slug: "thrive",
-    title: "Thrive",
-    year: "2024",
-    category: "Brand Identity",
-    href: "/project/thrive",
-    externalHref: "https://www.behance.net/gallery/222992479/Thrive",
-    image: "/projects/thrive/mockup-sign.png",
-    span: "half",
-    description: "Brand identity for a growth-focused startup — rooted in sustainability, innovation, and a forward-thinking design language.",
-    sections: [
-      {
-        type: "tagline",
-        attributes: ["Growth", "Innovation", "Impact"],
-        headline: "Thrive delivers smart solutions for sustainable growth. Powered by innovation, built for impact.",
-        body: "Thrive is a forward-thinking brand built around the belief that sustainable growth and bold innovation go hand in hand. Designed to inspire confidence and clarity, the identity reflects a company that moves with purpose — empowering people, businesses, and communities to reach their full potential. Every element of the brand communicates momentum, resilience, and a commitment to making meaningful impact.",
-        meta: "Logo & Brand Identity",
-      },
-      { type: "label", text: "Brand Identity" },
-      {
-        type: "concept-mark",
-        heading: "Concept:",
-        body: "The Thrive logo mark is a dynamic fusion of the letter T and a sprouting leaf, representing the brand's dual commitment to structured growth and natural sustainability. The bold geometric T provides a foundation of strength and reliability, while the leaf element introduces organic vitality and forward momentum. Together, they create a mark that is instantly recognizable — communicating that Thrive is where ambition meets purpose.",
-        variant: "thrive",
-      },
-      {
-        type: "screens",
-        images: [
-          { src: "/projects/thrive/logo-light.png", caption: "Logo mark — light" },
-          { src: "/projects/thrive/logo-dark.png", caption: "Logo mark — dark" },
-        ],
-      },
-      { type: "label", text: "Design System" },
-      {
-        type: "palette",
-        colors: [
-          { name: "Thrive Lime", hex: "#A7C955", role: "Primary — growth, vitality" },
-          { name: "Leafy Jade", hex: "#317E3D", role: "Secondary — depth, balance" },
-          { name: "Urban Charcoal", hex: "#212121", role: "Text — strength, grounding" },
-        ],
-      },
-      { type: "label", text: "Brand Applications" },
-      {
-        type: "image",
-        src: "/projects/thrive/mockup-sign.png",
-        caption: "Outdoor signage — brand at scale",
-      },
-      {
-        type: "screens",
-        images: [
-          { src: "/projects/thrive/mockup-citylight.png", caption: "Citylight poster — street presence" },
-          { src: "/projects/thrive/mockup-billboard.png", caption: "Billboard — brand in the wild" },
-        ],
-      },
-      {
-        type: "screens",
-        images: [
-          { src: "/projects/thrive/mockup-tote.png", caption: "Tote bag — everyday touchpoint" },
-          { src: "/projects/thrive/mockup-app.png", caption: "App icon — digital presence" },
         ],
       },
     ],
