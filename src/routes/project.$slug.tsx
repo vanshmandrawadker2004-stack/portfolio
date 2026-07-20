@@ -1946,7 +1946,7 @@ function ProjectPage() {
                     rel="noreferrer"
                     className="mt-8 inline-block border border-[var(--divider)] px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--ink-soft)] transition-all hover:border-[var(--neon)] hover:text-[var(--neon)]"
                   >
-                    View on Behance ↗
+                    {project.externalLabel ?? "View on Behance"} ↗
                   </a>
                 )}
               </motion.div>

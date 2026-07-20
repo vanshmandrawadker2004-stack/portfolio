@@ -38,6 +38,7 @@ export type Project = {
   meta?: string;
   href: string;
   externalHref?: string;
+  externalLabel?: string;
   image: string;
   featured?: boolean;
   span?: "full" | "half";
@@ -139,9 +140,9 @@ export const projects: Project[] = [
     category: "Web / Brand",
     href: "/project/batter-and-fire",
     externalHref: "https://www.batterandfire.shop",
+    externalLabel: "Visit Live Site",
     image: "/projects/batter-fire.png",
     span: "half",
-    hideHeroImage: true,
     description: "A lightweight order website for a home kitchen South Indian breakfast business — built, hosted, and wired to WhatsApp and Excel so the owner can run it alone.",
     sections: [
       {
