@@ -648,7 +648,7 @@ function Services() {
                     onMouseEnter={() => setActive(i)}
                     onMouseLeave={() => setActive(null)}
                     onClick={() => setActive(isActive ? null : i)}
-                    data-cursor="Open"
+                    data-cursor=""
                     className={`relative flex h-[360px] w-full flex-col items-center justify-between gap-5 border-2 px-4 py-8 transition-all duration-500 md:h-[470px] ${isActive ? "border-[var(--neon)] bg-[var(--neon)] shadow-[0_0_26px_rgba(255,42,60,0.35)]" : "border-[var(--divider)] bg-black/60 hover:border-white/50"}`}
                   >
                     <div className={`absolute -top-2 left-1/2 h-2 w-8 -translate-x-1/2 ${isActive ? "bg-black" : "bg-white/25"}`} />
