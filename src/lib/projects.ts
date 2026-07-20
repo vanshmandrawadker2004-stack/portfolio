@@ -28,7 +28,8 @@ export type ProjectSection =
   | { type: "solution-timeline" }
   | { type: "symptom-solution"; heading: string; body?: string; symptoms: string[]; solution: string }
   | { type: "ideation-grid" }
-  | { type: "hand-positions" };
+  | { type: "hand-positions" }
+  | { type: "iframe"; src: string; height?: number };
 
 export type Project = {
   slug: string;
@@ -169,6 +170,8 @@ export const projects: Project[] = [
         heading: "Excel Logging",
         body: "Every order is also automatically logged to a Google Sheet (accessible as Excel) so the owner has a running record of orders, customer names, and totals without writing anything down. At the end of each day, the sheet gives a clear picture of what was ordered and what to prepare — the kitchen's entire operation managed in a tool the owner already knows.",
       },
+      { type: "label", text: "Live Site" },
+      { type: "iframe", src: "https://www.batterandfire.shop", height: 700 },
     ],
   },
   {

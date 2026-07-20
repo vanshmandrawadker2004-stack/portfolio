@@ -1853,6 +1853,17 @@ function renderSection(section: ProjectSection, i: number) {
       )}
       {section.type === "ideation-grid" && <SectionIdeationGrid />}
       {section.type === "hand-positions" && <SectionHandPositions />}
+      {section.type === "iframe" && (
+        <div className="w-full overflow-hidden border-2 border-[var(--divider)]" style={{ height: section.height ?? 640 }}>
+          <iframe
+            src={section.src}
+            className="w-full h-full"
+            style={{ border: "none", display: "block" }}
+            title="Live site preview"
+            loading="lazy"
+          />
+        </div>
+      )}
     </motion.div>
   );
 }
