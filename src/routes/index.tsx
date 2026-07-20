@@ -398,7 +398,10 @@ function Hero() {
           </PowerOn>
           <PowerOn delay={1.5}>
             <SignHover>
-              <div className="flicker neon-border bg-black px-3 py-3.5 text-center">
+              <div
+                className="flicker neon-border bg-black px-3 py-3.5 text-center cursor-pointer"
+                onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 <span className="neon-red font-mono text-xs uppercase tracking-[0.25em]">↓ Work this way</span>
               </div>
             </SignHover>
@@ -519,7 +522,7 @@ const catShort: Record<string, string> = {
 function Work() {
   const featured = projects.slice(0, 6);
   return (
-    <section className="relative px-5 py-28 md:px-10 md:py-40">
+    <section id="work" className="relative px-5 py-28 md:px-10 md:py-40">
       <FloatShapes variant={1} />
       <div className="relative mx-auto max-w-[1300px]">
         <Fade>
