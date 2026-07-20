@@ -70,10 +70,10 @@ function Work() {
 
       {/* GRID */}
       <section className="relative px-5 py-20 md:px-10 md:py-28">
-        <div className="relative mx-auto grid max-w-[1300px] gap-8 md:grid-cols-2 md:gap-10">
+        <div className="relative mx-auto grid max-w-[1300px] gap-6 md:grid-cols-3 md:gap-8">
           {list.map((p, i) => (
-            <div key={p.slug} className={p.span === "full" ? "md:col-span-2" : ""}>
-              <PowerOn delay={(i % 2) * 0.08}>
+            <div key={p.slug}>
+              <PowerOn delay={(i % 3) * 0.08}>
                 <Tilt max={3.5}>
                   <a
                     href={p.href}
@@ -86,7 +86,7 @@ function Work() {
                       <img
                         src={p.image}
                         alt={p.title}
-                        className={`w-full transition-all duration-700 group-hover:scale-[1.02] group-hover:[filter:grayscale(0)_contrast(1)_brightness(1)] ${p.span === "full" ? "aspect-[16/8]" : "aspect-[16/10]"} ${p.contain ? "object-contain p-6" : "object-cover"}`}
+                        className={`w-full aspect-[16/10] transition-all duration-700 group-hover:scale-[1.02] group-hover:[filter:grayscale(0)_contrast(1)_brightness(1)] ${p.contain ? "object-contain p-6" : "object-cover"}`}
                         style={{ filter: "grayscale(1) contrast(1.1) brightness(0.85)" }}
                       />
                       <div className="absolute left-4 top-4 bg-black/80 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.2em] text-white/70">
@@ -100,7 +100,7 @@ function Work() {
                     </div>
                     <div className="flex items-center justify-between gap-4 p-5 md:p-6">
                       <div>
-                        <div className="serif-display text-3xl transition-all duration-300 group-hover:neon-red md:text-4xl">{p.title}</div>
+                        <div className="serif-display text-2xl transition-all duration-300 group-hover:neon-red md:text-3xl">{p.title}</div>
                         <div className="mt-2 flex flex-wrap items-center gap-3">
                           <span className="bg-[var(--neon)] px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-black">{p.category}</span>
                           <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-soft)]">{p.year}</span>
