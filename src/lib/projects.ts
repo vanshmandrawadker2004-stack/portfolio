@@ -143,6 +143,7 @@ export const projects: Project[] = [
     externalHref: "https://www.batterandfire.shop",
     externalLabel: "Visit Live Site",
     image: "/projects/batter-fire.png",
+    hideHeroImage: true,
     span: "half",
     description: "A lightweight order website for a home kitchen South Indian breakfast business — built, hosted, and wired to WhatsApp and Excel so the owner can run it alone.",
     sections: [
@@ -170,8 +171,6 @@ export const projects: Project[] = [
         heading: "Excel Logging",
         body: "Every order is also automatically logged to a Google Sheet (accessible as Excel) so the owner has a running record of orders, customer names, and totals without writing anything down. At the end of each day, the sheet gives a clear picture of what was ordered and what to prepare — the kitchen's entire operation managed in a tool the owner already knows.",
       },
-      { type: "label", text: "Live Site" },
-      { type: "iframe", src: "https://www.batterandfire.shop", height: 700 },
     ],
   },
   {
