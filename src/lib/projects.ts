@@ -79,7 +79,7 @@ export const projects: Project[] = [
         attributes: ["Confidence", "Clarity", "Performance"],
         headline: "Seamless cues for confidence, clarity, and peak performance.",
         body: "This project seeks to empower presenters to overcome anxiety and deliver impactful presentations by enhancing flow, communication, and composure, with a focus on mitigating glossophobia.",
-        meta: "Group Project · 4 Weeks",
+        meta: "Group Project · 3 Months",
       },
       { type: "label", text: "The Problem" },
       {
